@@ -67,7 +67,9 @@ class SignInScreen extends GetView<AuthController> {
 
                       CustomButton(
                         text: 'Login',
-                        onPressed: controller.login,
+                        onPressed: () {
+                          Get.toNamed(RouteNames.userHome);
+                        },
                         textColor: AppColors.primary,
                       ),
                       const SizedBox(height: 20),

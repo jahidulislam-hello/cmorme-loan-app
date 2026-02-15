@@ -17,7 +17,15 @@ class AppColors {
   static const Color accentBlue = Color(0xFF4FC3F7);
   static const Color hintGrey = Color(0xFF8899AA);
   static const Color darkNavy = Color(0xFF0F1B2D);
+  static const Color blue300 = Color(0xFF88C1FF);
   static const Color blue400 = Color(0xFF45547C);
   static const Color blue500 = Color(0xFF4DA3FF);
   static const Color blue100 = Color(0xFFB7BDCC);
+  static const Color blue200 = Color(0xFFADD5FF);
+  static const Color blue50 = Color(0xFFEDF6FF);
+  static const Color green500 = Color(0xFF4ADE80);
+  static const Color green600 = Color(0xFF43CA74);
+  static const Color yellow500 = Color(0xFFF4B400);
+  static const Color black400 = Color(0xFF333333);
+  static const Color containerHighlight = Color(0xFF253665);
 }

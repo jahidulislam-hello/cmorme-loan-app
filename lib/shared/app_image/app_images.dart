@@ -7,4 +7,11 @@ class AppImages {
   static const String mail = 'assets/images/mail.svg';
   static const String lock = 'assets/images/lock.svg';
   static const String frame = 'assets/images/Frame.svg';
+  static const String loanIcon = 'assets/images/loan_icon.svg';
+  static const String homeIcon = 'assets/images/home.svg';
+  static const String historyIcon = 'assets/images/history.svg';
+  static const String profileIcon = 'assets/images/avatar.svg';
+  static const String borrowerIcon = 'assets/images/borrower_icon.svg';
+  static const String pointIcon = 'assets/images/point_icon.svg';
+  static const String deleteIcon = 'assets/images/delete.svg';
 }
