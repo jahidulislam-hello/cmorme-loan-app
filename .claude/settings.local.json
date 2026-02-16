@@ -3,7 +3,14 @@
     "allow": [
       "Bash(flutter pub get:*)",
       "Bash(flutter analyze:*)",
-      "Bash(flutter pub add:*)"
+      "Bash(flutter pub add:*)",
+      "Bash(pip install:*)",
+      "Bash(python -m pip install:*)",
+      "Bash(dart --version:*)",
+      "Bash(\"C:/Users/Siam/StudioProjects/reverse_mortage_loan_app/gen_image/pubspec.yaml\":*)",
+      "Bash(\"C:/Users/Siam/StudioProjects/reverse_mortage_loan_app/gen_image/bin/generate.dart\":*)",
+      "Bash(dart pub get:*)",
+      "Bash(dart run:*)"
     ]
   }
 }

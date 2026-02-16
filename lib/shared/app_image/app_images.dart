@@ -14,4 +14,10 @@ class AppImages {
   static const String borrowerIcon = 'assets/images/borrower_icon.svg';
   static const String pointIcon = 'assets/images/point_icon.svg';
   static const String deleteIcon = 'assets/images/delete.svg';
+  static const String dateIcon = 'assets/images/Date.svg';
+  static const String objectiveIcon = 'assets/images/Objective.svg';
+  static const String loanTypeIcon = 'assets/images/loan_type.svg';
+  static const String loanAmountIcon = 'assets/images/loan_amount.svg';
+  static const String detailsIcon = 'assets/images/details.svg';
+  static const String housePlaceholder = 'assets/images/house_placeholder.png';
 }

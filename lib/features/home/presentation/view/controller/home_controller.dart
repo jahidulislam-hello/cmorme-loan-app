@@ -10,6 +10,10 @@ class HomeController extends GetxController {
 
   void onNavTap(int index) {
     selectedNavIndex.value = index;
+    if (index == 1) {
+      Get.toNamed(RouteNames.history);
+      selectedNavIndex.value = 0;
+    }
   }
 
   void onStartCalculation() {
@@ -21,7 +25,7 @@ class HomeController extends GetxController {
   }
 
   void onViewDetails() {
-    // TODO: Navigate to calculation details
+    Get.toNamed(RouteNames.loanDetails);
   }
 
   void onDeleteCalculation() {

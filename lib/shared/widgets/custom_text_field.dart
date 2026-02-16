@@ -16,6 +16,8 @@ class CustomTextField extends StatelessWidget {
   final double? labelFontSize;
   final Color? textColor;
   final double? textFontSize;
+  final bool filled;
+  final Color? backgroundColor;
 
   const CustomTextField({
     super.key,
@@ -32,9 +34,11 @@ class CustomTextField extends StatelessWidget {
     this.labelFontSize,
     this.textColor,
     this.textFontSize,
+    this.filled = false,
+    this.backgroundColor,
   });
 
-  Widget _buildPrefixIcon() {
+  Widget? _buildPrefixIcon() {
     if (prefixImagePath != null) {
       final Widget image;
       if (prefixImagePath!.endsWith('.svg')) {
@@ -50,7 +54,7 @@ class CustomTextField extends StatelessWidget {
     if (prefixIcon != null) {
       return Icon(prefixIcon, color: AppColors.hintGrey, size: 20);
     }
-    return const SizedBox.shrink();
+    return null;
   }
 
   @override
@@ -93,22 +97,34 @@ class CustomTextField extends StatelessWidget {
             )
                 : null,
 
-            contentPadding:
-            const EdgeInsets.symmetric(horizontal: 0, vertical: 14),
-
-
-            enabledBorder: const UnderlineInputBorder(
-              borderSide: BorderSide(
-                color: AppColors.fieldBorder,
-                width: 1,
-              ),
+            filled: filled,
+            fillColor: backgroundColor,
+            contentPadding: EdgeInsets.symmetric(
+              horizontal: filled ? 12 : 0,
+              vertical: 14,
             ),
-            focusedBorder: const UnderlineInputBorder(
-              borderSide: BorderSide(
-                color: AppColors.buttonBlue,
-                width: 1,
-              ),
-            ),
+            enabledBorder: filled
+                ? OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide.none,
+                  )
+                : const UnderlineInputBorder(
+                    borderSide: BorderSide(
+                      color: AppColors.fieldBorder,
+                      width: 1,
+                    ),
+                  ),
+            focusedBorder: filled
+                ? OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide.none,
+                  )
+                : const UnderlineInputBorder(
+                    borderSide: BorderSide(
+                      color: AppColors.buttonBlue,
+                      width: 1,
+                    ),
+                  ),
           ),
 
         ),

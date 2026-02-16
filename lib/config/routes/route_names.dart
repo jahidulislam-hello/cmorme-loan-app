@@ -15,4 +15,8 @@ class RouteNames {
   static const String tipsCalculate = '/tips-calculate';
   static const String recentCalculation = '/recent-calculation';
   static const String loanResult = '/loan-result';
+  static const String history = '/history';
+  static const String loanDetails = '/loan-details';
+  static const String requestProposal = '/request-proposal';
+  static const String inquirySuccess = '/inquiry-success';
 }

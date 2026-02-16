@@ -15,6 +15,13 @@ import 'package:reverse_mortage_loan_app/features/home/presentation/view/tips_ca
 import 'package:reverse_mortage_loan_app/features/recent_calculation/presentation/view/binding/recent_calculation_binding.dart';
 import 'package:reverse_mortage_loan_app/features/recent_calculation/presentation/view/recent_calculation_screen.dart';
 import 'package:reverse_mortage_loan_app/features/reverse_refinance/presentation/view/binding/reverse_refinance_binding.dart';
+import 'package:reverse_mortage_loan_app/features/history/presentation/view/bindings/history_binding.dart';
+import 'package:reverse_mortage_loan_app/features/history/presentation/view/page/history_screen.dart';
+import 'package:reverse_mortage_loan_app/features/loan_details/presentation/view/bindings/loan_details_binding.dart';
+import 'package:reverse_mortage_loan_app/features/loan_details/presentation/view/page/loan_details_screen.dart';
+import 'package:reverse_mortage_loan_app/features/request_proposal/presentation/view/bindings/request_proposal_binding.dart';
+import 'package:reverse_mortage_loan_app/features/request_proposal/presentation/view/page/request_proposal_screen.dart';
+import 'package:reverse_mortage_loan_app/features/request_proposal/presentation/view/page/inquiry_success_screen.dart';
 import 'package:reverse_mortage_loan_app/features/reverse_refinance/presentation/view/loan_result_screen.dart';
 import 'package:reverse_mortage_loan_app/features/reverse_refinance/presentation/view/reverse_refinance_screen.dart';
 
@@ -82,6 +89,25 @@ class AppRouter {
     GetPage(
       name: RouteNames.loanResult,
       page: () => const LoanResultScreen(),
+    ),
+    GetPage(
+      name: RouteNames.history,
+      page: () => const HistoryScreen(),
+      binding: HistoryBinding(),
+    ),
+    GetPage(
+      name: RouteNames.loanDetails,
+      page: () => const LoanDetailsScreen(),
+      binding: LoanDetailsBinding(),
+    ),
+    GetPage(
+      name: RouteNames.requestProposal,
+      page: () => const RequestProposalScreen(),
+      binding: RequestProposalBinding(),
+    ),
+    GetPage(
+      name: RouteNames.inquirySuccess,
+      page: () => const InquirySuccessScreen(),
     ),
   ];
 }
