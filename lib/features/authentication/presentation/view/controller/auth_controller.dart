@@ -3,6 +3,11 @@ import 'package:get/get.dart';
 import 'package:reverse_mortage_loan_app/config/routes/route_names.dart';
 
 class AuthController extends GetxController {
+  // User role
+  static final userRole = 'user'.obs;
+
+  bool get isRealEstate => userRole.value == 'real_estate';
+
   // Text controllers
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
@@ -96,10 +101,12 @@ class AuthController extends GetxController {
   }
 
   void chooseUserAccount() {
+    userRole.value = 'user';
     goToSignIn();
   }
 
   void chooseRealStateAccount() {
+    userRole.value = 'real_estate';
     goToSignIn();
   }
 }

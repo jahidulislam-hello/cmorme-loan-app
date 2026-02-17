@@ -10,7 +10,7 @@ class AppImages {
   static const String loanIcon = 'assets/images/loan_icon.svg';
   static const String homeIcon = 'assets/images/home.svg';
   static const String historyIcon = 'assets/images/history.svg';
-  static const String profileIcon = 'assets/images/avatar.svg';
+  static const String avatarIcon = 'assets/images/avatar.svg';
   static const String borrowerIcon = 'assets/images/borrower_icon.svg';
   static const String pointIcon = 'assets/images/point_icon.svg';
   static const String deleteIcon = 'assets/images/delete.svg';
@@ -19,5 +19,9 @@ class AppImages {
   static const String loanTypeIcon = 'assets/images/loan_type.svg';
   static const String loanAmountIcon = 'assets/images/loan_amount.svg';
   static const String detailsIcon = 'assets/images/details.svg';
+  static const String profileIcon = 'assets/images/profile_icon.svg';
+  static const String settingsIcon = 'assets/images/setting_icon.svg';
+  static const String notificationIcon = 'assets/images/notification.svg';
+  static const String inboxIcon = 'assets/images/inbox.svg';
   static const String housePlaceholder = 'assets/images/house_placeholder.png';
 }

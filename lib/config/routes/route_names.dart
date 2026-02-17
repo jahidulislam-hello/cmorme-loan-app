@@ -19,4 +19,12 @@ class RouteNames {
   static const String loanDetails = '/loan-details';
   static const String requestProposal = '/request-proposal';
   static const String inquirySuccess = '/inquiry-success';
+  static const String accountSetting = '/account-setting';
+  static const String editProfile = '/edit-profile';
+  static const String setting = '/setting';
+  static const String changePassword = '/change-password';
+  static const String legal = '/legal';
+  static const String notification = '/notification';
+  static const String inbox = '/inbox';
+  static const String inboxDetails = '/inbox-details';
 }

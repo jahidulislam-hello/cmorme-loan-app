@@ -7,11 +7,16 @@ import 'package:reverse_mortage_loan_app/shared/dialoges/filter_dialog.dart';
 
 class HistoryController extends GetxController {
   final searchController = TextEditingController();
-  final selectedNavIndex = 1.obs;
+  final selectedNavIndex = 2.obs;
 
   void onNavTap(int index) {
+    if (index == 2) return;
     if (index == 0) {
       Get.back();
+    } else if (index == 1) {
+      Get.offNamed(RouteNames.inbox);
+    } else if (index == 3) {
+      Get.offNamed(RouteNames.accountSetting);
     }
   }
 

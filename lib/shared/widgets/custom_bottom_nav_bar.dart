@@ -17,8 +17,9 @@ class CustomBottomNavBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final items = [
       AppImages.homeIcon,
+      AppImages.inboxIcon,
       AppImages.historyIcon,
-      AppImages.profileIcon,
+      AppImages.avatarIcon,
     ];
 
     return Container(

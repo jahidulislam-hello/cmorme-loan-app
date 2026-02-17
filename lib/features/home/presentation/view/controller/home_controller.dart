@@ -11,9 +11,19 @@ class HomeController extends GetxController {
   void onNavTap(int index) {
     selectedNavIndex.value = index;
     if (index == 1) {
+      Get.toNamed(RouteNames.inbox);
+      selectedNavIndex.value = 0;
+    } else if (index == 2) {
       Get.toNamed(RouteNames.history);
       selectedNavIndex.value = 0;
+    } else if (index == 3) {
+      Get.toNamed(RouteNames.accountSetting);
+      selectedNavIndex.value = 0;
     }
+  }
+
+  void onNotification() {
+    Get.toNamed(RouteNames.notification);
   }
 
   void onStartCalculation() {

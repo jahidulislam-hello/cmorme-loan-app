@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:reverse_mortage_loan_app/features/authentication/presentation/view/controller/auth_controller.dart';
+import 'package:reverse_mortage_loan_app/shared/app_image/app_images.dart';
 import 'package:reverse_mortage_loan_app/shared/theme/app_colors.dart';
 import 'package:reverse_mortage_loan_app/shared/widgets/custom_button.dart';
+import 'package:reverse_mortage_loan_app/shared/widgets/custom_horizontal_line.dart';
 
 class LoanResultScreen extends StatelessWidget {
   const LoanResultScreen({super.key});
@@ -12,6 +16,7 @@ class LoanResultScreen extends StatelessWidget {
     final type = args?['type'] ?? 'refinance';
     final isPurchase = type == 'purchase';
     final title = isPurchase ? 'Reverse for Purchase' : 'Reverse Refinance';
+    final isRealEstate = AuthController.userRole.value == 'real_estate';
 
     return Scaffold(
       backgroundColor: AppColors.primary,
@@ -44,6 +49,56 @@ class LoanResultScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      /// User info container (real estate only)
+                      if (isRealEstate) ...[
+                        const SizedBox(height: 16),
+                        Column(
+                          children: [
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                const Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Ankon Akash',
+                                        style: TextStyle(
+                                          color: AppColors.white,
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      SizedBox(height: 4),
+                                      Text(
+                                        'abcd1234@gmai.com',
+                                        style: TextStyle(
+                                          color: AppColors.hintGrey,
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    // Handle delete
+                                  },
+                                  child: SvgPicture.asset(
+                                    AppImages.deleteIcon,
+                                    width: 24,
+                                    height: 24,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            CustomHorizontalLine(
+                              thickness: 2,
+                            )
+                          ],
+                        ),
+                      ],
+
                       const SizedBox(height: 32),
 
                       /// Estimated Govt Reverse Mortgage

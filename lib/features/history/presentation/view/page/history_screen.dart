@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:reverse_mortage_loan_app/features/authentication/presentation/view/controller/auth_controller.dart';
+import 'package:reverse_mortage_loan_app/features/inbox/presentation/view/widgets/inbox_item.dart';
 import 'package:reverse_mortage_loan_app/shared/theme/app_colors.dart';
 import 'package:reverse_mortage_loan_app/shared/widgets/custom_bottom_nav_bar.dart';
 import 'package:reverse_mortage_loan_app/shared/widgets/custom_calculation_item.dart';
@@ -42,28 +44,55 @@ class HistoryScreen extends GetView<HistoryController> {
               ),
               const SizedBox(height: 24),
               Expanded(
-                child: ListView(
-                  children: [
-                    CustomCalculationItem(
-                      date: '08 Jan 2026',
-                      tag: 'Government',
-                      homeValue: '\$300,00',
-                      loanAmount: '300,00',
-                      onViewDetails: controller.onViewDetails,
-                      onDelete: controller.onDeleteCalculation,
-                    ),
-                    const SizedBox(height: 16),
-                    CustomCalculationItem(
-                      date: '08 Jan 2026',
-                      tag: 'Non-Government',
-                      homeValue: '\$300,00',
-                      loanAmount: '300,00',
-                      onViewDetails: controller.onViewDetails,
-                      onDelete: controller.onDeleteCalculation,
-                    ),
-                    const SizedBox(height: 20),
-                  ],
-                ),
+                child: Obx(() {
+                  final isRealEstate =
+                      AuthController.userRole.value == 'real_estate';
+                  return ListView(
+                    children: isRealEstate
+                        ? [
+                            InboxItem(
+                              userName: 'Ankon Akash',
+                              email: 'abcd1234@gmai.com',
+                              date: '08 Jan 2026',
+                              tag: 'Refinance',
+                              scenarioText: 'Calculated by 2 scenario',
+                              onViewDetails: controller.onViewDetails,
+                              onDelete: controller.onDeleteCalculation,
+                            ),
+                            const SizedBox(height: 16),
+                            InboxItem(
+                              userName: 'Ankon Akash',
+                              email: 'abcd1234@gmai.com',
+                              date: '08 Jan 2026',
+                              tag: 'Refinance',
+                              scenarioText: 'Calculated by 2 scenario',
+                              onViewDetails: controller.onViewDetails,
+                              onDelete: controller.onDeleteCalculation,
+                            ),
+                            const SizedBox(height: 20),
+                          ]
+                        : [
+                            CustomCalculationItem(
+                              date: '08 Jan 2026',
+                              tag: 'Government',
+                              homeValue: '\$300,00',
+                              loanAmount: '300,00',
+                              onViewDetails: controller.onViewDetails,
+                              onDelete: controller.onDeleteCalculation,
+                            ),
+                            const SizedBox(height: 16),
+                            CustomCalculationItem(
+                              date: '08 Jan 2026',
+                              tag: 'Non-Government',
+                              homeValue: '\$300,00',
+                              loanAmount: '300,00',
+                              onViewDetails: controller.onViewDetails,
+                              onDelete: controller.onDeleteCalculation,
+                            ),
+                            const SizedBox(height: 20),
+                          ],
+                  );
+                }),
               ),
             ],
           ),

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:reverse_mortage_loan_app/features/authentication/presentation/view/controller/auth_controller.dart';
+import 'package:reverse_mortage_loan_app/features/inbox/presentation/view/widgets/inbox_item.dart';
 import 'package:reverse_mortage_loan_app/shared/theme/app_colors.dart';
 import 'package:reverse_mortage_loan_app/shared/widgets/custom_bottom_nav_bar.dart';
 import 'package:reverse_mortage_loan_app/shared/widgets/custom_calculate_loan_item.dart';
@@ -47,17 +49,20 @@ class UserHomeScreen extends GetView<HomeController> {
                       ),
                     ],
                   ),
-                  Container(
-                    width: 40,
-                    height: 40,
-                    decoration: BoxDecoration(
-                      color: AppColors.white,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: const Icon(
-                      Icons.notifications_none,
-                      color: AppColors.primary,
-                      size: 24,
+                  GestureDetector(
+                    onTap: controller.onNotification,
+                    child: Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: AppColors.white,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: const Icon(
+                        Icons.notifications_none,
+                        color: AppColors.primary,
+                        size: 24,
+                      ),
                     ),
                   ),
                 ],
@@ -100,13 +105,24 @@ class UserHomeScreen extends GetView<HomeController> {
 
               const SizedBox(height: 32),
 
-              CustomCalculationItem(
-                date: '08 Jan 2026',
-                tag: 'Government',
-                homeValue: '\$300,00',
-                loanAmount: '300,00',
-                onViewDetails: controller.onViewDetails,
-                onDelete: controller.onDeleteCalculation,
+              Obx(() => AuthController.userRole.value == 'real_estate'
+                  ? InboxItem(
+                      userName: 'Ankon Akash',
+                      email: 'abcd1234@gmai.com',
+                      date: '08 Jan 2026',
+                      tag: 'Refinance',
+                      scenarioText: 'Calculated by 2 scenario',
+                      onViewDetails: controller.onViewDetails,
+                      onDelete: controller.onDeleteCalculation,
+                    )
+                  : CustomCalculationItem(
+                      date: '08 Jan 2026',
+                      tag: 'Government',
+                      homeValue: '\$300,00',
+                      loanAmount: '300,00',
+                      onViewDetails: controller.onViewDetails,
+                      onDelete: controller.onDeleteCalculation,
+                    ),
               ),
 
               const SizedBox(height: 20),

@@ -23,6 +23,18 @@ import 'package:reverse_mortage_loan_app/features/request_proposal/presentation/
 import 'package:reverse_mortage_loan_app/features/request_proposal/presentation/view/page/request_proposal_screen.dart';
 import 'package:reverse_mortage_loan_app/features/request_proposal/presentation/view/page/inquiry_success_screen.dart';
 import 'package:reverse_mortage_loan_app/features/reverse_refinance/presentation/view/loan_result_screen.dart';
+import 'package:reverse_mortage_loan_app/features/inbox/presentation/view/binding/inbox_binding.dart';
+import 'package:reverse_mortage_loan_app/features/inbox/presentation/view/page/inbox_screen.dart';
+import 'package:reverse_mortage_loan_app/features/inbox/presentation/view/page/inbox_details_screen.dart';
+import 'package:reverse_mortage_loan_app/features/notification/presentation/view/binding/notification_binding.dart';
+import 'package:reverse_mortage_loan_app/features/notification/presentation/view/page/notification_screen.dart';
+import 'package:reverse_mortage_loan_app/features/legal/presentation/view/binding/legal_binding.dart';
+import 'package:reverse_mortage_loan_app/features/legal/presentation/view/page/legal_screen.dart';
+import 'package:reverse_mortage_loan_app/features/profile/presentation/view/binding/profile_binding.dart';
+import 'package:reverse_mortage_loan_app/features/profile/presentation/view/page/account_setting_screen.dart';
+import 'package:reverse_mortage_loan_app/features/profile/presentation/view/page/edit_profile_screen.dart';
+import 'package:reverse_mortage_loan_app/features/profile/presentation/view/page/setting_screen.dart';
+import 'package:reverse_mortage_loan_app/features/profile/presentation/view/page/change_password_screen.dart';
 import 'package:reverse_mortage_loan_app/features/reverse_refinance/presentation/view/reverse_refinance_screen.dart';
 
 class AppRouter {
@@ -94,6 +106,7 @@ class AppRouter {
       name: RouteNames.history,
       page: () => const HistoryScreen(),
       binding: HistoryBinding(),
+      transition: Transition.noTransition,
     ),
     GetPage(
       name: RouteNames.loanDetails,
@@ -108,6 +121,48 @@ class AppRouter {
     GetPage(
       name: RouteNames.inquirySuccess,
       page: () => const InquirySuccessScreen(),
+    ),
+    GetPage(
+      name: RouteNames.accountSetting,
+      page: () => const AccountSettingScreen(),
+      binding: ProfileBinding(),
+      transition: Transition.noTransition,
+    ),
+    GetPage(
+      name: RouteNames.editProfile,
+      page: () => const EditProfileScreen(),
+      binding: ProfileBinding(),
+    ),
+    GetPage(
+      name: RouteNames.setting,
+      page: () => const SettingScreen(),
+      binding: ProfileBinding(),
+    ),
+    GetPage(
+      name: RouteNames.changePassword,
+      page: () => const ChangePasswordScreen(),
+      binding: ProfileBinding(),
+    ),
+    GetPage(
+      name: RouteNames.legal,
+      page: () => const LegalScreen(),
+      binding: LegalBinding(),
+    ),
+    GetPage(
+      name: RouteNames.notification,
+      page: () => const NotificationScreen(),
+      binding: NotificationBinding(),
+    ),
+    GetPage(
+      name: RouteNames.inbox,
+      page: () => const InboxScreen(),
+      binding: InboxBinding(),
+      transition: Transition.noTransition,
+    ),
+    GetPage(
+      name: RouteNames.inboxDetails,
+      page: () => const InboxDetailsScreen(),
+      binding: InboxBinding(),
     ),
   ];
 }
