@@ -18,6 +18,13 @@ class RouteNames {
   static const String history = '/history';
   static const String loanDetails = '/loan-details';
   static const String requestProposal = '/request-proposal';
+  static const String proposalAddress = '/proposal-address';
+  static const String proposalCityState = '/proposal-city-state';
+  static const String proposalInterested = '/proposal-interested';
+  static const String proposalLoanAmount = '/proposal-loan-amount';
+  static const String proposalDob = '/proposal-dob';
+  static const String proposalInquiry = '/proposal-inquiry';
+  static const String proposalAppointment = '/proposal-appointment';
   static const String inquirySuccess = '/inquiry-success';
   static const String accountSetting = '/account-setting';
   static const String editProfile = '/edit-profile';

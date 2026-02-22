@@ -75,8 +75,8 @@ class HistoryScreen extends GetView<HistoryController> {
                             CustomCalculationItem(
                               date: '08 Jan 2026',
                               tag: 'Government',
-                              homeValue: '\$300,00',
                               loanAmount: '300,00',
+                              cashAvailable: '300,00',
                               onViewDetails: controller.onViewDetails,
                               onDelete: controller.onDeleteCalculation,
                             ),
@@ -84,8 +84,8 @@ class HistoryScreen extends GetView<HistoryController> {
                             CustomCalculationItem(
                               date: '08 Jan 2026',
                               tag: 'Non-Government',
-                              homeValue: '\$300,00',
                               loanAmount: '300,00',
+                              cashAvailable: '300,00',
                               onViewDetails: controller.onViewDetails,
                               onDelete: controller.onDeleteCalculation,
                             ),

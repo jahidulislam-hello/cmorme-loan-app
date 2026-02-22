@@ -47,6 +47,13 @@ class AccountSettingScreen extends GetView<AccountSettingController> {
                 title: 'Setting',
                 onTap: controller.onSetting,
               ),
+              const SizedBox(height: 16),
+              ProfileOptionContainer(
+                iconPath: AppImages.logout,
+                title: 'Log Out',
+                onTap: controller.onLogout,
+
+              ),
             ],
           ),
         ),

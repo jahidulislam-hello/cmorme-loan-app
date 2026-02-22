@@ -72,7 +72,9 @@ class UserHomeScreen extends GetView<HomeController> {
 
               /// Calculate Loan Card
               CustomCalculateLoanItem(
-                onStartPressed: controller.onStartCalculation,
+                onReverseRefinance: controller.onReverseRefinance,
+                onReverseForPurchase: controller.onReverseForPurchase,
+                onReverseMortgageFAQ: controller.onReverseMortgageFAQ,
               ),
 
               const SizedBox(height: 28),
@@ -117,9 +119,9 @@ class UserHomeScreen extends GetView<HomeController> {
                     )
                   : CustomCalculationItem(
                       date: '08 Jan 2026',
-                      tag: 'Government',
-                      homeValue: '\$300,00',
+                      tag: 'Reverse Refinance',
                       loanAmount: '300,00',
+                      cashAvailable: '300,00',
                       onViewDetails: controller.onViewDetails,
                       onDelete: controller.onDeleteCalculation,
                     ),

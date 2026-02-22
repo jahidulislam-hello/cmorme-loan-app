@@ -21,6 +21,13 @@ import 'package:reverse_mortage_loan_app/features/loan_details/presentation/view
 import 'package:reverse_mortage_loan_app/features/loan_details/presentation/view/page/loan_details_screen.dart';
 import 'package:reverse_mortage_loan_app/features/request_proposal/presentation/view/bindings/request_proposal_binding.dart';
 import 'package:reverse_mortage_loan_app/features/request_proposal/presentation/view/page/request_proposal_screen.dart';
+import 'package:reverse_mortage_loan_app/features/request_proposal/presentation/view/page/address_page.dart';
+import 'package:reverse_mortage_loan_app/features/request_proposal/presentation/view/page/city_state_page.dart';
+import 'package:reverse_mortage_loan_app/features/request_proposal/presentation/view/page/interested_page.dart';
+import 'package:reverse_mortage_loan_app/features/request_proposal/presentation/view/page/loan_amount_page.dart';
+import 'package:reverse_mortage_loan_app/features/request_proposal/presentation/view/page/dob_page.dart';
+import 'package:reverse_mortage_loan_app/features/request_proposal/presentation/view/page/inquiry_page.dart';
+import 'package:reverse_mortage_loan_app/features/request_proposal/presentation/view/page/appointment_page.dart';
 import 'package:reverse_mortage_loan_app/features/request_proposal/presentation/view/page/inquiry_success_screen.dart';
 import 'package:reverse_mortage_loan_app/features/reverse_refinance/presentation/view/loan_result_screen.dart';
 import 'package:reverse_mortage_loan_app/features/inbox/presentation/view/binding/inbox_binding.dart';
@@ -117,6 +124,34 @@ class AppRouter {
       name: RouteNames.requestProposal,
       page: () => const RequestProposalScreen(),
       binding: RequestProposalBinding(),
+    ),
+    GetPage(
+      name: RouteNames.proposalAddress,
+      page: () => const AddressPage(),
+    ),
+    GetPage(
+      name: RouteNames.proposalCityState,
+      page: () => const CityStatePage(),
+    ),
+    GetPage(
+      name: RouteNames.proposalInterested,
+      page: () => const InterestedPage(),
+    ),
+    GetPage(
+      name: RouteNames.proposalLoanAmount,
+      page: () => const LoanAmountPage(),
+    ),
+    GetPage(
+      name: RouteNames.proposalDob,
+      page: () => const DobPage(),
+    ),
+    GetPage(
+      name: RouteNames.proposalInquiry,
+      page: () => const InquiryPage(),
+    ),
+    GetPage(
+      name: RouteNames.proposalAppointment,
+      page: () => const AppointmentPage(),
     ),
     GetPage(
       name: RouteNames.inquirySuccess,

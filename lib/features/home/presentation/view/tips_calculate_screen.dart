@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:reverse_mortage_loan_app/config/routes/route_names.dart';
+import 'package:reverse_mortage_loan_app/shared/app_image/app_images.dart';
 import 'package:reverse_mortage_loan_app/shared/theme/app_colors.dart';
 
 class TipsCalculateScreen extends StatefulWidget {
@@ -77,9 +79,44 @@ class _TipsCalculateScreenState extends State<TipsCalculateScreen>
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        '💬',
-                        style: TextStyle(fontSize: 16),
+                      SizedBox(
+                        width: 30,
+                        height: 28,
+                        child: Stack(
+                          clipBehavior: Clip.none,
+                          children: [
+                            SvgPicture.asset(
+                              AppImages.triangleIcon,
+                              width: 30,
+                              height: 28,
+                            ),
+                            Positioned(
+                              left: 0,
+                              top: 0,
+                              bottom: 0,
+                              child: Center(
+                                child: Container(
+                                  width: 11,
+                                  height: 6,
+                                  decoration: const BoxDecoration(
+                                    color: AppColors.yellow500,
+                                    shape: BoxShape.rectangle,
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      '${index + 1}'.padLeft(2, '0'),
+                                      style: const TextStyle(
+                                        color: AppColors.primary,
+                                        fontSize: 5,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                       const SizedBox(width: 12),
                       Expanded(

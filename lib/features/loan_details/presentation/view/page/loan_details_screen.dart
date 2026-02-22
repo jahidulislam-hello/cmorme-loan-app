@@ -84,7 +84,7 @@ class LoanDetailsScreen extends GetView<LoanDetailsController> {
               Padding(
                 padding: const EdgeInsets.only(bottom: 20),
                 child: CustomButton(
-                  text: 'Request for more info.',
+                  text: 'Request for more information.',
                   onPressed: controller.onRequestMoreInfo,
                   textColor: AppColors.primary,
                 ),

@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:reverse_mortage_loan_app/features/authentication/presentation/view/controller/auth_controller.dart';
-import 'package:reverse_mortage_loan_app/shared/app_image/app_images.dart';
+import 'package:reverse_mortage_loan_app/config/routes/route_names.dart';
+import 'package:reverse_mortage_loan_app/features/reverse_refinance/shared/widgets/loan_estimate_card.dart';
 import 'package:reverse_mortage_loan_app/shared/theme/app_colors.dart';
 import 'package:reverse_mortage_loan_app/shared/widgets/custom_button.dart';
-import 'package:reverse_mortage_loan_app/shared/widgets/custom_horizontal_line.dart';
 
 class LoanResultScreen extends StatelessWidget {
   const LoanResultScreen({super.key});
@@ -16,7 +14,6 @@ class LoanResultScreen extends StatelessWidget {
     final type = args?['type'] ?? 'refinance';
     final isPurchase = type == 'purchase';
     final title = isPurchase ? 'Reverse for Purchase' : 'Reverse Refinance';
-    final isRealEstate = AuthController.userRole.value == 'real_estate';
 
     return Scaffold(
       backgroundColor: AppColors.primary,
@@ -49,179 +46,64 @@ class LoanResultScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      /// User info container (real estate only)
-                      if (isRealEstate) ...[
-                        const SizedBox(height: 16),
-                        Column(
-                          children: [
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                const Expanded(
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Ankon Akash',
-                                        style: TextStyle(
-                                          color: AppColors.white,
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      SizedBox(height: 4),
-                                      Text(
-                                        'abcd1234@gmai.com',
-                                        style: TextStyle(
-                                          color: AppColors.hintGrey,
-                                          fontSize: 14,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    // Handle delete
-                                  },
-                                  child: SvgPicture.asset(
-                                    AppImages.deleteIcon,
-                                    width: 24,
-                                    height: 24,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            CustomHorizontalLine(
-                              thickness: 2,
-                            )
-                          ],
-                        ),
-                      ],
+                      const SizedBox(height: 16),
 
-                      const SizedBox(height: 32),
-
-                      /// Estimated Govt Reverse Mortgage
-                      const Text(
-                        'Estimated Govt Reverse Mortgage',
-                        style: TextStyle(
-                          color: AppColors.yellow500,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      const Text(
-                        'Loan Amount',
-                        style: TextStyle(
-                          color: AppColors.blue50,
-                          fontSize: 20,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        '\$1500',
-                        style: TextStyle(
-                          color: AppColors.green500,
-                          fontSize: 36,
-                          fontWeight: FontWeight.bold,
-                        ),
+                      /// Estimated Government Insured Reverse Mortgage
+                      LoanEstimateCard(
+                        title: 'Estimated Government Insured\nReverse Mortgage',
+                        loanAmount: '\$1500',
+                        cashAvailable: '\$1500',
+                        downPayment: isPurchase ? '\$1500' : null,
                       ),
 
-                      /// Down Payment (Purchase only)
-                      if (isPurchase) ...[
-                        const SizedBox(height: 8),
-                        const Text(
-                          'Down Payment',
-                          style: TextStyle(
-                            color: AppColors.blue50,
-                            fontSize: 20,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        const Text(
-                          '\$1500',
-                          style: TextStyle(
-                            color: AppColors.green500,
-                            fontSize: 36,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
+                      const SizedBox(height: 20),
 
-                      const SizedBox(height: 35),
-
-                      /// Estimated Non-Govt Reverse Mortgage
-                      const Text(
-                        'Estimated Non-Govt Reverse Mortgage',
-                        style: TextStyle(
-                          color: AppColors.yellow500,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
-                        ),
+                      /// Estimated Non-Government Insured Reverse Mortgage
+                      LoanEstimateCard(
+                        title:
+                            'Estimated Non-Government Insured\nReverse Mortgage',
+                        loanAmount: '\$1500',
+                        cashAvailable: '\$1500',
+                        downPayment: isPurchase ? '\$1500' : null,
                       ),
-                      const SizedBox(height: 8),
-                      const Text(
-                        'Loan Amount',
-                        style: TextStyle(
-                          color: AppColors.blue50,
-                          fontSize: 20,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        '\$1500',
-                        style: TextStyle(
-                          color: AppColors.green500,
-                          fontSize: 36,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-
-                      /// Down Payment (Purchase only)
-                      if (isPurchase) ...[
-                        const SizedBox(height: 8),
-                        const Text(
-                          'Down Payment',
-                          style: TextStyle(
-                            color: AppColors.blue50,
-                            fontSize: 20,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        const Text(
-                          '\$1500',
-                          style: TextStyle(
-                            color: AppColors.green500,
-                            fontSize: 36,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
 
                       const Spacer(),
 
-                      /// Calculate Loan Button
+                      /// Start New Calculation Button
                       CustomButton(
-                        text: 'Calculate Loan',
+                        text: 'Start New Calculation',
                         onPressed: () {
-                          // TODO: Calculate loan action
+                          Get.offAllNamed(RouteNames.userHome);
                         },
-                        textColor: AppColors.primary,
+                        backgroundColor: AppColors.blue600,
+                        textColor: AppColors.white,
                       ),
                       const SizedBox(height: 12),
 
-                      /// Request for more info Button
+                      /// Request Full Proposal Button
                       CustomButton(
-                        text: 'Request for more info.',
+                        text: 'Request Full Proposal',
                         onPressed: () {
-                          // TODO: Request more info action
+                          Get.toNamed(RouteNames.requestProposal);
                         },
-                        textColor: AppColors.primary,
+
+                         textColor: AppColors.primary,
+                        backgroundColor: AppColors.blue100,
+
+
+                      ),
+
+                      const SizedBox(height: 8),
+
+                      const Center(
+                        child: Text(
+                          "Users to hit 'request full proposal' and send more information",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: AppColors.hintGrey,
+                            fontSize: 11,
+                          ),
+                        ),
                       ),
 
                       const SizedBox(height: 20),

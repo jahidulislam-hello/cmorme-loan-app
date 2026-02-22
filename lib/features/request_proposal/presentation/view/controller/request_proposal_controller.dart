@@ -4,54 +4,65 @@ import 'package:reverse_mortage_loan_app/config/routes/route_names.dart';
 
 class RequestProposalController extends GetxController {
   final currentStep = 0.obs;
-  late final PageController pageController;
 
   // Step 1 - Basic Information
   final fullNameController = TextEditingController();
+  final lastNameController = TextEditingController();
   final emailController = TextEditingController();
+
+  // Step 2 - Address
   final addressController = TextEditingController();
+
+  // Step 3 - City & State
   final cityController = TextEditingController();
   final stateCodeController = TextEditingController();
 
-  // Step 2 - Interested
+  // Step 4 - Interested
   final selectedInterest = 0.obs;
   final interestOptions = [
-    'Reverse Mortgage - Reverse finance',
+    'Reverse Mortgage - Reverse Refinance',
     'Reverse Mortgage - Reverse for purchase',
-    'Reverse Mortgage - General Information',
   ];
 
-  // Step 3 - Details for Loan Amount
+  // Step 5 - Details for Loan Amount
   final homeValueController = TextEditingController();
+
+  // Step 6 - Date of Birth
   final dobController = TextEditingController();
 
-  // Step 4 - Inquiry
+  // Step 7 - Inquiry
   final inquiryController = TextEditingController();
 
-  @override
-  void onInit() {
-    super.onInit();
-    pageController = PageController();
+  // Step 8 - Appointment
+  final selectedDate = Rxn<DateTime>();
+  final timeController = TextEditingController();
+
+  void goToAddress() {
+    Get.toNamed(RouteNames.proposalAddress);
   }
 
-  void goToStep(int step) {
-    currentStep.value = step;
-    pageController.animateToPage(
-      step,
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.easeInOut,
-    );
+  void goToCityState() {
+    Get.toNamed(RouteNames.proposalCityState);
   }
 
-  void nextStep() {
-    if (currentStep.value < 3) {
-      currentStep.value++;
-      pageController.animateToPage(
-        currentStep.value,
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
-      );
-    }
+  void goToInterested() {
+    Get.toNamed(RouteNames.proposalInterested);
+  }
+
+  void goToLoanAmount() {
+    Get.toNamed(RouteNames.proposalLoanAmount);
+  }
+
+  void goToDob() {
+    Get.toNamed(RouteNames.proposalDob);
+  }
+
+  void goToInquiry() {
+    Get.toNamed(RouteNames.proposalInquiry);
+  }
+
+  void goToAppointment() {
+    Get.toNamed(RouteNames.proposalAppointment);
   }
 
   void onSend() {
@@ -60,8 +71,8 @@ class RequestProposalController extends GetxController {
 
   @override
   void onClose() {
-    pageController.dispose();
     fullNameController.dispose();
+    lastNameController.dispose();
     emailController.dispose();
     addressController.dispose();
     cityController.dispose();
@@ -69,6 +80,7 @@ class RequestProposalController extends GetxController {
     homeValueController.dispose();
     dobController.dispose();
     inquiryController.dispose();
+    timeController.dispose();
     super.onClose();
   }
 }

@@ -5,11 +5,15 @@ import 'package:reverse_mortage_loan_app/shared/theme/app_colors.dart';
 import 'package:reverse_mortage_loan_app/shared/widgets/custom_button.dart';
 
 class CustomCalculateLoanItem extends StatelessWidget {
-  final VoidCallback onStartPressed;
+  final VoidCallback onReverseRefinance;
+  final VoidCallback onReverseForPurchase;
+  final VoidCallback onReverseMortgageFAQ;
 
   const CustomCalculateLoanItem({
     super.key,
-    required this.onStartPressed,
+    required this.onReverseRefinance,
+    required this.onReverseForPurchase,
+    required this.onReverseMortgageFAQ,
   });
 
   @override
@@ -38,31 +42,107 @@ class CustomCalculateLoanItem extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           const Text(
-            'Calculate Your Loan',
+            'What would you like to calculate?',
+            textAlign: TextAlign.center,
             style: TextStyle(
               color: AppColors.white,
               fontSize: 18,
               fontWeight: FontWeight.bold,
             ),
           ),
-          const SizedBox(height: 8),
-          const Text(
-            'Calculate loan amounts instantly based on\nuser input such as age, property value, and\nselected interest rate',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: AppColors.hintGrey,
-              fontSize: 13,
-              height: 1.5,
-            ),
-          ),
           const SizedBox(height: 20),
+
+          /// Reverse Refinance Button
+          _CalculateOptionButton(
+            title: 'Reverse Refinance',
+            subtitle: 'Stay home, access cash, with monthly mortgage payments',
+            onTap: onReverseRefinance,
+          ),
+
+          const SizedBox(height: 12),
+
+          /// Reverse for Purchase Button
+          _CalculateOptionButton(
+            title: 'Reverse for Purchase',
+            subtitle:
+                'Buy new home & optional or no monthly mortgage payments',
+            onTap: onReverseForPurchase,
+          ),
+
+          const SizedBox(height: 12),
+
+          /// Reverse Mortgage FAQ Button
           CustomButton(
-            text: 'Start',
-            onPressed: onStartPressed,
+            text: 'Reverse Mortgage FAQ',
+            onPressed: onReverseMortgageFAQ,
             backgroundColor: AppColors.green500,
             textColor: AppColors.primary,
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _CalculateOptionButton extends StatelessWidget {
+  final String title;
+  final String subtitle;
+  final VoidCallback onTap;
+
+  const _CalculateOptionButton({
+    required this.title,
+    required this.subtitle,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: double.infinity,
+        height: 70,
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        decoration: BoxDecoration(
+          color: AppColors.blue600,
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(
+            color: AppColors.hintGrey.withValues(alpha: 0.3),
+            width: 1,
+          ),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(
+                    color: AppColors.primary,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const Icon(
+                  Icons.chevron_right,
+                  color: AppColors.primary,
+                  size: 22,
+                ),
+
+              ],
+            ),
+            Text(
+              subtitle,
+              style: const TextStyle(
+                color: AppColors.blue400,
+                fontSize: 10
+               // height: 1.3,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

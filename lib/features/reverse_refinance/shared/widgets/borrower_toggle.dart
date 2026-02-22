@@ -62,7 +62,8 @@ class BorrowerToggle extends StatelessWidget {
           child: Text(
             label,
             style: TextStyle(
-              color: isSelected ? AppColors.white : AppColors.hintGrey,
+             // color: AppColors.primary,
+              color: isSelected ? AppColors.primary : AppColors.hintGrey,
               fontSize: 13,
               fontWeight: FontWeight.w600,
             ),

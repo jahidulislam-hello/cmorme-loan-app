@@ -8,20 +8,20 @@ class RecentCalculationController extends GetxController {
     {
       'date': '08 Jan 2026',
       'tag': 'Government',
-      'homeValue': '\$300,00',
-      'loanAmount': '\$300,00',
+      'cashAvailable': '300,00',
+      'loanAmount': '300,00',
     },
     {
       'date': '08 Jan 2026',
       'tag': 'Non-Government',
-      'homeValue': '\$300,00',
-      'loanAmount': '\$300,00',
+      'cashAvailable': '300,00',
+      'loanAmount': '300,00',
     },
     {
       'date': '08 Jan 2026',
       'tag': 'Government',
-      'homeValue': '\$300,00',
-      'loanAmount': '\$300,00',
+      'cashAvailable': '300,00',
+      'loanAmount': '300,00',
     },
   ].obs;
 

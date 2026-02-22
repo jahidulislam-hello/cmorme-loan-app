@@ -73,7 +73,7 @@ class LabeledInputField extends StatelessWidget {
                       ? [FilteringTextInputFormatter.digitsOnly]
                       : null,
                   style: const TextStyle(
-                    color: AppColors.white,
+                    color: AppColors.green500,
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
                   ),

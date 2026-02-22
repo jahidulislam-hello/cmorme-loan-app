@@ -53,9 +53,12 @@ class RecentCalculationScreen extends GetView<RecentCalculationController> {
               }
               return CustomCalculationItem(
                 date: item['date']!,
-                tag: item['tag']!,
-                homeValue: item['homeValue']!,
+                tag: 'Reverse for Purchase',
+
+                // tag: item['tag']!,
                 loanAmount: item['loanAmount']!,
+                downPayment: "300,00",
+                cashAvailable: item['cashAvailable']!,
                 onViewDetails: () => controller.onViewDetails(index),
                 onDelete: () => controller.onDeleteCalculation(index),
               );

@@ -10,13 +10,14 @@ class HomeController extends GetxController {
 
   void onNavTap(int index) {
     selectedNavIndex.value = index;
+    // if (index == 1) {
+    //   Get.toNamed(RouteNames.inbox);
+    //   selectedNavIndex.value = 0;
+    // } else
     if (index == 1) {
-      Get.toNamed(RouteNames.inbox);
-      selectedNavIndex.value = 0;
-    } else if (index == 2) {
       Get.toNamed(RouteNames.history);
       selectedNavIndex.value = 0;
-    } else if (index == 3) {
+    } else if (index == 2) {
       Get.toNamed(RouteNames.accountSetting);
       selectedNavIndex.value = 0;
     }
@@ -26,8 +27,18 @@ class HomeController extends GetxController {
     Get.toNamed(RouteNames.notification);
   }
 
-  void onStartCalculation() {
-    Get.toNamed(RouteNames.calculateOptions);
+  void onReverseRefinance() {
+    Get.toNamed(RouteNames.reverseRefinance,
+        arguments: {'type': 'refinance'});
+  }
+
+  void onReverseForPurchase() {
+    Get.toNamed(RouteNames.reverseRefinance,
+        arguments: {'type': 'purchase'});
+  }
+
+  void onReverseMortgageFAQ() {
+    Get.toNamed(RouteNames.tipsCalculate);
   }
 
   void onSeeAllCalculations() {
