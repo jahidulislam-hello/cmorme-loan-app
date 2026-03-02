@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:reverse_mortage_loan_app/config/routes/route_names.dart';
+import 'package:reverse_mortage_loan_app/shared/app_image/app_images.dart';
 import 'package:reverse_mortage_loan_app/shared/widgets/logo/app_logo.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -22,10 +23,10 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: AppLogo(
-          width: 295,
-          height: 279,
+      body: Align(
+        alignment: const Alignment(0.3, 0.3),
+        child: Image.asset(
+          AppImages.launcherIcons,
         ),
       ),
     );

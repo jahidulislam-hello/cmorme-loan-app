@@ -38,7 +38,7 @@ class HomeController extends GetxController {
   }
 
   void onReverseMortgageFAQ() {
-    Get.toNamed(RouteNames.tipsCalculate);
+    Get.toNamed(RouteNames.faq);
   }
 
   void onSeeAllCalculations() {

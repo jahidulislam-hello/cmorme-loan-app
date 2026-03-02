@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:reverse_mortage_loan_app/shared/app_image/app_images.dart';
 import 'package:reverse_mortage_loan_app/shared/theme/app_colors.dart';
 import 'package:reverse_mortage_loan_app/shared/widgets/custom_button.dart';
 import 'package:reverse_mortage_loan_app/features/loan_details/presentation/view/controller/loan_details_controller.dart';
 import 'package:reverse_mortage_loan_app/features/loan_details/presentation/view/widgets/loan_image_section.dart';
 import 'package:reverse_mortage_loan_app/features/loan_details/presentation/view/widgets/loan_info_section.dart';
-import 'package:reverse_mortage_loan_app/features/loan_details/presentation/view/widgets/borrower_age_section.dart';
-import 'package:reverse_mortage_loan_app/features/loan_details/presentation/view/widgets/home_value_section.dart';
+import 'package:reverse_mortage_loan_app/features/loan_details/presentation/view/widgets/estimated_mortgage_section.dart';
 
 class LoanDetailsScreen extends GetView<LoanDetailsController> {
   const LoanDetailsScreen({super.key});
@@ -61,21 +61,34 @@ class LoanDetailsScreen extends GetView<LoanDetailsController> {
                             LoanInfoSection(
                               date: controller.date,
                               objective: controller.objective,
-                              loanType: controller.loanType,
-                              loanAmount: controller.loanAmount,
-                              downPayment: controller.downPayment,
+                              homeValue: controller.homeValue,
+                              firstBorrowerAge: controller.firstBorrowerAge,
+                              secondBorrowerAge: controller.secondBorrowerAge,
                             ),
                           ],
                         ),
                       ),
 
                       const SizedBox(height: 24),
-                      BorrowerAgeSection(
-                        firstBorrowerAge: controller.firstBorrowerAge,
-                        secondBorrowerAge: controller.secondBorrowerAge,
+                      EstimatedMortgageSection(
+                        title: 'Estimated Government Insured Reverse Mortgage',
+                        primaryLabel: 'Loan Amount',
+                        primaryIconPath: AppImages.loanAmountIcon,
+                        primaryAmount: controller.loanAmount,
+                        cashAvailable: controller.cashAvailable,
+                        downPayment: controller.downPayment,
                       ),
-                      const SizedBox(height: 16),
-                      HomeValueSection(homeValue: controller.homeValue),
+
+                      const SizedBox(height: 24),
+                      EstimatedMortgageSection(
+                        title: 'Estimated Non-Govt Insured Reverse Mortgage',
+                        primaryLabel: 'Home Value',
+                        primaryIconPath: AppImages.homeIcon,
+                        primaryAmount: controller.homeValue,
+                        cashAvailable: controller.cashAvailable,
+                        downPayment: controller.downPayment,
+                      ),
+
                       const SizedBox(height: 24),
                     ],
                   ),
@@ -83,10 +96,23 @@ class LoanDetailsScreen extends GetView<LoanDetailsController> {
               ),
               Padding(
                 padding: const EdgeInsets.only(bottom: 20),
-                child: CustomButton(
-                  text: 'Request for more information.',
-                  onPressed: controller.onRequestMoreInfo,
-                  textColor: AppColors.primary,
+                child: Column(
+                  children: [
+                    CustomButton(
+                      text: 'Request Full Proposal',
+                      onPressed: controller.onRequestMoreInfo,
+                      textColor: AppColors.primary,
+                    ),
+                    const SizedBox(height: 8),
+                    const Text(
+                      'Get more information on available line of credit, interest rates, eligibility, and more.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: AppColors.hintGrey,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],

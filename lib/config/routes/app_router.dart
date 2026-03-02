@@ -43,6 +43,14 @@ import 'package:reverse_mortage_loan_app/features/profile/presentation/view/page
 import 'package:reverse_mortage_loan_app/features/profile/presentation/view/page/setting_screen.dart';
 import 'package:reverse_mortage_loan_app/features/profile/presentation/view/page/change_password_screen.dart';
 import 'package:reverse_mortage_loan_app/features/reverse_refinance/presentation/view/reverse_refinance_screen.dart';
+import 'package:reverse_mortage_loan_app/features/faq/presentation/view/binding/faq_binding.dart';
+import 'package:reverse_mortage_loan_app/features/faq/presentation/view/page/faq_screen.dart';
+import 'package:reverse_mortage_loan_app/features/faq/presentation/view/page/faq_questions_screen.dart';
+import 'package:reverse_mortage_loan_app/features/faq/presentation/view/page/about_us_screen.dart';
+import 'package:reverse_mortage_loan_app/features/faq/presentation/view/page/why_we_educate_screen.dart';
+import 'package:reverse_mortage_loan_app/features/faq/presentation/view/page/our_blog_screen.dart';
+import 'package:reverse_mortage_loan_app/features/faq/presentation/view/page/testimonial_screen.dart';
+import 'package:reverse_mortage_loan_app/features/faq/presentation/view/page/instant_quote_screen.dart';
 
 class AppRouter {
   AppRouter._();
@@ -198,6 +206,37 @@ class AppRouter {
       name: RouteNames.inboxDetails,
       page: () => const InboxDetailsScreen(),
       binding: InboxBinding(),
+    ),
+    GetPage(
+      name: RouteNames.faq,
+      page: () => const FaqScreen(),
+      binding: FaqBinding(),
+    ),
+    GetPage(
+      name: RouteNames.faqQuestions,
+      page: () => const FaqQuestionsScreen(),
+      binding: FaqBinding(),
+    ),
+    GetPage(
+      name: RouteNames.aboutUs,
+      page: () => const AboutUsScreen(),
+    ),
+    GetPage(
+      name: RouteNames.whyWeEducate,
+      page: () => const WhyWeEducateScreen(),
+    ),
+    GetPage(
+      name: RouteNames.ourBlog,
+      page: () => const OurBlogScreen(),
+    ),
+    GetPage(
+      name: RouteNames.testimonial,
+      page: () => const TestimonialScreen(),
+    ),
+    GetPage(
+      name: RouteNames.instantQuote,
+      page: () => const InstantQuoteScreen(),
+      binding: FaqBinding(),
     ),
   ];
 }

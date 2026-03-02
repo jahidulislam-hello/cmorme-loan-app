@@ -69,15 +69,10 @@ class CustomCalculateLoanItem extends StatelessWidget {
             onTap: onReverseForPurchase,
           ),
 
-          const SizedBox(height: 12),
+         // const SizedBox(height: 12),
 
           /// Reverse Mortgage FAQ Button
-          CustomButton(
-            text: 'Reverse Mortgage FAQ',
-            onPressed: onReverseMortgageFAQ,
-            backgroundColor: AppColors.green500,
-            textColor: AppColors.primary,
-          ),
+
         ],
       ),
     );
@@ -101,10 +96,10 @@ class _CalculateOptionButton extends StatelessWidget {
       onTap: onTap,
       child: Container(
         width: double.infinity,
-        height: 70,
+        height: 80,
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         decoration: BoxDecoration(
-          color: AppColors.blue600,
+          color: AppColors.green500,
           borderRadius: BorderRadius.circular(8),
           border: Border.all(
             color: AppColors.hintGrey.withValues(alpha: 0.3),

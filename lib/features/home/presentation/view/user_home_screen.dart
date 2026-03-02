@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:reverse_mortage_loan_app/config/routes/app_router.dart';
+import 'package:reverse_mortage_loan_app/config/routes/route_names.dart';
 import 'package:reverse_mortage_loan_app/features/authentication/presentation/view/controller/auth_controller.dart';
 import 'package:reverse_mortage_loan_app/features/inbox/presentation/view/widgets/inbox_item.dart';
 import 'package:reverse_mortage_loan_app/shared/theme/app_colors.dart';
 import 'package:reverse_mortage_loan_app/shared/widgets/custom_bottom_nav_bar.dart';
 import 'package:reverse_mortage_loan_app/shared/widgets/custom_calculate_loan_item.dart';
 import 'package:reverse_mortage_loan_app/shared/widgets/custom_calculation_item.dart';
+import '../../../../shared/widgets/custom_button.dart';
 import 'controller/home_controller.dart';
 
 class UserHomeScreen extends GetView<HomeController> {
@@ -78,7 +81,15 @@ class UserHomeScreen extends GetView<HomeController> {
               ),
 
               const SizedBox(height: 28),
-
+              CustomButton(
+                text: 'Reverse Mortgage FAQ',
+                onPressed:(){
+                  Get.toNamed(RouteNames.faq);
+                },
+                backgroundColor: AppColors.blue600,
+                textColor: AppColors.primary,
+              ),
+              const SizedBox(height: 28),
               /// Recent Calculation Header
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -105,7 +116,7 @@ class UserHomeScreen extends GetView<HomeController> {
                 ],
               ),
 
-              const SizedBox(height: 32),
+              const SizedBox(height: 10),
 
               Obx(() => AuthController.userRole.value == 'real_estate'
                   ? InboxItem(

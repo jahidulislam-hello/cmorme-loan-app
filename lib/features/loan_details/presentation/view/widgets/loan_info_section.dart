@@ -6,41 +6,42 @@ import 'package:reverse_mortage_loan_app/shared/theme/app_colors.dart';
 class LoanInfoSection extends StatelessWidget {
   final String date;
   final String objective;
-  final String loanType;
-  final String loanAmount;
-  final String? downPayment;
+  final String homeValue;
+  final String firstBorrowerAge;
+  final String? secondBorrowerAge;
 
   const LoanInfoSection({
     super.key,
     required this.date,
     required this.objective,
-    required this.loanType,
-    required this.loanAmount,
-    this.downPayment,
+    required this.homeValue,
+    required this.firstBorrowerAge,
+    this.secondBorrowerAge,
   });
+
+  bool get hasTwoBorrowers => secondBorrowerAge != null;
 
   @override
   Widget build(BuildContext context) {
-    final bool isGovernment = loanType == 'Government';
-
     return Column(
       children: [
-        _buildInfoRow(AppImages.dateIcon, 'Date', date),
+        _buildInfoRow(AppImages.dateIcon, 'Date', date, AppColors.white),
         const SizedBox(height: 12),
-        _buildInfoRow(AppImages.objectiveIcon, 'Objective', objective),
+        _buildInfoRow(AppImages.objectiveIcon, 'Objective', objective, AppColors.white),
         const SizedBox(height: 12),
-        _buildLoanTypeRow(isGovernment),
+        _buildInfoRow(AppImages.homeIcon, 'Home Value', homeValue, AppColors.green500),
         const SizedBox(height: 12),
-        _buildAmountRow(AppImages.loanAmountIcon, 'Loan Amount', loanAmount),
-        if (downPayment != null) ...[
+        if (hasTwoBorrowers) ...[
+          _buildInfoRow(AppImages.borrowerIcon, '1st Borrower Age', firstBorrowerAge, AppColors.white),
           const SizedBox(height: 12),
-          _buildAmountRow(AppImages.loanAmountIcon, 'Down-Payment', downPayment!),
-        ],
+          _buildInfoRow(AppImages.borrowerIcon, '2nd Borrower Age', secondBorrowerAge!, AppColors.white),
+        ] else
+          _buildInfoRow(AppImages.borrowerIcon, 'Borrower Age', firstBorrowerAge, AppColors.white),
       ],
     );
   }
 
-  Widget _buildInfoRow(String svgPath, String label, String value) {
+  Widget _buildInfoRow(String svgPath, String label, String value, Color valueColor) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -59,77 +60,9 @@ class LoanInfoSection extends StatelessWidget {
         ),
         Text(
           value,
-          style: const TextStyle(
-            color: AppColors.white,
+          style: TextStyle(
+            color: valueColor,
             fontSize: 14,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildLoanTypeRow(bool isGovernment) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Row(
-          children: [
-            SvgPicture.asset(AppImages.loanTypeIcon, width: 18, height: 18),
-            const SizedBox(width: 6),
-            const Text(
-              'Loan Type',
-              style: TextStyle(
-                color: AppColors.hintGrey,
-                fontSize: 14,
-              ),
-            ),
-          ],
-        ),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(4),
-            border: Border.all(
-              color: isGovernment ? AppColors.green600 : AppColors.accentBlue,
-              width: 1,
-            ),
-          ),
-          child: Text(
-            loanType,
-            style: TextStyle(
-              color: isGovernment ? AppColors.green500 : AppColors.accentBlue,
-              fontSize: 12,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildAmountRow(String svgPath, String label, String amount) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Row(
-          children: [
-            SvgPicture.asset(svgPath, width: 18, height: 18),
-            const SizedBox(width: 6),
-            Text(
-              label,
-              style: const TextStyle(
-                color: AppColors.hintGrey,
-                fontSize: 14,
-              ),
-            ),
-          ],
-        ),
-        Text(
-          amount,
-          style: const TextStyle(
-            color: AppColors.green500,
-            fontSize: 18,
             fontWeight: FontWeight.bold,
           ),
         ),

@@ -5,8 +5,8 @@ import 'package:reverse_mortage_loan_app/config/routes/route_names.dart';
 class LoanDetailsController extends GetxController {
   final String date = '08 Jan 2026';
   final String objective = 'Reverse Finance';
-  final String loanType = 'Government';
   final String loanAmount = '\$1500';
+  final String cashAvailable = '\$1500';
   final String? downPayment = null;
   final String firstBorrowerAge = '55';
   final String? secondBorrowerAge = '75';

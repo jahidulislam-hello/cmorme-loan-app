@@ -55,7 +55,7 @@ class DeleteConfirmationDialog extends StatelessWidget {
 
             /// Title
             const Text(
-              'Delete the data',
+              'Delete the data?',
               style: TextStyle(
                 color: AppColors.white,
                 fontSize: 18,

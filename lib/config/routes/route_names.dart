@@ -34,4 +34,11 @@ class RouteNames {
   static const String notification = '/notification';
   static const String inbox = '/inbox';
   static const String inboxDetails = '/inbox-details';
+  static const String faq = '/faq';
+  static const String faqQuestions = '/faq-questions';
+  static const String aboutUs = '/about-us';
+  static const String whyWeEducate = '/why-we-educate';
+  static const String ourBlog = '/our-blog';
+  static const String testimonial = '/testimonial';
+  static const String instantQuote = '/instant-quote';
 }

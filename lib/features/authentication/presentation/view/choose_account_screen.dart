@@ -29,7 +29,7 @@ class ChooseAccountScreen extends GetView<AuthController> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Mortgage',
+                  'Reverse Mortgage',
                   style: TextStyle(
                     color: AppColors.white,
                     fontSize: 28,
@@ -37,7 +37,7 @@ class ChooseAccountScreen extends GetView<AuthController> {
                   ),
                 ),
                 Text(
-                  'Loan App',
+                  'Calculation App',
                   style: TextStyle(
                     color: AppColors.white,
                     fontSize: 36,
@@ -71,8 +71,8 @@ class ChooseAccountScreen extends GetView<AuthController> {
                   child: InkWell(
                     onTap: controller.chooseUserAccount,
                     borderRadius: BorderRadius.circular(5),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                    child: Stack(
+                      alignment: Alignment.center,
                       children: [
                         const Text(
                           'Login Now',
@@ -82,12 +82,27 @@ class ChooseAccountScreen extends GetView<AuthController> {
                             color: AppColors.white,
                           ),
                         ),
-                        const SizedBox(width: 12),
-                        Text(
-                          '>>>',
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: AppColors.hintGrey,
+                        Positioned(
+                          right: 16,
+                          child: RichText(
+                            text: TextSpan(
+                              children: [
+                                TextSpan(
+                                  text: '>>',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: AppColors.hintGrey,
+                                  ),
+                                ),
+                                const TextSpan(
+                                  text: '>',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: AppColors.white,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ],

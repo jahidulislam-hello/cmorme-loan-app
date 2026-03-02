@@ -2,7 +2,8 @@ class AppImages {
   AppImages._();
 
   static const String logo = 'assets/images/dummy_logo_image.png';
-  static const String backgroundImage = 'assets/images/background_image.png';
+ // static const String backgroundImage = 'assets/images/background_image.png';
+  static const String backgroundImage = 'assets/images/backgroundImage.png';
   static const String group = 'assets/images/Group.svg';
   static const String layer = 'assets/images/Layer.svg';
   static const String mail = 'assets/images/mail.svg';
@@ -32,5 +33,10 @@ class AppImages {
   static const String date = 'assets/images/date_icon.svg';
   static const String triangleIcon = 'assets/images/triangle_icon.svg';
   static const String housePlaceholder = 'assets/images/house_placeholder.png';
+  static const String aboutUS = 'assets/images/abou_us.png';
+  static const String educate = 'assets/images/educate.png';
+  static const String instantQuote = 'assets/images/instant_quote.png';
+  static const String launcherIcons = 'assets/images/launcher_icons.png';
+
   static const String logout = 'assets/images/logout.svg';
 }

@@ -72,7 +72,7 @@ class DeleteSuccessDialog extends StatelessWidget {
 
             /// Subtitle
             const Text(
-              'Send your data successfully',
+              'Deleted your data successfully',
               style: TextStyle(
                 color: AppColors.hintGrey,
                 fontSize: 14,
