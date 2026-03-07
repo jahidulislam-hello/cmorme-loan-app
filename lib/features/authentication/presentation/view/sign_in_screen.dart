@@ -60,18 +60,31 @@ class SignInScreen extends GetView<AuthController> {
                         controller.togglePasswordVisibility,
                         controller: controller.passwordController,
                       )),
-
+                      const SizedBox(height: 8),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: GestureDetector(
+                          onTap: controller.goToVerifyEmail,
+                          child: const Text(
+                            'Forgot Password?',
+                            style: TextStyle(
+                              color: AppColors.white,
+                              fontSize: 13,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                      ),
 
                       const Spacer(),
 
 
-                      CustomButton(
-                        text: 'Login',
-                        onPressed: () {
-                          Get.toNamed(RouteNames.userHome);
-                        },
-                        textColor: AppColors.primary,
-                      ),
+                      Obx(() => CustomButton(
+                            text: 'Login',
+                            onPressed: controller.login,
+                            isLoading: controller.isLoading.value,
+                            textColor: AppColors.primary,
+                          )),
                       const SizedBox(height: 20),
 
 

@@ -4,14 +4,14 @@ import 'package:reverse_mortage_loan_app/shared/theme/app_colors.dart';
 class LoanEstimateCard extends StatelessWidget {
   final String title;
   final String loanAmount;
-  final String cashAvailable;
+  final String? cashAvailable;
   final String? downPayment;
 
   const LoanEstimateCard({
     super.key,
     required this.title,
     required this.loanAmount,
-    required this.cashAvailable,
+    this.cashAvailable,
     this.downPayment,
   });
 
@@ -62,30 +62,31 @@ class LoanEstimateCard extends StatelessWidget {
                   ],
                 ),
               ),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Cash Available',
-                      style: TextStyle(
-                        color: AppColors.white,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
+              if (cashAvailable != null)
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Cash Available',
+                        style: TextStyle(
+                          color: AppColors.white,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      cashAvailable,
-                      style: const TextStyle(
-                        color: AppColors.green500,
-                        fontSize: 32,
-                        fontWeight: FontWeight.bold,
+                      const SizedBox(height: 4),
+                      Text(
+                        cashAvailable!,
+                        style: const TextStyle(
+                          color: AppColors.green500,
+                          fontSize: 32,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
             ],
           ),
           if (downPayment != null) ...[

@@ -52,10 +52,11 @@ class NewPasswordScreen extends GetView<AuthController> {
                     controller: controller.newConfirmPasswordController,
                   )),
               const SizedBox(height: 32),
-              CustomButton(
-                text: 'Confirm',
-                onPressed: controller.resetPassword,
-              ),
+              Obx(() => CustomButton(
+                    text: 'Confirm',
+                    onPressed: controller.resetPassword,
+                    isLoading: controller.isLoading.value,
+                  )),
             ],
           ),
         ),

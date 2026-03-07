@@ -49,11 +49,12 @@ class VerifyEmailScreen extends GetView<AuthController> {
 
                       const Spacer(),
 
-                      CustomButton(
-                        text: 'Confirm',
-                        onPressed: controller.verifyEmail,
-                        textColor: AppColors.primary,
-                      ),
+                      Obx(() => CustomButton(
+                            text: 'Confirm',
+                            onPressed: controller.verifyEmail,
+                            isLoading: controller.isLoading.value,
+                            textColor: AppColors.primary,
+                          )),
                       const SizedBox(height: 20),
                     ],
                   ),

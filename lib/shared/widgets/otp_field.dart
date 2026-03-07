@@ -19,44 +19,46 @@ class OtpField extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: List.generate(length, (index) {
-        return Container(
-          width: 55,
-          height: 55,
-          margin: const EdgeInsets.symmetric(horizontal: 6),
-          child: TextField(
-            controller: controllers[index],
-            focusNode: focusNodes[index],
-            textAlign: TextAlign.center,
-            keyboardType: TextInputType.number,
-            cursorColor: AppColors.white,
-            maxLength: 1,
-            style: const TextStyle(
-              color: AppColors.white,
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
-            ),
-            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-            decoration: InputDecoration(
-              counterText: '',
-              contentPadding: EdgeInsets.zero,
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide:
-                    const BorderSide(color: AppColors.fieldBorder, width: 1),
+        return Expanded(
+          child: Container(
+            width: 55,
+            height: 55,
+            margin: const EdgeInsets.symmetric(horizontal: 6),
+            child: TextField(
+              controller: controllers[index],
+              focusNode: focusNodes[index],
+              textAlign: TextAlign.center,
+              keyboardType: TextInputType.number,
+              cursorColor: AppColors.white,
+              maxLength: 1,
+              style: const TextStyle(
+                color: AppColors.white,
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
               ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide:
-                    const BorderSide(color: AppColors.buttonBlue, width: 1.5),
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+              decoration: InputDecoration(
+                counterText: '',
+                contentPadding: EdgeInsets.zero,
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide:
+                      const BorderSide(color: AppColors.fieldBorder, width: 1),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide:
+                      const BorderSide(color: AppColors.buttonBlue, width: 1.5),
+                ),
               ),
+              onChanged: (value) {
+                if (value.isNotEmpty && index < length - 1) {
+                  focusNodes[index + 1].requestFocus();
+                } else if (value.isEmpty && index > 0) {
+                  focusNodes[index - 1].requestFocus();
+                }
+              },
             ),
-            onChanged: (value) {
-              if (value.isNotEmpty && index < length - 1) {
-                focusNodes[index + 1].requestFocus();
-              } else if (value.isEmpty && index > 0) {
-                focusNodes[index - 1].requestFocus();
-              }
-            },
           ),
         );
       }),

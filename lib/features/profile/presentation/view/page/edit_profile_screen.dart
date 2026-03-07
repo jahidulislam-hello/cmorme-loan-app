@@ -50,12 +50,12 @@ class EditProfileScreen extends GetView<EditProfileController> {
                 controller: controller.lastNameController,
               ),
               const Spacer(),
-              CustomButton(
-                text: 'Update',
-                onPressed: controller.onUpdate,
-                textColor: AppColors.primary,
-
-              ),
+              Obx(() => CustomButton(
+                    text: 'Update',
+                    onPressed: controller.onUpdate,
+                    isLoading: controller.isLoading.value,
+                    textColor: AppColors.primary,
+                  )),
               const SizedBox(height: 24),
             ],
           ),

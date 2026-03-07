@@ -75,11 +75,12 @@ class SignUpScreen extends GetView<AuthController> {
                     controller: controller.confirmPasswordController,
                   )),
               const SizedBox(height: 32),
-              CustomButton(
-                text: 'Create Account',
-                onPressed: controller.signUp,
-                textColor: AppColors.primary,
-              ),
+              Obx(() => CustomButton(
+                    text: 'Create Account',
+                    onPressed: controller.signUp,
+                    isLoading: controller.isLoading.value,
+                    textColor: AppColors.primary,
+                  )),
               const SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,

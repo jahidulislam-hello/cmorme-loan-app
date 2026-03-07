@@ -6,6 +6,7 @@ class CustomButton extends StatelessWidget {
   final String text;
   final VoidCallback onPressed;
   final bool isOutlined;
+  final bool isLoading;
   final IconData? icon;
   final String? imagePath;
   final double? width;
@@ -18,6 +19,7 @@ class CustomButton extends StatelessWidget {
     required this.text,
     required this.onPressed,
     this.isOutlined = false,
+    this.isLoading = false,
     this.icon,
     this.imagePath,
     this.width,
@@ -79,7 +81,7 @@ class CustomButton extends StatelessWidget {
       width: width ?? double.infinity,
       height: 50,
       child: ElevatedButton(
-        onPressed: onPressed,
+        onPressed: isLoading ? null : onPressed,
         style: ElevatedButton.styleFrom(
           backgroundColor: backgroundColor ?? AppColors.buttonBlue,
           foregroundColor: textColor ?? AppColors.white,
@@ -88,13 +90,22 @@ class CustomButton extends StatelessWidget {
           ),
           elevation: 0,
         ),
-        child: Text(
-          text,
-          style: TextStyle(
-            fontSize: fontSize ?? 16,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
+        child: isLoading
+            ? const SizedBox(
+                width: 22,
+                height: 22,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2.5,
+                  color: AppColors.white,
+                ),
+              )
+            : Text(
+                text,
+                style: TextStyle(
+                  fontSize: fontSize ?? 16,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
       ),
     );
   }

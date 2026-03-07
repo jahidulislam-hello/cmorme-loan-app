@@ -39,7 +39,7 @@ class OtpScreen extends GetView<AuthController> {
                       const SizedBox(height: 32),
 
                       OtpField(
-                        length: 5,
+                        length: 6,
                         controllers: controller.otpControllers,
                         focusNodes: controller.otpFocusNodes,
                       ),
@@ -75,10 +75,11 @@ class OtpScreen extends GetView<AuthController> {
                       /// 👇 pushes button to bottom
                       const Spacer(),
 
-                      CustomButton(
-                        text: 'Confirm',
-                        onPressed: controller.verifyOtp,
-                      ),
+                      Obx(() => CustomButton(
+                            text: 'Confirm',
+                            onPressed: controller.verifyOtp,
+                            isLoading: controller.isLoading.value,
+                          )),
 
                       const SizedBox(height: 20),
                     ],

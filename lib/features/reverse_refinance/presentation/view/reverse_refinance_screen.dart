@@ -167,12 +167,44 @@ class ReverseRefinanceScreen extends GetView<ReverseRefinanceController> {
                       const Spacer(),
                       const SizedBox(height: 24),
 
+                      /// Upload indicator
+                      Obx(() {
+                        if (!controller.isUploadingImages.value) {
+                          return const SizedBox.shrink();
+                        }
+                        return const Padding(
+                          padding: EdgeInsets.only(bottom: 12),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SizedBox(
+                                width: 16,
+                                height: 16,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  color: AppColors.white,
+                                ),
+                              ),
+                              SizedBox(width: 10),
+                              Text(
+                                'Uploading images...',
+                                style: TextStyle(
+                                  color: AppColors.white,
+                                  fontSize: 13,
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      }),
+
                       /// Bottom Button
-                      CustomButton(
+                      Obx(() => CustomButton(
                         text: 'Calculate Loan',
                         onPressed: controller.onNext,
                         textColor: AppColors.white,
-                      ),
+                        isLoading: controller.isLoading.value,
+                      )),
 
                       const SizedBox(height: 20),
                     ],

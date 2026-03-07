@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:reverse_mortage_loan_app/config/routes/route_names.dart';
+import 'package:reverse_mortage_loan_app/features/reverse_refinance/data/models/calculate_loan_response_model.dart';
 import 'package:reverse_mortage_loan_app/features/reverse_refinance/shared/widgets/loan_estimate_card.dart';
 import 'package:reverse_mortage_loan_app/shared/theme/app_colors.dart';
 import 'package:reverse_mortage_loan_app/shared/widgets/custom_button.dart';
@@ -8,10 +9,16 @@ import 'package:reverse_mortage_loan_app/shared/widgets/custom_button.dart';
 class LoanResultScreen extends StatelessWidget {
   const LoanResultScreen({super.key});
 
+  String _fmt(double? value) {
+    if (value == null) return '\$0';
+    return '\$${value.toStringAsFixed(value.truncateToDouble() == value ? 0 : 2)}';
+  }
+
   @override
   Widget build(BuildContext context) {
     final args = Get.arguments as Map<String, dynamic>?;
     final type = args?['type'] ?? 'refinance';
+    final result = args?['result'] as CalculateLoanResponseModel?;
     final isPurchase = type == 'purchase';
     final title = isPurchase ? 'Reverse for Purchase' : 'Reverse Refinance';
 
@@ -51,9 +58,15 @@ class LoanResultScreen extends StatelessWidget {
                       /// Estimated Government Insured Reverse Mortgage
                       LoanEstimateCard(
                         title: 'Estimated Government Insured\nReverse Mortgage',
-                        loanAmount: '\$1500',
-                        cashAvailable: '\$1500',
-                        downPayment: isPurchase ? '\$1500' : null,
+                        loanAmount: isPurchase
+                            ? _fmt(result?.reversePurchaseGovtLoanAmount)
+                            : _fmt(result?.reverseRefinanceGovtLoanAmount),
+                        cashAvailable: isPurchase
+                            ? null
+                            : _fmt(result?.reverseRefinanceGovtCashAvailable),
+                        downPayment: isPurchase
+                            ? _fmt(result?.reversePurchaseGovtDownPayment)
+                            : null,
                       ),
 
                       const SizedBox(height: 20),
@@ -62,9 +75,15 @@ class LoanResultScreen extends StatelessWidget {
                       LoanEstimateCard(
                         title:
                             'Estimated Non-Government Insured\nReverse Mortgage',
-                        loanAmount: '\$1500',
-                        cashAvailable: '\$1500',
-                        downPayment: isPurchase ? '\$1500' : null,
+                        loanAmount: isPurchase
+                            ? _fmt(result?.reversePurchaseNonGovtLoanAmount)
+                            : _fmt(result?.reverseRefinanceNonGovtLoanAmount),
+                        cashAvailable: isPurchase
+                            ? null
+                            : _fmt(result?.reverseRefinanceNonGovtCashAvailable),
+                        downPayment: isPurchase
+                            ? _fmt(result?.reversePurchaseNonGovtDownPayment)
+                            : null,
                       ),
 
                       const Spacer(),
@@ -86,11 +105,8 @@ class LoanResultScreen extends StatelessWidget {
                         onPressed: () {
                           Get.toNamed(RouteNames.requestProposal);
                         },
-
-                         textColor: AppColors.primary,
+                        textColor: AppColors.primary,
                         backgroundColor: AppColors.blue100,
-
-
                       ),
 
                       const SizedBox(height: 8),

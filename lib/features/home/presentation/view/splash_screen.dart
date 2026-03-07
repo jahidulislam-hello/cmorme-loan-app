@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:reverse_mortage_loan_app/config/routes/route_names.dart';
+import 'package:reverse_mortage_loan_app/core/services/token_service.dart';
 import 'package:reverse_mortage_loan_app/shared/app_image/app_images.dart';
 import 'package:reverse_mortage_loan_app/shared/widgets/logo/app_logo.dart';
 
@@ -16,7 +17,11 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     Future.delayed(const Duration(seconds: 3), () {
-      Get.offNamed(RouteNames.chooseAccount);
+      if (TokenService().hasToken()) {
+        Get.offNamed(RouteNames.userHome);
+      } else {
+        Get.offNamed(RouteNames.chooseAccount);
+      }
     });
   }
 

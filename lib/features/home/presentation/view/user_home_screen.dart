@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:reverse_mortage_loan_app/config/routes/app_router.dart';
 import 'package:reverse_mortage_loan_app/config/routes/route_names.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:reverse_mortage_loan_app/features/authentication/presentation/view/controller/auth_controller.dart';
 import 'package:reverse_mortage_loan_app/features/inbox/presentation/view/widgets/inbox_item.dart';
 import 'package:reverse_mortage_loan_app/shared/theme/app_colors.dart';
@@ -42,14 +43,30 @@ class UserHomeScreen extends GetView<HomeController> {
                         ),
                       ),
                       const SizedBox(height: 4),
-                      Text(
-                        controller.userName,
-                        style: const TextStyle(
-                          color: AppColors.white,
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+                      Obx(() {
+                        if (controller.isProfileLoading.value) {
+                          return Shimmer.fromColors(
+                            baseColor: Colors.white12,
+                            highlightColor: Colors.white30,
+                            child: Container(
+                              width: 130,
+                              height: 24,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                            ),
+                          );
+                        }
+                        return Text(
+                          controller.userName.value,
+                          style: const TextStyle(
+                            color: AppColors.white,
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        );
+                      }),
                     ],
                   ),
                   GestureDetector(

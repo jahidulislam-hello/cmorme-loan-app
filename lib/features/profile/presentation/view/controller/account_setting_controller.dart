@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:reverse_mortage_loan_app/config/routes/route_names.dart';
+import 'package:reverse_mortage_loan_app/core/services/token_service.dart';
 import 'package:reverse_mortage_loan_app/shared/dialoges/logout_dialog.dart';
 
 class AccountSettingController extends GetxController {
@@ -28,7 +29,8 @@ class AccountSettingController extends GetxController {
   void onLogout() {
     Get.dialog(
       LogoutDialog(
-        onLogout: () {
+        onLogout: () async {
+          await TokenService().deleteToken();
           Get.back();
           Get.offAllNamed(RouteNames.signIn);
         },
