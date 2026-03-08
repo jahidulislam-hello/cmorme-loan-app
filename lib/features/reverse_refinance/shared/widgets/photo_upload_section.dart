@@ -68,6 +68,7 @@ class PhotoUploadSection extends StatelessWidget {
         child: Stack(
           children: [
             PageView.builder(
+              physics: const BouncingScrollPhysics(),
               itemCount: photos.length,
               onPageChanged: onPageChanged,
               itemBuilder: (context, index) {

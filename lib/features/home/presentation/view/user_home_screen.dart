@@ -9,6 +9,7 @@ import 'package:reverse_mortage_loan_app/shared/theme/app_colors.dart';
 import 'package:reverse_mortage_loan_app/shared/widgets/custom_bottom_nav_bar.dart';
 import 'package:reverse_mortage_loan_app/shared/widgets/custom_calculate_loan_item.dart';
 import 'package:reverse_mortage_loan_app/shared/widgets/custom_calculation_item.dart';
+import 'package:reverse_mortage_loan_app/shared/widgets/custom_shimmer_loading_indicator.dart';
 import '../../../../shared/widgets/custom_button.dart';
 import 'controller/home_controller.dart';
 
@@ -21,6 +22,7 @@ class UserHomeScreen extends GetView<HomeController> {
       backgroundColor: AppColors.primary,
       body: SafeArea(
         child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -101,7 +103,7 @@ class UserHomeScreen extends GetView<HomeController> {
               CustomButton(
                 text: 'Reverse Mortgage FAQ',
                 onPressed:(){
-                  Get.toNamed(RouteNames.faq);
+                  Get.toNamed(RouteNames.faqQuestions);
                 },
                 backgroundColor: AppColors.blue600,
                 textColor: AppColors.primary,
@@ -135,25 +137,43 @@ class UserHomeScreen extends GetView<HomeController> {
 
               const SizedBox(height: 10),
 
-              Obx(() => AuthController.userRole.value == 'real_estate'
-                  ? InboxItem(
-                      userName: 'Ankon Akash',
-                      email: 'abcd1234@gmai.com',
-                      date: '08 Jan 2026',
-                      tag: 'Refinance',
-                      scenarioText: 'Calculated by 2 scenario',
-                      onViewDetails: controller.onViewDetails,
-                      onDelete: controller.onDeleteCalculation,
-                    )
-                  : CustomCalculationItem(
-                      date: '08 Jan 2026',
-                      tag: 'Reverse Refinance',
-                      loanAmount: '300,00',
-                      cashAvailable: '300,00',
-                      onViewDetails: controller.onViewDetails,
-                      onDelete: controller.onDeleteCalculation,
-                    ),
-              ),
+              Obx(() {
+                if (controller.isCalculationLoading.value) {
+                  return const CustomCalculationItemShimmer();
+                }
+
+                final item = controller.latestCalculation;
+                if (item == null) {
+                  return const SizedBox.shrink();
+                }
+
+                final date = controller.formatDate(item.createdAt);
+                final tag = controller.tagLabel(item.financeType);
+
+                if (AuthController.userRole.value == 'real_estate') {
+                  return InboxItem(
+                    userName: 'Ankon Akash',
+                    email: 'abcd1234@gmail.com',
+                    date: date,
+                    tag: tag,
+                    scenarioText: 'Calculated by 2 scenario',
+                    onViewDetails: controller.onViewDetails,
+                    onDelete: controller.onDeleteCalculation,
+                  );
+                }
+
+                return CustomCalculationItem(
+                  date: date,
+                  tag: tag,
+                  loanAmount: controller.formatAmount(item.govtLoanAmount),
+                  cashAvailable: controller.formatAmount(item.govtCashOrDownPayment),
+                  downPayment: item.isPurchase
+                      ? controller.formatAmount(item.govtCashOrDownPayment)
+                      : null,
+                  onViewDetails: controller.onViewDetails,
+                  onDelete: controller.onDeleteCalculation,
+                );
+              }),
 
               const SizedBox(height: 20),
             ],

@@ -17,6 +17,7 @@ class SignUpScreen extends GetView<AuthController> {
       backgroundColor: AppColors.primary,
       body: SafeArea(
         child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
           padding: const EdgeInsets.symmetric(horizontal: 24),
           child: Column(
             children: [

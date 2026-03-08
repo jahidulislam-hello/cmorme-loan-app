@@ -19,6 +19,7 @@ class SignInScreen extends GetView<AuthController> {
         child: LayoutBuilder(
           builder: (context, constraints) {
             return SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: ConstrainedBox(
                 constraints: BoxConstraints(minHeight: constraints.maxHeight),

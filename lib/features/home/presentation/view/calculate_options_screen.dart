@@ -12,6 +12,7 @@ class CalculateOptionsScreen extends StatelessWidget {
       backgroundColor: AppColors.primary,
       body: SafeArea(
         child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

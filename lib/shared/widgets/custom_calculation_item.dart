@@ -87,85 +87,26 @@ class CustomCalculationItem extends StatelessWidget {
           const SizedBox(height: 16),
 
           /// Loan Amount & Cash Available row
-          Row(
-               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      SvgPicture.asset(
-                        AppImages.loan,
-                        width: 14,
-                        height: 14,
-                      ),
-                      const SizedBox(width: 4),
-                      const Text(
-                        'Loan Amount',
-                        style: TextStyle(
-                          color: AppColors.hintGrey,
-                          fontSize: 13,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    '\$$loanAmount',
-                    style: const TextStyle(
-                      color: AppColors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      SvgPicture.asset(
-                        AppImages.cashIcon,
-                        width: 14,
-                        height: 14,
-                      ),
-                      const SizedBox(width: 4),
-                      const Text(
-                        'Cash Available',
-                        style: TextStyle(
-                          color: AppColors.hintGrey,
-                          fontSize: 13,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    '\$$cashAvailable',
-                    style: const TextStyle(
-                      color: AppColors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
-              if (downPayment != null)
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            physics: const BouncingScrollPhysics(),
+            child: Row(
+              spacing: 24,
+                 // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
                       children: [
                         SvgPicture.asset(
-                          AppImages.downPay,
+                          AppImages.loan,
                           width: 14,
                           height: 14,
                         ),
                         const SizedBox(width: 4),
                         const Text(
-                          'Down Pay',
+                          'Loan Amount',
                           style: TextStyle(
                             color: AppColors.hintGrey,
                             fontSize: 13,
@@ -175,16 +116,81 @@ class CustomCalculationItem extends StatelessWidget {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      '\$$downPayment',
+                      '\$$loanAmount',
                       style: const TextStyle(
                         color: AppColors.white,
-                        fontSize: 20,
+                        fontSize: 18,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                   ],
                 ),
-            ],
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        SvgPicture.asset(
+                          AppImages.cashIcon,
+                          width: 14,
+                          height: 14,
+                        ),
+                        const SizedBox(width: 4),
+                        const Text(
+                          'Cash Available',
+                          style: TextStyle(
+                            color: AppColors.hintGrey,
+                            fontSize: 13,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      '\$$cashAvailable',
+                      style: const TextStyle(
+                        color: AppColors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+                if (downPayment != null)
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          SvgPicture.asset(
+                            AppImages.downPay,
+                            width: 14,
+                            height: 14,
+                          ),
+                          const SizedBox(width: 4),
+                          const Text(
+                            'Down Pay',
+                            // textAlign: TextAlign.end,
+                            style: TextStyle(
+                              color: AppColors.hintGrey,
+                              fontSize: 13,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        '\$$downPayment',
+                        style: const TextStyle(
+                          color: AppColors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+              ],
+            ),
           ),
           const SizedBox(height: 16),
           const CustomHorizontalLine(

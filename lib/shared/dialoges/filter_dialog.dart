@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:reverse_mortage_loan_app/shared/theme/app_colors.dart';
 import 'package:reverse_mortage_loan_app/shared/widgets/custom_button.dart';
 import 'package:reverse_mortage_loan_app/shared/widgets/custom_date_picker_field.dart';
 import 'package:reverse_mortage_loan_app/shared/widgets/custom_dropdown_field.dart';
 
 class FilterDialog extends StatelessWidget {
-  final VoidCallback? onConfirm;
+  final Function(String? objective, DateTime? date)? onConfirm;
 
   FilterDialog({super.key, this.onConfirm});
 
@@ -50,7 +51,12 @@ class FilterDialog extends StatelessWidget {
                 text: 'Confirm',
                 onPressed: () {
                   Get.back();
-                  onConfirm?.call();
+                  DateTime? parsedDate;
+                  final dateText = _dateController.text.trim();
+                  if (dateText.isNotEmpty) {
+                    parsedDate = DateFormat('dd/MM/yyyy').parse(dateText);
+                  }
+                  onConfirm?.call(_selectedObjective.value, parsedDate);
                 },
                 textColor: AppColors.primary,
               ),

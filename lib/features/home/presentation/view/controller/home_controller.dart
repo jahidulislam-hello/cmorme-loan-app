@@ -1,37 +1,65 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 import 'package:reverse_mortage_loan_app/config/routes/route_names.dart';
 import 'package:reverse_mortage_loan_app/core/exceptions/app_exceptions.dart';
+import 'package:reverse_mortage_loan_app/core/services/cache_service.dart';
 import 'package:reverse_mortage_loan_app/features/profile/domain/usecases/get_profile_usecase.dart';
+import 'package:reverse_mortage_loan_app/features/recent_calculation/data/models/recent_calculation_response_model.dart';
+import 'package:reverse_mortage_loan_app/features/recent_calculation/domain/usecases/delete_calculation_usecase.dart';
+import 'package:reverse_mortage_loan_app/features/recent_calculation/domain/usecases/get_calculation_by_id_usecase.dart';
+import 'package:reverse_mortage_loan_app/features/recent_calculation/domain/usecases/get_recent_calculations_usecase.dart';
 import 'package:reverse_mortage_loan_app/shared/dialoges/delete_confirmation_dialog.dart';
 import 'package:reverse_mortage_loan_app/shared/dialoges/delete_success_dialog.dart';
 
 class HomeController extends GetxController {
   final GetProfileUseCase _getProfileUseCase;
+  final GetRecentCalculationsUseCase _getRecentCalculationsUseCase;
+  final DeleteCalculationUseCase _deleteCalculationUseCase;
+  final GetCalculationByIdUseCase _getCalculationByIdUseCase;
   final _logger = Logger();
 
-  HomeController({required GetProfileUseCase getProfileUseCase})
-      : _getProfileUseCase = getProfileUseCase;
+  HomeController({
+    required GetProfileUseCase getProfileUseCase,
+    required GetRecentCalculationsUseCase getRecentCalculationsUseCase,
+    required DeleteCalculationUseCase deleteCalculationUseCase,
+    required GetCalculationByIdUseCase getCalculationByIdUseCase,
+  })  : _getProfileUseCase = getProfileUseCase,
+        _getRecentCalculationsUseCase = getRecentCalculationsUseCase,
+        _deleteCalculationUseCase = deleteCalculationUseCase,
+        _getCalculationByIdUseCase = getCalculationByIdUseCase;
 
   final userName = ''.obs;
   final isProfileLoading = true.obs;
   final selectedNavIndex = 0.obs;
 
+  final calculations = <RecentCalculationItemModel>[].obs;
+  final isCalculationLoading = true.obs;
+
+  RecentCalculationItemModel? get latestCalculation =>
+      calculations.isNotEmpty ? calculations.first : null;
+
   @override
   void onInit() {
     super.onInit();
     _fetchProfile();
+    _fetchLatestCalculation();
   }
+
+  static const _userNameCacheKey = 'cached_user_name';
 
   Future<void> _fetchProfile() async {
     isProfileLoading.value = true;
     try {
       final profile = await _getProfileUseCase();
       userName.value = profile.firstName;
+      await CacheService().put(_userNameCacheKey, profile.firstName);
       _logger.i('Profile fetched: ${profile.firstName}');
     } on NoInternetException catch (e) {
-      _logger.w('No internet fetching profile: $e');
+      _logger.w('No internet fetching profile — loading from cache: $e');
+      final cached = CacheService().get<String>(_userNameCacheKey);
+      if (cached != null) userName.value = cached;
     } on ServerException catch (e) {
       _logger.e('Server error fetching profile: $e');
     } catch (e) {
@@ -41,50 +69,130 @@ class HomeController extends GetxController {
     }
   }
 
-  void onNavTap(int index) {
+  static const _cacheKey = 'recent_calculations';
+
+  Future<void> _fetchLatestCalculation() async {
+    isCalculationLoading.value = true;
+    try {
+      final response = await _getRecentCalculationsUseCase(limit: 10);
+      calculations.assignAll(response.data);
+      await CacheService().put(
+        _cacheKey,
+        response.data.map((e) => e.toJson()).toList(),
+      );
+      _logger.i('Calculations fetched: ${calculations.length}');
+    } on NoInternetException catch (e) {
+      _logger.w('No internet fetching calculation — loading from cache: $e');
+      _loadCalculationsFromCache();
+    } on ServerException catch (e) {
+      _logger.e('Server error fetching calculation: $e');
+    } catch (e) {
+      _logger.e('Unknown error fetching calculation: $e');
+    } finally {
+      isCalculationLoading.value = false;
+    }
+  }
+
+  void _loadCalculationsFromCache() {
+    try {
+      final cached = CacheService().get<List>(_cacheKey);
+      if (cached != null && cached.isNotEmpty) {
+        final items = cached
+            .map((e) => RecentCalculationItemModel.fromJson(
+                Map<String, dynamic>.from(e as Map)))
+            .toList();
+        calculations.assignAll(items);
+        _logger.i('Loaded ${items.length} calculations from cache');
+      }
+    } catch (e) {
+      _logger.e('Failed to load calculations from cache: $e');
+    }
+  }
+
+  String formatDate(DateTime date) => DateFormat('dd MMM yyyy').format(date);
+
+  String formatAmount(double amount) => NumberFormat('#,##0.##').format(amount);
+
+  String tagLabel(String financeType) =>
+      financeType == 'peverse_purchase' ? 'Reverse for Purchase' : 'Reverse Refinance';
+
+  void onNavTap(int index) async {
     selectedNavIndex.value = index;
     if (index == 1) {
-      Get.toNamed(RouteNames.history);
+      await Get.toNamed(RouteNames.history);
       selectedNavIndex.value = 0;
+      _fetchLatestCalculation();
     } else if (index == 2) {
       Get.toNamed(RouteNames.accountSetting);
       selectedNavIndex.value = 0;
     }
   }
 
-  void onNotification() {
-    Get.toNamed(RouteNames.notification);
+  void onNotification() => Get.toNamed(RouteNames.notification);
+
+  void onReverseRefinance() =>
+      Get.toNamed(RouteNames.reverseRefinance, arguments: {'type': 'refinance'});
+
+  void onReverseForPurchase() =>
+      Get.toNamed(RouteNames.reverseRefinance, arguments: {'type': 'purchase'});
+
+  void onReverseMortgageFAQ() => Get.toNamed(RouteNames.faqQuestions);
+
+  Future<void> onSeeAllCalculations() async {
+    await Get.toNamed(RouteNames.recentCalculation);
+    _fetchLatestCalculation();
   }
 
-  void onReverseRefinance() {
-    Get.toNamed(RouteNames.reverseRefinance, arguments: {'type': 'refinance'});
-  }
-
-  void onReverseForPurchase() {
-    Get.toNamed(RouteNames.reverseRefinance, arguments: {'type': 'purchase'});
-  }
-
-  void onReverseMortgageFAQ() {
-    Get.toNamed(RouteNames.faq);
-  }
-
-  void onSeeAllCalculations() {
-    Get.toNamed(RouteNames.recentCalculation);
-  }
-
-  void onViewDetails() {
-    Get.toNamed(RouteNames.loanDetails);
+  Future<void> onViewDetails() async {
+    final item = latestCalculation;
+    if (item == null) return;
+    try {
+      final detail = await _getCalculationByIdUseCase(item.id);
+      _logger.i('Fetched calculation detail: ${item.id}');
+      Get.toNamed(RouteNames.loanDetails, arguments: detail);
+    } on NoInternetException catch (e) {
+      _logger.w('No internet fetching detail: $e');
+      Get.snackbar('No Internet', e.message);
+    } on TimeoutException catch (e) {
+      _logger.w('Timeout fetching detail: $e');
+      Get.snackbar('Timeout', 'Server took too long. Please try again.');
+    } on ServerException catch (e) {
+      _logger.e('Server error fetching detail: $e');
+      Get.snackbar('Error', e.message);
+    } catch (e) {
+      _logger.e('Unknown error fetching detail: $e');
+      Get.snackbar('Error', 'Something went wrong. Please try again.');
+    }
   }
 
   void onDeleteCalculation() {
+    final item = latestCalculation;
+    if (item == null) return;
     Get.dialog(
       DeleteConfirmationDialog(
-        onDelete: () {
+        onDelete: () async {
           Get.back();
-          Get.dialog(
-            const DeleteSuccessDialog(),
-            barrierColor: Colors.white24,
-          );
+          try {
+            await _deleteCalculationUseCase(item.id);
+            calculations.removeAt(0);
+            _logger.i('Deleted calculation: ${item.id}');
+            Get.dialog(
+              const DeleteSuccessDialog(),
+              barrierColor: Colors.white24,
+            );
+          } on NoInternetException catch (e) {
+            _logger.w('No internet during delete: $e');
+            Get.snackbar('No Internet', e.message);
+          } on TimeoutException catch (e) {
+            _logger.w('Timeout during delete: $e');
+            Get.snackbar('Timeout', 'Server took too long. Please try again.');
+          } on ServerException catch (e) {
+            _logger.e('Server error during delete: $e');
+            Get.snackbar('Error', e.message);
+          } catch (e) {
+            _logger.e('Unknown error during delete: $e');
+            Get.snackbar('Error', 'Something went wrong. Please try again.');
+          }
         },
       ),
       barrierColor: Colors.white24,

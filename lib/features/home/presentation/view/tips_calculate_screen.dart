@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:reverse_mortage_loan_app/config/routes/route_names.dart';
+import 'package:reverse_mortage_loan_app/features/home/presentation/view/controller/tips_calculate_controller.dart';
 import 'package:reverse_mortage_loan_app/shared/app_image/app_images.dart';
 import 'package:reverse_mortage_loan_app/shared/theme/app_colors.dart';
 
@@ -24,20 +24,55 @@ class _TipsCalculateScreenState extends State<TipsCalculateScreen>
     'Comparing multiple lenders helps you find the best deal!',
   ];
 
+  int _currentTipIndex = 0;
+  bool _tipVisible = false;
+
+  static const _fadeDuration = Duration(milliseconds: 250);
+  static const _stayDuration = Duration(milliseconds: 900);
+  static const _gapDuration = Duration(milliseconds: 50);
+
   @override
   void initState() {
     super.initState();
+
     _progressController = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 5),
+      duration: const Duration(seconds: 6),
     )..forward();
 
     _progressController.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
-        final args = Get.arguments as Map<String, dynamic>?;
-        Get.offNamed(RouteNames.loanResult, arguments: args);
+        Get.find<TipsCalculateController>().onProgressCompleted();
       }
     });
+
+    _startTipsAnimation();
+  }
+
+  Future<void> _startTipsAnimation() async {
+    for (int i = 0; i < _tips.length; i++) {
+      if (!mounted) return;
+
+      // Fade in at this tip's position
+      setState(() {
+        _currentTipIndex = i;
+        _tipVisible = true;
+      });
+
+      if (i < _tips.length - 1) {
+        // Stay visible
+        await Future.delayed(_stayDuration);
+        if (!mounted) return;
+
+        // Fade out
+        setState(() => _tipVisible = false);
+        await Future.delayed(_fadeDuration);
+
+        // Brief gap before next tip
+        await Future.delayed(_gapDuration);
+      }
+      // Last tip: fades in and stays on screen
+    }
   }
 
   @override
@@ -70,71 +105,25 @@ class _TipsCalculateScreenState extends State<TipsCalculateScreen>
                 ),
               ),
 
-              const SizedBox(height: 32),
+              const SizedBox(height: 48),
 
-              /// Tips List
-              ...List.generate(_tips.length, (index) {
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 20),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        width: 30,
-                        height: 28,
-                        child: Stack(
-                          clipBehavior: Clip.none,
-                          children: [
-                            SvgPicture.asset(
-                              AppImages.triangleIcon,
-                              width: 30,
-                              height: 28,
-                            ),
-                            Positioned(
-                              left: 0,
-                              top: 0,
-                              bottom: 0,
-                              child: Center(
-                                child: Container(
-                                  width: 11,
-                                  height: 6,
-                                  decoration: const BoxDecoration(
-                                    color: AppColors.yellow500,
-                                    shape: BoxShape.rectangle,
-                                  ),
-                                  child: Center(
-                                    child: Text(
-                                      '${index + 1}'.padLeft(2, '0'),
-                                      style: const TextStyle(
-                                        color: AppColors.primary,
-                                        fontSize: 5,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+              /// Tips — each tip stays at its own list position, animates individually
+              Expanded(
+                child: Column(
+                  children: List.generate(_tips.length, (index) {
+                    final isVisible =
+                        index == _currentTipIndex && _tipVisible;
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 24),
+                      child: AnimatedOpacity(
+                        opacity: isVisible ? 1.0 : 0.0,
+                        duration: _fadeDuration,
+                        child: _buildTipItem(index),
                       ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Text(
-                          _tips[index],
-                          style: const TextStyle(
-                            color: AppColors.hintGrey,
-                            fontSize: 14,
-                            height: 1.4,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              }),
-
-              const Spacer(),
+                    );
+                  }),
+                ),
+              ),
 
               /// Progress Bar
               AnimatedBuilder(
@@ -159,7 +148,7 @@ class _TipsCalculateScreenState extends State<TipsCalculateScreen>
                       const SizedBox(height: 16),
                       const Center(
                         child: Text(
-                          'Please Wait',
+                          'Please Wait...',
                           style: TextStyle(
                             color: AppColors.white,
                             fontSize: 18,
@@ -177,6 +166,65 @@ class _TipsCalculateScreenState extends State<TipsCalculateScreen>
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildTipItem(int index) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        SizedBox(
+          width: 56,
+          height: 52,
+          child: Stack(
+            clipBehavior: Clip.none,
+            children: [
+              SvgPicture.asset(
+                AppImages.triangleIcon,
+                width: 56,
+                height: 52,
+              ),
+              Positioned(
+                left: 0,
+                top: 0,
+                bottom: 0,
+                child: Center(
+                  child: Container(
+                    width: 24,
+                    height: 14,
+                    decoration: const BoxDecoration(
+                      color: AppColors.yellow500,
+                      shape: BoxShape.rectangle,
+                    ),
+                    child: Center(
+                      child: Text(
+                        '${index + 1}'.padLeft(2, '0'),
+                        style: const TextStyle(
+                          color: AppColors.primary,
+                          fontSize: 9,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(width: 16),
+        Expanded(
+          child: Text(
+            _tips[index],
+            style: const TextStyle(
+              color: AppColors.white,
+              fontSize: 18,
+              height: 1.5,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

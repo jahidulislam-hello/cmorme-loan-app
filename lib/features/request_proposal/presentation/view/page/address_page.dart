@@ -38,6 +38,7 @@ class AddressPage extends GetView<RequestProposalController> {
               const SizedBox(height: 40),
               Expanded(
                 child: SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [

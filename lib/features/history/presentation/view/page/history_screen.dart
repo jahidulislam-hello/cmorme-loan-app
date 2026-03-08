@@ -6,6 +6,7 @@ import 'package:reverse_mortage_loan_app/shared/theme/app_colors.dart';
 import 'package:reverse_mortage_loan_app/shared/widgets/custom_bottom_nav_bar.dart';
 import 'package:reverse_mortage_loan_app/shared/widgets/custom_calculation_item.dart';
 import 'package:reverse_mortage_loan_app/shared/widgets/custom_search_bar.dart';
+import 'package:reverse_mortage_loan_app/shared/widgets/custom_shimmer_loading_indicator.dart';
 import 'package:reverse_mortage_loan_app/features/history/presentation/view/controller/history_controller.dart';
 
 class HistoryScreen extends GetView<HistoryController> {
@@ -45,52 +46,76 @@ class HistoryScreen extends GetView<HistoryController> {
               const SizedBox(height: 24),
               Expanded(
                 child: Obx(() {
+                  if (controller.isLoading.value) {
+                    return const CustomShimmerLoadingIndicator(itemCount: 4);
+                  }
+
+                  final items = controller.filteredCalculations;
                   final isRealEstate =
                       AuthController.userRole.value == 'real_estate';
-                  return ListView(
-                    children: isRealEstate
-                        ? [
-                            InboxItem(
-                              userName: 'Ankon Akash',
-                              email: 'abcd1234@gmai.com',
-                              date: '08 Jan 2026',
-                              tag: 'Refinance',
-                              scenarioText: 'Calculated by 2 scenario',
-                              onViewDetails: controller.onViewDetails,
-                              onDelete: controller.onDeleteCalculation,
+
+                  if (items.isEmpty) {
+                    return RefreshIndicator(
+                      onRefresh: controller.fetchCalculations,
+                      color: AppColors.primary,
+                      backgroundColor: AppColors.white,
+                      child: const SingleChildScrollView(
+                        physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+                        child: SizedBox(
+                          height: 400,
+                          child: Center(
+                            child: Text(
+                              'No history found.',
+                              style: TextStyle(
+                                color: AppColors.hintGrey,
+                                fontSize: 16,
+                              ),
                             ),
-                            const SizedBox(height: 16),
-                            InboxItem(
-                              userName: 'Ankon Akash',
-                              email: 'abcd1234@gmai.com',
-                              date: '08 Jan 2026',
-                              tag: 'Refinance',
-                              scenarioText: 'Calculated by 2 scenario',
-                              onViewDetails: controller.onViewDetails,
-                              onDelete: controller.onDeleteCalculation,
-                            ),
-                            const SizedBox(height: 20),
-                          ]
-                        : [
-                            CustomCalculationItem(
-                              date: '08 Jan 2026',
-                              tag: 'Government',
-                              loanAmount: '300,00',
-                              cashAvailable: '300,00',
-                              onViewDetails: controller.onViewDetails,
-                              onDelete: controller.onDeleteCalculation,
-                            ),
-                            const SizedBox(height: 16),
-                            CustomCalculationItem(
-                              date: '08 Jan 2026',
-                              tag: 'Non-Government',
-                              loanAmount: '300,00',
-                              cashAvailable: '300,00',
-                              onViewDetails: controller.onViewDetails,
-                              onDelete: controller.onDeleteCalculation,
-                            ),
-                            const SizedBox(height: 20),
-                          ],
+                          ),
+                        ),
+                      ),
+                    );
+                  }
+
+                  return RefreshIndicator(
+                    onRefresh: controller.fetchCalculations,
+                    color: AppColors.primary,
+                    backgroundColor: AppColors.white,
+                    child: ListView.separated(
+                      physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+                      itemCount: items.length,
+                      separatorBuilder: (_, __) => const SizedBox(height: 16),
+                      itemBuilder: (context, index) {
+                        final item = items[index];
+                        final date = controller.formatDate(item.createdAt);
+                        final tag = controller.tagLabel(item.financeType);
+
+                        if (isRealEstate) {
+                          return InboxItem(
+                            userName: 'Ankon Akash',
+                            email: 'abcd1234@gmail.com',
+                            date: date,
+                            tag: tag,
+                            scenarioText: 'Calculated by 2 scenario',
+                            onViewDetails: () => controller.onViewDetails(index),
+                            onDelete: () => controller.onDeleteCalculation(index),
+                          );
+                        }
+
+                        return CustomCalculationItem(
+                          date: date,
+                          tag: tag,
+                          loanAmount: controller.formatAmount(item.govtLoanAmount),
+                          cashAvailable:
+                              controller.formatAmount(item.govtCashOrDownPayment),
+                          downPayment: item.isPurchase
+                              ? controller.formatAmount(item.govtCashOrDownPayment)
+                              : null,
+                          onViewDetails: () => controller.onViewDetails(index),
+                          onDelete: () => controller.onDeleteCalculation(index),
+                        );
+                      },
+                    ),
                   );
                 }),
               ),
@@ -99,9 +124,9 @@ class HistoryScreen extends GetView<HistoryController> {
         ),
       ),
       bottomNavigationBar: Obx(() => CustomBottomNavBar(
-        selectedIndex: controller.selectedNavIndex.value,
-        onTap: controller.onNavTap,
-      )),
+            selectedIndex: controller.selectedNavIndex.value,
+            onTap: controller.onNavTap,
+          )),
     );
   }
 }

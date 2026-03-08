@@ -30,6 +30,7 @@ class NotificationScreen extends GetView<NotificationController> {
       ),
       body: SafeArea(
         child: ListView(
+          physics: const BouncingScrollPhysics(),
           padding: const EdgeInsets.symmetric(horizontal: 20),
           children: [
             const SizedBox(height: 16),

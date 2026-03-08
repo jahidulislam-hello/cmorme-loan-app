@@ -45,6 +45,7 @@ class RequestProposalScreen extends GetView<RequestProposalController> {
               const SizedBox(height: 32),
               Expanded(
                 child: SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [

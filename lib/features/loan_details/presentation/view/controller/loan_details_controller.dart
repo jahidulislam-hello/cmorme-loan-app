@@ -1,33 +1,82 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:reverse_mortage_loan_app/config/routes/route_names.dart';
+import 'package:reverse_mortage_loan_app/core/constants/api_constants.dart';
+import 'package:reverse_mortage_loan_app/features/recent_calculation/data/models/recent_calculation_response_model.dart';
 
 class LoanDetailsController extends GetxController {
-  final String date = '08 Jan 2026';
-  final String objective = 'Reverse Finance';
-  final String loanAmount = '\$1500';
-  final String cashAvailable = '\$1500';
-  final String? downPayment = null;
-  final String firstBorrowerAge = '55';
-  final String? secondBorrowerAge = '75';
-  final String homeValue = '\$1500';
-
-  final List<String> imageUrls = [
-    'assets/images/dummy_house.png',
-    'assets/images/dummy_house.png',
-    'assets/images/dummy_house.png',
-  ];
+  late final RecentCalculationItemModel _item;
 
   final currentImageIndex = 0.obs;
   late final PageController pageController;
 
-  bool get hasTwoBorrowers => secondBorrowerAge != null;
-  bool get hasDownPayment => downPayment != null;
+  // Image URLs with baseUrl prepended
+  late final List<String> imageUrls;
+
+  // Info section
+  late final String date;
+  late final String objective;
+  late final String homeValue;
+  late final String firstBorrowerAge;
+  late final String? secondBorrowerAge;
+
+  // Govt section
+  late final String govtLoanAmount;
+  late final String govtCashAvailable;
+  late final String? govtDownPayment;
+
+  // Non-govt section
+  late final String nonGovtLoanAmount;
+  late final String nonGovtCashAvailable;
+  late final String? nonGovtDownPayment;
 
   @override
   void onInit() {
     super.onInit();
     pageController = PageController();
+    _item = Get.arguments as RecentCalculationItemModel;
+    _mapFields();
+  }
+
+  void _mapFields() {
+    final fmt = NumberFormat('#,##0.##');
+
+    imageUrls = _item.homeImg
+        .map((path) => '${ApiConstants.imageBaseUrl}$path')
+        .toList();
+
+    date = DateFormat('dd MMM yyyy').format(_item.createdAt);
+    objective = _item.isPurchase ? 'Reverse for Purchase' : 'Reverse Refinance';
+    homeValue = '\$${fmt.format(_item.homeValue)}';
+
+    if (_item.multipleBorrowerAge1 != null) {
+      firstBorrowerAge = '${_item.multipleBorrowerAge1}';
+      secondBorrowerAge = _item.multipleBorrowerAge2 != null
+          ? '${_item.multipleBorrowerAge2}'
+          : null;
+    } else {
+      firstBorrowerAge = '${_item.singleBorrowerAge ?? '-'}';
+      secondBorrowerAge = null;
+    }
+
+    if (_item.isPurchase) {
+      govtLoanAmount = '\$${fmt.format(_item.reversePurchaseGovtLoanAmount ?? 0)}';
+      govtCashAvailable = '\$${fmt.format(0)}';
+      govtDownPayment = '\$${fmt.format(_item.reversePurchaseGovtDownPayment ?? 0)}';
+
+      nonGovtLoanAmount = '\$${fmt.format(_item.reversePurchaseNonGovtLoanAmount ?? 0)}';
+      nonGovtCashAvailable = '\$${fmt.format(0)}';
+      nonGovtDownPayment = '\$${fmt.format(_item.reversePurchaseNonGovtDownPayment ?? 0)}';
+    } else {
+      govtLoanAmount = '\$${fmt.format(_item.reverseRefinanceGovtLoanAmount ?? 0)}';
+      govtCashAvailable = '\$${fmt.format(_item.reverseRefinanceGovtCashAvailable ?? 0)}';
+      govtDownPayment = null;
+
+      nonGovtLoanAmount = '\$${fmt.format(_item.reverseRefinanceNonGovtLoanAmount ?? 0)}';
+      nonGovtCashAvailable = '\$${fmt.format(_item.reverseRefinanceNonGovtCashAvailable ?? 0)}';
+      nonGovtDownPayment = null;
+    }
   }
 
   @override

@@ -43,6 +43,7 @@ class InboxScreen extends GetView<InboxController> {
               const SizedBox(height: 24),
               Expanded(
                 child: ListView(
+                  physics: const BouncingScrollPhysics(),
                   children: [
                     InboxItem(
                       userName: 'Ankon Akash',

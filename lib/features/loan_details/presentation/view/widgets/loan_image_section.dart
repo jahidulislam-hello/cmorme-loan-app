@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:reverse_mortage_loan_app/shared/theme/app_colors.dart';
+import 'package:reverse_mortage_loan_app/shared/widgets/custom_shimmer_loading_indicator.dart';
 
 class LoanImageSection extends StatelessWidget {
   final List<String> imageUrls;
@@ -24,14 +25,22 @@ class LoanImageSection extends StatelessWidget {
           child: ClipRRect(
             borderRadius: BorderRadius.circular(4),
             child: PageView.builder(
+              physics: const BouncingScrollPhysics(),
               controller: pageController,
               itemCount: imageUrls.length,
               onPageChanged: (index) => currentIndex.value = index,
               itemBuilder: (context, index) {
-                return Image.asset(
+                return Image.network(
                   imageUrls[index],
                   fit: BoxFit.cover,
                   width: double.infinity,
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) return child;
+                    return const LoanImageShimmer();
+                  },
+                  errorBuilder: (context, error, stackTrace) => const Center(
+                    child: Icon(Icons.broken_image, color: Colors.white54, size: 48),
+                  ),
                 );
               },
             ),

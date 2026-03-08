@@ -45,6 +45,7 @@ class LoanResultScreen extends StatelessWidget {
         child: LayoutBuilder(
           builder: (context, constraints) {
             return SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
               padding:
                   const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
               child: ConstrainedBox(

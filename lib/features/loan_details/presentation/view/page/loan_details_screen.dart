@@ -39,6 +39,7 @@ class LoanDetailsScreen extends GetView<LoanDetailsController> {
             children: [
               Expanded(
                 child: SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -74,19 +75,19 @@ class LoanDetailsScreen extends GetView<LoanDetailsController> {
                         title: 'Estimated Government Insured Reverse Mortgage',
                         primaryLabel: 'Loan Amount',
                         primaryIconPath: AppImages.loanAmountIcon,
-                        primaryAmount: controller.loanAmount,
-                        cashAvailable: controller.cashAvailable,
-                        downPayment: controller.downPayment,
+                        primaryAmount: controller.govtLoanAmount,
+                        cashAvailable: controller.govtCashAvailable,
+                        downPayment: controller.govtDownPayment,
                       ),
 
                       const SizedBox(height: 24),
                       EstimatedMortgageSection(
                         title: 'Estimated Non-Govt Insured Reverse Mortgage',
-                        primaryLabel: 'Home Value',
-                        primaryIconPath: AppImages.homeIcon,
-                        primaryAmount: controller.homeValue,
-                        cashAvailable: controller.cashAvailable,
-                        downPayment: controller.downPayment,
+                        primaryLabel: 'Loan Amount',
+                        primaryIconPath: AppImages.loanAmountIcon,
+                        primaryAmount: controller.nonGovtLoanAmount,
+                        cashAvailable: controller.nonGovtCashAvailable,
+                        downPayment: controller.nonGovtDownPayment,
                       ),
 
                       const SizedBox(height: 24),

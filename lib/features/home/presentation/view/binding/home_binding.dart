@@ -5,6 +5,12 @@ import 'package:reverse_mortage_loan_app/features/profile/data/datasources/profi
 import 'package:reverse_mortage_loan_app/features/profile/data/repositories/profile_repository_impl.dart';
 import 'package:reverse_mortage_loan_app/features/profile/domain/repositories/profile_repository.dart';
 import 'package:reverse_mortage_loan_app/features/profile/domain/usecases/get_profile_usecase.dart';
+import 'package:reverse_mortage_loan_app/features/recent_calculation/data/datasources/recent_calculation_remote_datasource.dart';
+import 'package:reverse_mortage_loan_app/features/recent_calculation/data/repositories/recent_calculation_repository_impl.dart';
+import 'package:reverse_mortage_loan_app/features/recent_calculation/domain/repositories/recent_calculation_repository.dart';
+import 'package:reverse_mortage_loan_app/features/recent_calculation/domain/usecases/delete_calculation_usecase.dart';
+import 'package:reverse_mortage_loan_app/features/recent_calculation/domain/usecases/get_calculation_by_id_usecase.dart';
+import 'package:reverse_mortage_loan_app/features/recent_calculation/domain/usecases/get_recent_calculations_usecase.dart';
 
 class HomeBinding extends Bindings {
   @override
@@ -18,8 +24,32 @@ class HomeBinding extends Bindings {
     Get.lazyPut<GetProfileUseCase>(
       () => GetProfileUseCase(Get.find<ProfileRepository>()),
     );
+
+    Get.lazyPut<RecentCalculationRemoteDatasource>(
+      () => RecentCalculationRemoteDatasource(ApiService()),
+    );
+    Get.lazyPut<RecentCalculationRepository>(
+      () => RecentCalculationRepositoryImpl(
+        Get.find<RecentCalculationRemoteDatasource>(),
+      ),
+    );
+    Get.lazyPut<GetRecentCalculationsUseCase>(
+      () => GetRecentCalculationsUseCase(Get.find<RecentCalculationRepository>()),
+    );
+    Get.lazyPut<DeleteCalculationUseCase>(
+      () => DeleteCalculationUseCase(Get.find<RecentCalculationRepository>()),
+    );
+    Get.lazyPut<GetCalculationByIdUseCase>(
+      () => GetCalculationByIdUseCase(Get.find<RecentCalculationRepository>()),
+    );
+
     Get.lazyPut<HomeController>(
-      () => HomeController(getProfileUseCase: Get.find<GetProfileUseCase>()),
+      () => HomeController(
+        getProfileUseCase: Get.find<GetProfileUseCase>(),
+        getRecentCalculationsUseCase: Get.find<GetRecentCalculationsUseCase>(),
+        deleteCalculationUseCase: Get.find<DeleteCalculationUseCase>(),
+        getCalculationByIdUseCase: Get.find<GetCalculationByIdUseCase>(),
+      ),
     );
   }
 }

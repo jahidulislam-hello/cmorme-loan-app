@@ -36,6 +36,7 @@ class ReverseRefinanceScreen extends GetView<ReverseRefinanceController> {
         child: LayoutBuilder(
           builder: (context, constraints) {
             return SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: ConstrainedBox(
                 constraints: BoxConstraints(minHeight: constraints.maxHeight),

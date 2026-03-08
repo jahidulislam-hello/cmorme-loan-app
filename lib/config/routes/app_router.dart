@@ -8,6 +8,7 @@ import 'package:reverse_mortage_loan_app/features/authentication/presentation/vi
 import 'package:reverse_mortage_loan_app/features/authentication/presentation/view/sign_up_screen.dart';
 import 'package:reverse_mortage_loan_app/features/authentication/presentation/view/verify_email_screen.dart';
 import 'package:reverse_mortage_loan_app/features/home/presentation/view/binding/home_binding.dart';
+import 'package:reverse_mortage_loan_app/features/home/presentation/view/binding/tips_calculate_binding.dart';
 import 'package:reverse_mortage_loan_app/features/home/presentation/view/calculate_options_screen.dart';
 import 'package:reverse_mortage_loan_app/features/home/presentation/view/splash_screen.dart';
 import 'package:reverse_mortage_loan_app/features/home/presentation/view/user_home_screen.dart';
@@ -59,6 +60,7 @@ class AppRouter {
     GetPage(
       name: RouteNames.splash,
       page: () => const SplashScreen(),
+      transition: Transition.rightToLeftWithFade
     ),
     GetPage(
       name: RouteNames.chooseAccount,
@@ -107,6 +109,7 @@ class AppRouter {
     GetPage(
       name: RouteNames.tipsCalculate,
       page: () => const TipsCalculateScreen(),
+      binding: TipsCalculateBinding(),
     ),
     GetPage(
       name: RouteNames.recentCalculation,
@@ -121,7 +124,7 @@ class AppRouter {
       name: RouteNames.history,
       page: () => const HistoryScreen(),
       binding: HistoryBinding(),
-      transition: Transition.noTransition,
+      transition: Transition.rightToLeftWithFade,
     ),
     GetPage(
       name: RouteNames.loanDetails,
@@ -169,7 +172,7 @@ class AppRouter {
       name: RouteNames.accountSetting,
       page: () => const AccountSettingScreen(),
       binding: ProfileBinding(),
-      transition: Transition.noTransition,
+      transition: Transition.rightToLeftWithFade,
     ),
     GetPage(
       name: RouteNames.editProfile,
@@ -200,7 +203,7 @@ class AppRouter {
       name: RouteNames.inbox,
       page: () => const InboxScreen(),
       binding: InboxBinding(),
-      transition: Transition.noTransition,
+      transition: Transition.rightToLeftWithFade,
     ),
     GetPage(
       name: RouteNames.inboxDetails,

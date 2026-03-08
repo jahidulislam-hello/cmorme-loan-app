@@ -30,6 +30,7 @@ class FaqQuestionsScreen extends GetView<FaqQuestionsController> {
       ),
       body: SafeArea(
         child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

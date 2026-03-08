@@ -31,6 +31,7 @@ class InstantQuoteScreen extends GetView<InstantQuoteController> {
       ),
       body: SafeArea(
         child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

@@ -111,46 +111,26 @@ class ReverseRefinanceController extends GetxController {
       return;
     }
 
-    isLoading.value = true;
-    try {
-      final request = CalculateLoanRequestModel(
-        financeType: financeType,
-        homeImg: uploadedImagePaths.toList(),
-        homeValue: double.parse(homeValueController.text.trim()),
-        mortgageAmount: double.parse(loanBalanceController.text.trim()),
-        singleBorrowerAge: isMultipleBorrower.value
-            ? null
-            : int.tryParse(borrowerAgeController.text.trim()),
-        multipleBorrowerAge1: isMultipleBorrower.value
-            ? int.tryParse(firstBorrowerAgeController.text.trim())
-            : null,
-        multipleBorrowerAge2: isMultipleBorrower.value
-            ? int.tryParse(secondBorrowerAgeController.text.trim())
-            : null,
-      );
+    final request = CalculateLoanRequestModel(
+      financeType: financeType,
+      homeImg: uploadedImagePaths.toList(),
+      homeValue: double.parse(homeValueController.text.trim()),
+      mortgageAmount: double.parse(loanBalanceController.text.trim()),
+      singleBorrowerAge: isMultipleBorrower.value
+          ? null
+          : int.tryParse(borrowerAgeController.text.trim()),
+      multipleBorrowerAge1: isMultipleBorrower.value
+          ? int.tryParse(firstBorrowerAgeController.text.trim())
+          : null,
+      multipleBorrowerAge2: isMultipleBorrower.value
+          ? int.tryParse(secondBorrowerAgeController.text.trim())
+          : null,
+    );
 
-      final result = await _calculateLoanUseCase(request);
-      _logger.i('Calculate loan success: ${result.id}');
-
-      Get.toNamed(RouteNames.loanResult, arguments: {
-        'type': loanType,
-        'result': result,
-      });
-    } on NoInternetException catch (e) {
-      _logger.w('No internet during calculate loan: $e');
-      Get.snackbar('No Internet', e.message);
-    } on TimeoutException catch (e) {
-      _logger.w('Timeout during calculate loan: $e');
-      Get.snackbar('Timeout', 'Server took too long. Please try again.');
-    } on ServerException catch (e) {
-      _logger.e('Server error during calculate loan: $e');
-      Get.snackbar('Error', e.message);
-    } catch (e) {
-      _logger.e('Unknown error during calculate loan: $e');
-      Get.snackbar('Error', 'Something went wrong. Please try again.');
-    } finally {
-      isLoading.value = false;
-    }
+    Get.toNamed(RouteNames.tipsCalculate, arguments: {
+      'type': loanType,
+      'request': request,
+    });
   }
 
   @override
