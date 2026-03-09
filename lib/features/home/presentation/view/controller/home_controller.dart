@@ -114,7 +114,7 @@ class HomeController extends GetxController {
   String formatAmount(double amount) => NumberFormat('#,##0.##').format(amount);
 
   String tagLabel(String financeType) =>
-      financeType == 'peverse_purchase' ? 'Reverse for Purchase' : 'Reverse Refinance';
+      financeType == 'reverse_purchase' ? 'Reverse for Purchase' : 'Reverse Refinance';
 
   void onNavTap(int index) async {
     selectedNavIndex.value = index;

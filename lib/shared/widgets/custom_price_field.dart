@@ -47,7 +47,7 @@ class CustomPriceField extends StatelessWidget {
               fontSize: 14,
             ),
             suffixIcon: const Icon(
-              Icons.info_outline,
+              Icons.monetization_on_outlined,
               color: AppColors.hintGrey,
               size: 20,
             ),

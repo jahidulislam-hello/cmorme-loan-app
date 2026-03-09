@@ -19,6 +19,7 @@ class RouteNames {
   static const String loanDetails = '/loan-details';
   static const String requestProposal = '/request-proposal';
   static const String proposalAddress = '/proposal-address';
+  static const String phonePage = '/phone-page';
   static const String proposalCityState = '/proposal-city-state';
   static const String proposalInterested = '/proposal-interested';
   static const String proposalLoanAmount = '/proposal-loan-amount';

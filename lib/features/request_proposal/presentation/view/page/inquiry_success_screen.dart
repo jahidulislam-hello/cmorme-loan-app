@@ -1,7 +1,9 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:reverse_mortage_loan_app/config/routes/route_names.dart';
 import 'package:reverse_mortage_loan_app/shared/theme/app_colors.dart';
+import 'package:reverse_mortage_loan_app/shared/widgets/custom_button.dart';
 
 class InquirySuccessScreen extends StatelessWidget {
   const InquirySuccessScreen({super.key});
@@ -13,10 +15,7 @@ class InquirySuccessScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: AppColors.primary,
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.chevron_left, color: AppColors.white, size: 30),
-          onPressed: () => Get.back(),
-        ),
+        automaticallyImplyLeading: false,
         centerTitle: true,
         title: const Text(
           'Request Full Proposal',
@@ -27,15 +26,15 @@ class InquirySuccessScreen extends StatelessWidget {
           ),
         ),
       ),
-      body: Center(
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            const Spacer(),
             CustomPaint(
               size: const Size(120, 120),
-              painter: _ScallopedCirclePainter(
-                color: Colors.white
-              ),
+              painter: _ScallopedCirclePainter(color: Colors.white),
               child: const SizedBox(
                 width: 120,
                 height: 120,
@@ -63,6 +62,16 @@ class InquirySuccessScreen extends StatelessWidget {
               style: TextStyle(
                 color: AppColors.hintGrey,
                 fontSize: 14,
+              ),
+            ),
+            const Spacer(),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 20),
+              child: CustomButton(
+                text: 'Back to Home',
+                onPressed: () => Get.offAllNamed(RouteNames.userHome),
+                backgroundColor: AppColors.buttonBlue,
+                textColor: AppColors.white,
               ),
             ),
           ],

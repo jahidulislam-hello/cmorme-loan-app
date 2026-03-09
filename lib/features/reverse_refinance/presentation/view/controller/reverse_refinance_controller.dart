@@ -41,7 +41,7 @@ class ReverseRefinanceController extends GetxController {
   bool get isPurchase => loanType == 'purchase';
 
   String get financeType =>
-      isPurchase ? 'peverse_purchase' : 'reverse_refinance';
+      isPurchase ? 'reverse_purchase' : 'reverse_refinance';
 
   String get screenTitle =>
       isPurchase ? 'Reverse for Purchase' : 'Reverse Refinance';

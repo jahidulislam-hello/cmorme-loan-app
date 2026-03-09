@@ -41,7 +41,7 @@ class DobPage extends GetView<RequestProposalController> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     CustomDatePickerField(
-                      label: 'Date of Birth',
+                      label: 'Spouse Date of Birth',
                       labelColor: AppColors.white,
                       controller: controller.dobController,
                     ),

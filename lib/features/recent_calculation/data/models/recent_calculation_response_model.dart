@@ -44,7 +44,7 @@ class RecentCalculationItemModel {
     required this.createdAt,
   });
 
-  bool get isPurchase => financeType == 'peverse_purchase';
+  bool get isPurchase => financeType == 'reverse_purchase';
 
   /// Govt loan amount regardless of finance type
   double get govtLoanAmount =>
@@ -73,10 +73,10 @@ class RecentCalculationItemModel {
       'reverse_refinance_non_govt_cash_available': reverseRefinanceNonGovtCashAvailable,
       'reverse_refinance_govt_loan_Amount': reverseRefinanceGovtLoanAmount,
       'reverse_refinance_govt_cash_available': reverseRefinanceGovtCashAvailable,
-      'peverse_purchase_non_govt_loan_Amount': reversePurchaseNonGovtLoanAmount,
-      'peverse_purchase_non_govt_down_payment': reversePurchaseNonGovtDownPayment,
-      'peverse_purchase_govt_loan_Amount': reversePurchaseGovtLoanAmount,
-      'peverse_purchase_govt_down_payment': reversePurchaseGovtDownPayment,
+      'reverse_purchase_non_govt_loan_Amount': reversePurchaseNonGovtLoanAmount,
+      'reverse_purchase_non_govt_down_payment': reversePurchaseNonGovtDownPayment,
+      'reverse_purchase_govt_loan_Amount': reversePurchaseGovtLoanAmount,
+      'reverse_purchase_govt_down_payment': reversePurchaseGovtDownPayment,
       'createdAt': createdAt.toIso8601String(),
     };
   }
@@ -84,7 +84,9 @@ class RecentCalculationItemModel {
   factory RecentCalculationItemModel.fromJson(Map<String, dynamic> json) {
     return RecentCalculationItemModel(
       id: json['_id'] as String,
-      userId: json['user_id'] as String,
+      userId: json['user_id'] is Map
+          ? (json['user_id'] as Map<String, dynamic>)['_id'] as String
+          : json['user_id'] as String,
       financeType: json['finance_type'] as String,
       homeImg: List<String>.from(json['home_img'] as List),
       homeValue: (json['home_value'] as num).toDouble(),
@@ -101,13 +103,13 @@ class RecentCalculationItemModel {
       reverseRefinanceGovtCashAvailable:
           (json['reverse_refinance_govt_cash_available'] as num?)?.toDouble(),
       reversePurchaseNonGovtLoanAmount:
-          (json['peverse_purchase_non_govt_loan_Amount'] as num?)?.toDouble(),
+          (json['reverse_purchase_non_govt_loan_Amount'] as num?)?.toDouble(),
       reversePurchaseNonGovtDownPayment:
-          (json['peverse_purchase_non_govt_down_payment'] as num?)?.toDouble(),
+          (json['reverse_purchase_non_govt_down_payment'] as num?)?.toDouble(),
       reversePurchaseGovtLoanAmount:
-          (json['peverse_purchase_govt_loan_Amount'] as num?)?.toDouble(),
+          (json['reverse_purchase_govt_loan_Amount'] as num?)?.toDouble(),
       reversePurchaseGovtDownPayment:
-          (json['peverse_purchase_govt_down_payment'] as num?)?.toDouble(),
+          (json['reverse_purchase_govt_down_payment'] as num?)?.toDouble(),
       createdAt: DateTime.parse(json['createdAt'] as String),
     );
   }
@@ -144,6 +146,8 @@ class RecentCalculationResponseModel {
   final int statusCode;
   final String message;
   final RecentCalculationPaginationModel pagination;
+  final double govt;
+  final double nonGovt;
   final List<RecentCalculationItemModel> data;
 
   RecentCalculationResponseModel({
@@ -151,6 +155,8 @@ class RecentCalculationResponseModel {
     required this.statusCode,
     required this.message,
     required this.pagination,
+    required this.govt,
+    required this.nonGovt,
     required this.data,
   });
 
@@ -161,7 +167,9 @@ class RecentCalculationResponseModel {
       statusCode: json['statusCode'] as int,
       message: json['message'] as String,
       pagination: RecentCalculationPaginationModel.fromJson(
-          dataObj['pagination'] as Map<String, dynamic>),
+          json['pagination'] as Map<String, dynamic>),
+      govt: (dataObj['govt'] as num?)?.toDouble() ?? 0,
+      nonGovt: (dataObj['nonGovt'] as num?)?.toDouble() ?? 0,
       data: (dataObj['data'] as List)
           .map((e) => RecentCalculationItemModel.fromJson(e as Map<String, dynamic>))
           .toList(),

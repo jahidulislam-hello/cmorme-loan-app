@@ -62,13 +62,13 @@ class CalculateLoanResponseModel {
       reverseRefinanceGovtCashAvailable:
           (data['reverse_refinance_govt_cash_available'] as num?)?.toDouble(),
       reversePurchaseNonGovtLoanAmount:
-          (data['peverse_purchase_non_govt_loan_Amount'] as num?)?.toDouble(),
+          (data['reverse_purchase_non_govt_loan_Amount'] as num?)?.toDouble(),
       reversePurchaseNonGovtDownPayment:
-          (data['peverse_purchase_non_govt_down_payment'] as num?)?.toDouble(),
+          (data['reverse_purchase_non_govt_down_payment'] as num?)?.toDouble(),
       reversePurchaseGovtLoanAmount:
-          (data['peverse_purchase_govt_loan_Amount'] as num?)?.toDouble(),
+          (data['reverse_purchase_govt_loan_Amount'] as num?)?.toDouble(),
       reversePurchaseGovtDownPayment:
-          (data['peverse_purchase_govt_down_payment'] as num?)?.toDouble(),
+          (data['reverse_purchase_govt_down_payment'] as num?)?.toDouble(),
     );
   }
 }

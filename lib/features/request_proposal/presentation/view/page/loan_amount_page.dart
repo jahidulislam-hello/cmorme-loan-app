@@ -63,6 +63,12 @@ class LoanAmountPage extends GetView<RequestProposalController> {
                       labelColor: AppColors.white,
                       controller: controller.homeValueController,
                     ),
+                    const SizedBox(height: 24),
+                    CustomPriceField(
+                      label: 'Current Mortgage Balance',
+                      labelColor: AppColors.white,
+                      controller: controller.mortgageAmountController,
+                    ),
                   ],
                 ),
               ),

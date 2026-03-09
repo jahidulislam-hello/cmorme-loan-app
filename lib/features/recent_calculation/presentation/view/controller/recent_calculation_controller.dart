@@ -67,7 +67,7 @@ class RecentCalculationController extends GetxController {
   }
 
   String tagLabel(String financeType) {
-    return financeType == 'peverse_purchase'
+    return financeType == 'reverse_purchase'
         ? 'Reverse for Purchase'
         : 'Reverse Refinance';
   }

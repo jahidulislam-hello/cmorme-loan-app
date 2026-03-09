@@ -67,7 +67,7 @@ class CityStatePage extends GetView<RequestProposalController> {
                 padding: const EdgeInsets.only(bottom: 20),
                 child: CustomButton(
                   text: 'Next',
-                  onPressed: controller.goToInterested,
+                  onPressed: controller.goToPhonePage,
                   backgroundColor: AppColors.buttonBlue,
                   textColor: AppColors.white,
                 ),

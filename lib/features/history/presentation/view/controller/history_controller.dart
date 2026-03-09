@@ -33,7 +33,7 @@ class HistoryController extends GetxController {
   final calculations = <RecentCalculationItemModel>[].obs;
   final isLoading = false.obs;
 
-  // null = no filter, 'reverse_refinance' or 'peverse_purchase'
+  // null = no filter, 'reverse_refinance' or 'reverse_purchase'
   final selectedFilter = Rxn<String>();
   final selectedDate = Rxn<DateTime>();
 
@@ -106,7 +106,7 @@ class HistoryController extends GetxController {
   String formatAmount(double amount) => NumberFormat('#,##0.##').format(amount);
 
   String tagLabel(String financeType) =>
-      financeType == 'peverse_purchase' ? 'Reverse for Purchase' : 'Reverse Refinance';
+      financeType == 'reverse_purchase' ? 'Reverse for Purchase' : 'Reverse Refinance';
 
   Future<void> onViewDetails(int index) async {
     final id = filteredCalculations[index].id;
@@ -169,7 +169,7 @@ class HistoryController extends GetxController {
           if (objective == 'Reverse Finance ') {
             selectedFilter.value = 'reverse_refinance';
           } else if (objective == 'Reverse for Purchase') {
-            selectedFilter.value = 'peverse_purchase';
+            selectedFilter.value = 'reverse_purchase';
           } else {
             selectedFilter.value = null;
           }

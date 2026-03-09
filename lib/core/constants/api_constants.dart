@@ -20,6 +20,11 @@ class ApiConstants {
   static const String legalAbout = '/management/about';
   static const String legalTerms = '/management/terms';
 
+  // Request Proposal
+  static const String requestProposalCreate = '/request-proposal/create';
+  static const String requestProposalUpdate = '/request-proposal';
+  static const String requestProposalMy = '/request-proposal/my';
+
   // Calculate Loan
   static const String fileUpload = '/file-upload';
   static const String calculateLoan = '/calculate-loan/create';

@@ -98,12 +98,13 @@ class RequestProposalScreen extends GetView<RequestProposalController> {
               ),
               Padding(
                 padding: const EdgeInsets.only(bottom: 20),
-                child: CustomButton(
-                  text: 'Next',
-                  onPressed: controller.goToAddress,
-                  backgroundColor: AppColors.buttonBlue,
-                  textColor: AppColors.white,
-                ),
+                child: Obx(() => CustomButton(
+                      text: 'Next',
+                      onPressed: controller.goToAddress,
+                      backgroundColor: AppColors.buttonBlue,
+                      textColor: AppColors.white,
+                      isLoading: controller.isLoading.value,
+                    )),
               ),
             ],
           ),

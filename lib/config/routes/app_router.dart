@@ -15,6 +15,7 @@ import 'package:reverse_mortage_loan_app/features/home/presentation/view/user_ho
 import 'package:reverse_mortage_loan_app/features/home/presentation/view/tips_calculate_screen.dart';
 import 'package:reverse_mortage_loan_app/features/recent_calculation/presentation/view/binding/recent_calculation_binding.dart';
 import 'package:reverse_mortage_loan_app/features/recent_calculation/presentation/view/recent_calculation_screen.dart';
+import 'package:reverse_mortage_loan_app/features/request_proposal/presentation/view/page/phone_page.dart';
 import 'package:reverse_mortage_loan_app/features/reverse_refinance/presentation/view/binding/reverse_refinance_binding.dart';
 import 'package:reverse_mortage_loan_app/features/history/presentation/view/bindings/history_binding.dart';
 import 'package:reverse_mortage_loan_app/features/history/presentation/view/page/history_screen.dart';
@@ -139,6 +140,9 @@ class AppRouter {
     GetPage(
       name: RouteNames.proposalAddress,
       page: () => const AddressPage(),
+    ), GetPage(
+      name: RouteNames.phonePage,
+      page: () => const PhonePage(),
     ),
     GetPage(
       name: RouteNames.proposalCityState,

@@ -122,12 +122,13 @@ class AppointmentPage extends GetView<RequestProposalController> {
               ),
               Padding(
                 padding: const EdgeInsets.only(bottom: 20),
-                child: CustomButton(
-                  text: 'Send',
-                  onPressed: controller.onSend,
-                  backgroundColor: AppColors.buttonBlue,
-                  textColor: AppColors.white,
-                ),
+                child: Obx(() => CustomButton(
+                      text: 'Send',
+                      onPressed: controller.submitFromAppointment,
+                      backgroundColor: AppColors.buttonBlue,
+                      textColor: AppColors.white,
+                      isLoading: controller.isLoading.value,
+                    )),
               ),
             ],
           ),
