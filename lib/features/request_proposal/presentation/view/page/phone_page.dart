@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:reverse_mortage_loan_app/shared/theme/app_colors.dart';
 import 'package:reverse_mortage_loan_app/shared/widgets/custom_button.dart';
-import 'package:reverse_mortage_loan_app/shared/widgets/custom_text_field.dart';
 import 'package:reverse_mortage_loan_app/features/request_proposal/presentation/view/controller/request_proposal_controller.dart';
 
 class PhonePage extends GetView<RequestProposalController> {
@@ -42,14 +42,67 @@ class PhonePage extends GetView<RequestProposalController> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      CustomTextField(
-                        label: 'Phone No.',
-                        hintText: 'Phone No.',
-                        labelColor: AppColors.blue200,
+                      Text(
+                        'Phone No.',
+                        style: const TextStyle(
+                          color: AppColors.blue200,
+                          fontSize: 13,
+                        ),
+                      ),
+                      const SizedBox(height: 6),
+                      IntlPhoneField(
                         controller: controller.phoneController,
-                        filled: true,
-                        backgroundColor: AppColors.containerHighlight,
-                        keyboardType: TextInputType.number,
+                        initialCountryCode: 'US',
+                        keyboardType: TextInputType.phone,
+                        cursorColor: AppColors.white,
+                        style: const TextStyle(
+                          color: AppColors.white,
+                          fontSize: 14,
+                        ),
+                        dropdownTextStyle: const TextStyle(
+                          color: AppColors.white,
+                          fontSize: 14,
+                        ),
+                        dropdownIcon: const Icon(
+                          Icons.arrow_drop_down,
+                          color: AppColors.hintGrey,
+                        ),
+                        dropdownDecoration: BoxDecoration(
+                          color: AppColors.containerHighlight,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        decoration: InputDecoration(
+                          hintText: 'Phone No.',
+                          hintStyle: const TextStyle(
+                            color: AppColors.hintGrey,
+                            fontSize: 14,
+                          ),
+                          filled: true,
+                          fillColor: AppColors.containerHighlight,
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 14,
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: BorderSide.none,
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: BorderSide.none,
+                          ),
+                          errorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: BorderSide.none,
+                          ),
+                          focusedErrorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: BorderSide.none,
+                          ),
+                        ),
+                        onChanged: (phone) {
+                          controller.phoneCompleteNumber = phone.completeNumber;
+                        },
                       ),
                     ],
                   ),

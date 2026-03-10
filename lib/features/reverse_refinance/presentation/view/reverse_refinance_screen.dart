@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:reverse_mortage_loan_app/features/reverse_refinance/shared/widgets/borrower_toggle.dart';
+import 'package:reverse_mortage_loan_app/shared/widgets/custom_shimmer_loading_indicator.dart';
 import 'package:reverse_mortage_loan_app/features/reverse_refinance/shared/widgets/labeled_input_field.dart';
 import 'package:reverse_mortage_loan_app/features/reverse_refinance/shared/widgets/photo_upload_section.dart';
 import 'package:reverse_mortage_loan_app/shared/app_image/app_images.dart';
@@ -58,6 +59,9 @@ class ReverseRefinanceScreen extends GetView<ReverseRefinanceController> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Obx(() {
+                              if (controller.isUploadingImages.value) {
+                                return const PhotoUploadShimmer();
+                              }
                               if (controller.photos.isEmpty) {
                                 return Padding(
                                   padding: const EdgeInsets.only(
@@ -167,37 +171,6 @@ class ReverseRefinanceScreen extends GetView<ReverseRefinanceController> {
 
                       const Spacer(),
                       const SizedBox(height: 24),
-
-                      /// Upload indicator
-                      Obx(() {
-                        if (!controller.isUploadingImages.value) {
-                          return const SizedBox.shrink();
-                        }
-                        return const Padding(
-                          padding: EdgeInsets.only(bottom: 12),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              SizedBox(
-                                width: 16,
-                                height: 16,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                  color: AppColors.white,
-                                ),
-                              ),
-                              SizedBox(width: 10),
-                              Text(
-                                'Uploading images...',
-                                style: TextStyle(
-                                  color: AppColors.white,
-                                  fontSize: 13,
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      }),
 
                       /// Bottom Button
                       Obx(() => CustomButton(

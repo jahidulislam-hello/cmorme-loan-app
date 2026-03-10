@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:reverse_mortage_loan_app/shared/theme/app_colors.dart';
 
+import 'package:flutter/material.dart';
+import 'package:reverse_mortage_loan_app/shared/theme/app_colors.dart';
+
 class LoanEstimateCard extends StatelessWidget {
   final String title;
   final String loanAmount;
@@ -37,6 +40,7 @@ class LoanEstimateCard extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           Row(
+            spacing: 20,
             children: [
               Expanded(
                 child: Column(
@@ -51,12 +55,16 @@ class LoanEstimateCard extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 4),
-                    Text(
-                      loanAmount,
-                      style: const TextStyle(
-                        color: AppColors.green500,
-                        fontSize: 32,
-                        fontWeight: FontWeight.bold,
+                    FittedBox(
+                      fit: BoxFit.scaleDown,
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        loanAmount,
+                        style: const TextStyle(
+                          color: AppColors.green500,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ],
@@ -76,12 +84,16 @@ class LoanEstimateCard extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 4),
-                      Text(
-                        cashAvailable!,
-                        style: const TextStyle(
-                          color: AppColors.green500,
-                          fontSize: 32,
-                          fontWeight: FontWeight.bold,
+                      FittedBox(
+                        fit: BoxFit.scaleDown,
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          cashAvailable!,
+                          style: const TextStyle(
+                            color: AppColors.green500,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ],

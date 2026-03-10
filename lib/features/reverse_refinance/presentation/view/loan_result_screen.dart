@@ -114,7 +114,8 @@ class LoanResultScreen extends StatelessWidget {
 
                       const Center(
                         child: Text(
-                          "Users to hit 'request full proposal' and send more information",
+                          'Get more information on available line of credit, interest rates, eligibility, and more.',
+
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             color: AppColors.hintGrey,

@@ -44,6 +44,7 @@ class RequestProposalController extends GetxController {
 
   // Step 4 - Phone
   final phoneController = TextEditingController();
+  String phoneCompleteNumber = '';
 
   // Step 5 - Interested (finance_type)
   final selectedInterest = 0.obs;
@@ -115,6 +116,7 @@ class RequestProposalController extends GetxController {
 
     // Step 4
     phoneController.text = data.phone ?? '';
+    phoneCompleteNumber = data.phone ?? '';
 
     // Step 5 — finance_type
     if (data.financeType != null) {
@@ -238,7 +240,9 @@ class RequestProposalController extends GetxController {
         address: addressController.text.trim(),
         city: cityController.text.trim(),
         stateCode: stateCodeController.text.trim(),
-        phone: phoneController.text.trim(),
+        phone: phoneCompleteNumber.isNotEmpty
+            ? phoneCompleteNumber
+            : phoneController.text.trim(),
         financeType: selectedInterest.value == 0
             ? 'reverse_refinance'
             : 'reverse_purchase',

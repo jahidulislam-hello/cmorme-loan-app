@@ -11,7 +11,8 @@
       "Bash(\"C:/Users/Siam/StudioProjects/reverse_mortage_loan_app/gen_image/bin/generate.dart\":*)",
       "Bash(dart pub get:*)",
       "Bash(dart run:*)",
-      "Bash(ls:*)"
+      "Bash(ls:*)",
+      "Bash(find /c/Users/Siam/StudioProjects/reverse_mortage_loan_app/lib -name \"*.dart\" | xargs grep -l -i \"login\\\\|sign_in\\\\|signin\" 2>/dev/null)"
     ]
   }
 }

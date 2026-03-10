@@ -69,21 +69,25 @@ class ReverseRefinanceController extends GetxController {
       if (pickedFiles.isEmpty) return;
 
       final newFiles = pickedFiles.take(remaining).map((x) => File(x.path)).toList();
-      photos.addAll(newFiles);
-      currentPhotoIndex.value = 0;
 
-      // Upload each picked image immediately
+      // Show loading overlay over the photo container; add photos only after upload succeeds
       isUploadingImages.value = true;
+      final List<(File, String)> successfulUploads = [];
       for (final file in newFiles) {
         try {
           final result = await _uploadFileUseCase(file);
-          uploadedImagePaths.add(result.path);
+          successfulUploads.add((file, result.path));
           _logger.i('Image uploaded: ${result.path}');
         } catch (e) {
           _logger.e('Failed to upload image ${file.path}: $e');
           Get.snackbar('Upload Error', 'Failed to upload one or more images. Please try again.',
               snackPosition: SnackPosition.BOTTOM);
         }
+      }
+      if (successfulUploads.isNotEmpty) {
+        photos.addAll(successfulUploads.map((u) => u.$1));
+        uploadedImagePaths.addAll(successfulUploads.map((u) => u.$2));
+        currentPhotoIndex.value = 0;
       }
     } catch (e) {
       _logger.e('Image picker error: $e');

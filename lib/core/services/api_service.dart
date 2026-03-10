@@ -269,7 +269,10 @@ class ApiService {
 
       case DioExceptionType.badResponse:
         final statusCode = error.response?.statusCode;
-        final message = error.response?.statusMessage ?? 'Server error';
+        final data = error.response?.data;
+        final message = (data is Map && data['message'] != null)
+            ? data['message'].toString()
+            : error.response?.statusMessage ?? 'Server error';
         return ServerException(message, statusCode, error.message);
 
       case DioExceptionType.cancel:

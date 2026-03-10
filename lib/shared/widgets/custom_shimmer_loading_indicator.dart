@@ -137,6 +137,25 @@ class _CalculationItemSkeleton extends StatelessWidget {
   }
 }
 
+/// Shimmer placeholder for the photo upload area in [ReverseRefinanceScreen].
+/// Covers the full-width photo container (180px height) while images are uploading.
+class PhotoUploadShimmer extends StatelessWidget {
+  const PhotoUploadShimmer({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Shimmer.fromColors(
+      baseColor: const Color(0xFF2D4278),
+      highlightColor: const Color(0xFF3D5A9A),
+      child: Container(
+        width: double.infinity,
+        height: 180,
+        color: const Color(0xFF2D4278),
+      ),
+    );
+  }
+}
+
 /// Shimmer placeholder for a network image inside [LoanImageSection].
 /// Matches the 200px height and borderRadius 4 of the image container.
 class LoanImageShimmer extends StatelessWidget {
