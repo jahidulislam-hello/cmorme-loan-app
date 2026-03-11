@@ -10,6 +10,7 @@ import '../models/register_response_model.dart';
 import '../models/reset_password_request_model.dart';
 import '../models/reset_password_response_model.dart';
 import '../models/verify_forget_otp_response_model.dart';
+import '../models/resend_otp_response_model.dart';
 import '../models/verify_otp_request_model.dart';
 import '../models/verify_otp_response_model.dart';
 
@@ -67,6 +68,16 @@ class AuthRemoteDatasource {
     );
     _logger.d('VerifyForgetOtp raw response: ${response.data}');
     return VerifyForgetOtpResponseModel.fromJson(response.data);
+  }
+
+  Future<ResendOtpResponseModel> resendOtp(String email) async {
+    _logger.d('ResendOtp request body: {email: $email}');
+    final response = await _apiService.post(
+      ApiConstants.resendOtp,
+      data: {'email': email},
+    );
+    _logger.d('ResendOtp raw response: ${response.data}');
+    return ResendOtpResponseModel.fromJson(response.data);
   }
 
   Future<ResetPasswordResponseModel> resetPassword(ResetPasswordRequestModel request) async {

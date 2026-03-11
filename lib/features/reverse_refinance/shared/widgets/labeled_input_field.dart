@@ -12,6 +12,7 @@ class LabeledInputField extends StatelessWidget {
   final TextEditingController? controller;
   final TextInputType keyboardType;
   final Color? labelColor;
+  final String? errorText;
 
   const LabeledInputField({
     super.key,
@@ -23,6 +24,7 @@ class LabeledInputField extends StatelessWidget {
     this.controller,
     this.keyboardType = TextInputType.number,
     this.labelColor,
+    this.errorText,
   });
 
   @override
@@ -34,7 +36,7 @@ class LabeledInputField extends StatelessWidget {
           label,
           style: TextStyle(
             color: labelColor ?? AppColors.green500,
-            fontSize: 13,
+            fontSize: 16,
             fontWeight: FontWeight.w600,
             letterSpacing: 0.5,
           ),
@@ -45,7 +47,9 @@ class LabeledInputField extends StatelessWidget {
           decoration: BoxDecoration(
             color: AppColors.blue400,
             borderRadius: BorderRadius.circular(8),
-
+            border: errorText != null
+                ? Border.all(color: Colors.redAccent, width: 1.5)
+                : null,
           ),
           child: Row(
             children: [
@@ -92,6 +96,17 @@ class LabeledInputField extends StatelessWidget {
             ],
           ),
         ),
+        if (errorText != null) ...[
+          const SizedBox(height: 6),
+          Text(
+            errorText!,
+            style: const TextStyle(
+              color: Colors.redAccent,
+              fontSize: 12,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ],
       ],
     );
   }

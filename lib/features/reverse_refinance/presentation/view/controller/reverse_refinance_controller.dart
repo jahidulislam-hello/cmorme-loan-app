@@ -21,7 +21,7 @@ class ReverseRefinanceController extends GetxController {
         _calculateLoanUseCase = calculateLoanUseCase;
 
   final homeValueController = TextEditingController();
-  final loanBalanceController = TextEditingController();
+  final mortgageBalanceController = TextEditingController();
   final borrowerAgeController = TextEditingController();
   final firstBorrowerAgeController = TextEditingController();
   final secondBorrowerAgeController = TextEditingController();
@@ -32,8 +32,25 @@ class ReverseRefinanceController extends GetxController {
   final uploadedImagePaths = <String>[].obs;
   final isUploadingImages = false.obs;
   final isLoading = false.obs;
+  final homeValueError = RxnString();
+  final mortgageBalanceValueError = RxnString();
 
   final ImagePicker _picker = ImagePicker();
+
+  @override
+  void onInit() {
+    super.onInit();
+    homeValueController.addListener(() {
+      if (homeValueController.text.trim().isNotEmpty) {
+        homeValueError.value = null;
+      }
+    });
+    mortgageBalanceController.addListener(() {
+      if (mortgageBalanceController.text.trim().isNotEmpty) {
+        mortgageBalanceValueError.value = null;
+      }
+    });
+  }
 
   String get loanType =>
       (Get.arguments as Map<String, dynamic>?)?['type'] ?? 'refinance';
@@ -99,27 +116,27 @@ class ReverseRefinanceController extends GetxController {
   }
 
   Future<void> onNext() async {
-    if (uploadedImagePaths.isEmpty) {
-      Get.snackbar('Required', 'Please upload at least one photo.',
-          snackPosition: SnackPosition.BOTTOM);
-      return;
-    }
+    bool hasError = false;
     if (homeValueController.text.trim().isEmpty) {
-      Get.snackbar('Required', 'Please enter home value.',
-          snackPosition: SnackPosition.BOTTOM);
-      return;
+      homeValueError.value = 'Please enter home value.';
+      hasError = true;
+    } else {
+      homeValueError.value = null;
     }
-    if (loanBalanceController.text.trim().isEmpty) {
-      Get.snackbar('Required', 'Please enter current loan balance.',
-          snackPosition: SnackPosition.BOTTOM);
-      return;
+    if (mortgageBalanceController.text.trim().isEmpty) {
+      mortgageBalanceValueError.value = 'Please enter mortgage balance.';
+      hasError = true;
+    } else {
+      mortgageBalanceValueError.value = null;
     }
+    if (hasError) return;
+
 
     final request = CalculateLoanRequestModel(
       financeType: financeType,
-      homeImg: uploadedImagePaths.toList(),
       homeValue: double.parse(homeValueController.text.trim()),
-      mortgageAmount: double.parse(loanBalanceController.text.trim()),
+      homeImg: uploadedImagePaths.toList(),
+      mortgageAmount: double.tryParse(mortgageBalanceController.text.trim()),
       singleBorrowerAge: isMultipleBorrower.value
           ? null
           : int.tryParse(borrowerAgeController.text.trim()),
@@ -140,7 +157,7 @@ class ReverseRefinanceController extends GetxController {
   @override
   void onClose() {
     homeValueController.dispose();
-    loanBalanceController.dispose();
+    mortgageBalanceController.dispose();
     borrowerAgeController.dispose();
     firstBorrowerAgeController.dispose();
     secondBorrowerAgeController.dispose();

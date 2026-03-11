@@ -1,17 +1,17 @@
 class CalculateLoanRequestModel {
   final String financeType;
-  final List<String> homeImg;
   final double homeValue;
-  final double mortgageAmount;
+  final List<String> homeImg;
+  final double? mortgageAmount;
   final int? singleBorrowerAge;
   final int? multipleBorrowerAge1;
   final int? multipleBorrowerAge2;
 
   CalculateLoanRequestModel({
     required this.financeType,
-    required this.homeImg,
     required this.homeValue,
-    required this.mortgageAmount,
+    this.homeImg = const [],
+    this.mortgageAmount,
     this.singleBorrowerAge,
     this.multipleBorrowerAge1,
     this.multipleBorrowerAge2,
@@ -20,10 +20,14 @@ class CalculateLoanRequestModel {
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{
       'finance_type': financeType,
-      'home_img': homeImg,
       'home_value': homeValue,
-      'Mortgage_amount': mortgageAmount,
     };
+    if (homeImg.isNotEmpty) {
+      map['home_img'] = homeImg;
+    }
+    if (mortgageAmount != null) {
+      map['Mortgage_amount'] = mortgageAmount;
+    }
     if (singleBorrowerAge != null) {
       map['single_borrwer_age'] = singleBorrowerAge;
     }

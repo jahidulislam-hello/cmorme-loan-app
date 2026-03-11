@@ -24,26 +24,44 @@ class LoanImageSection extends StatelessWidget {
           height: 200,
           child: ClipRRect(
             borderRadius: BorderRadius.circular(4),
-            child: PageView.builder(
-              physics: const BouncingScrollPhysics(),
-              controller: pageController,
-              itemCount: imageUrls.length,
-              onPageChanged: (index) => currentIndex.value = index,
-              itemBuilder: (context, index) {
-                return Image.network(
-                  imageUrls[index],
-                  fit: BoxFit.cover,
-                  width: double.infinity,
-                  loadingBuilder: (context, child, loadingProgress) {
-                    if (loadingProgress == null) return child;
-                    return const LoanImageShimmer();
-                  },
-                  errorBuilder: (context, error, stackTrace) => const Center(
-                    child: Icon(Icons.broken_image, color: Colors.white54, size: 48),
+            child: imageUrls.isEmpty
+                ? Container(
+                    color: AppColors.blue400,
+                    child: const Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.image_not_supported_outlined,
+                            color: Colors.white54, size: 52),
+                        SizedBox(height: 8),
+                        Text(
+                          'No images available',
+                          style: TextStyle(color: Colors.white54, fontSize: 13),
+                        ),
+                      ],
+                    ),
+                  )
+                : PageView.builder(
+                    physics: const BouncingScrollPhysics(),
+                    controller: pageController,
+                    itemCount: imageUrls.length,
+                    onPageChanged: (index) => currentIndex.value = index,
+                    itemBuilder: (context, index) {
+                      return Image.network(
+                        imageUrls[index],
+                        fit: BoxFit.cover,
+                        width: double.infinity,
+                        loadingBuilder: (context, child, loadingProgress) {
+                          if (loadingProgress == null) return child;
+                          return const LoanImageShimmer();
+                        },
+                        errorBuilder: (context, error, stackTrace) =>
+                            const Center(
+                          child: Icon(Icons.broken_image,
+                              color: Colors.white54, size: 48),
+                        ),
+                      );
+                    },
                   ),
-                );
-              },
-            ),
           ),
         ),
         if (imageUrls.length > 1) ...[

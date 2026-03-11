@@ -8,6 +8,7 @@ import 'package:reverse_mortage_loan_app/features/authentication/data/models/reg
 import 'package:reverse_mortage_loan_app/features/authentication/data/models/register_response_model.dart';
 import 'package:reverse_mortage_loan_app/features/authentication/data/models/reset_password_request_model.dart';
 import 'package:reverse_mortage_loan_app/features/authentication/data/models/reset_password_response_model.dart';
+import 'package:reverse_mortage_loan_app/features/authentication/data/models/resend_otp_response_model.dart';
 import 'package:reverse_mortage_loan_app/features/authentication/data/models/verify_forget_otp_response_model.dart';
 import 'package:reverse_mortage_loan_app/features/authentication/data/models/verify_otp_request_model.dart';
 import 'package:reverse_mortage_loan_app/features/authentication/data/models/verify_otp_response_model.dart';
@@ -56,6 +57,13 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<ResetPasswordResponseModel> resetPassword(ResetPasswordRequestModel request) async {
     final response = await _datasource.resetPassword(request);
     await _tokenService.deleteToken();
+    return response;
+  }
+
+  @override
+  Future<ResendOtpResponseModel> resendOtp(String email) async {
+    final response = await _datasource.resendOtp(email);
+    await _tokenService.saveToken(response.token);
     return response;
   }
 }

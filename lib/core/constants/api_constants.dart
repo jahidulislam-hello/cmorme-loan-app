@@ -9,6 +9,7 @@ class ApiConstants {
   static const String forgetPassword = '/user/forget-password';
   static const String verifyForgetOtp = '/user/verify-forget-otp';
   static const String resetPassword = '/user/reset-password';
+  static const String resendOtp = '/user/resend';
 
   // Profile
   static const String myProfile = '/user/my-profile';
@@ -24,6 +25,9 @@ class ApiConstants {
   static const String requestProposalCreate = '/request-proposal/create';
   static const String requestProposalUpdate = '/request-proposal';
   static const String requestProposalMy = '/request-proposal/my';
+
+  // Notifications
+  static const String myNotifications = '/notification/my';
 
   // Calculate Loan
   static const String fileUpload = '/file-upload';

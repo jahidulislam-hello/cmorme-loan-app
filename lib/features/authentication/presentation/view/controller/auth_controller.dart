@@ -12,6 +12,7 @@ import 'package:reverse_mortage_loan_app/features/authentication/domain/usecases
 import 'package:reverse_mortage_loan_app/features/authentication/domain/usecases/login_usecase.dart';
 import 'package:reverse_mortage_loan_app/features/authentication/domain/usecases/register_usecase.dart';
 import 'package:reverse_mortage_loan_app/features/authentication/domain/usecases/reset_password_usecase.dart';
+import 'package:reverse_mortage_loan_app/features/authentication/domain/usecases/resend_otp_usecase.dart';
 import 'package:reverse_mortage_loan_app/features/authentication/domain/usecases/verify_forget_otp_usecase.dart';
 import 'package:reverse_mortage_loan_app/features/authentication/domain/usecases/verify_otp_usecase.dart';
 
@@ -24,6 +25,7 @@ class AuthController extends GetxController {
   final ForgetPasswordUseCase _forgetPasswordUseCase;
   final VerifyForgetOtpUseCase _verifyForgetOtpUseCase;
   final ResetPasswordUseCase _resetPasswordUseCase;
+  final ResendOtpUseCase _resendOtpUseCase;
   final _logger = Logger();
 
   AuthController({
@@ -33,12 +35,14 @@ class AuthController extends GetxController {
     required ForgetPasswordUseCase forgetPasswordUseCase,
     required VerifyForgetOtpUseCase verifyForgetOtpUseCase,
     required ResetPasswordUseCase resetPasswordUseCase,
+    required ResendOtpUseCase resendOtpUseCase,
   })  : _registerUseCase = registerUseCase,
         _verifyOtpUseCase = verifyOtpUseCase,
         _loginUseCase = loginUseCase,
         _forgetPasswordUseCase = forgetPasswordUseCase,
         _verifyForgetOtpUseCase = verifyForgetOtpUseCase,
-        _resetPasswordUseCase = resetPasswordUseCase;
+        _resetPasswordUseCase = resetPasswordUseCase,
+        _resendOtpUseCase = resendOtpUseCase;
 
   // User role
   static final userRole = 'user'.obs;
@@ -198,6 +202,37 @@ class AuthController extends GetxController {
       Get.snackbar('Error', e.message);
     } catch (e) {
       _logger.e('Unknown error during forget password: $e');
+      Get.snackbar('Error', 'Something went wrong. Please try again.');
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  // ─── Resend OTP ───────────────────────────────────────────────────────────
+
+  /// Email used for resend — matches whichever flow sent the OTP originally.
+  String get _resendEmail => otpFlow.value == OtpFlow.registration
+      ? emailController.text.trim()
+      : verifyEmailController.text.trim();
+
+  Future<void> resendOtp() async {
+    isLoading.value = true;
+    try {
+      final response = await _resendOtpUseCase(_resendEmail);
+      _logger.i('OTP resent: ${response.message}');
+      Get.snackbar('OTP Sent', response.message,
+          snackPosition: SnackPosition.BOTTOM);
+    } on NoInternetException catch (e) {
+      _logger.w('No internet during resend OTP: $e');
+      Get.snackbar('No Internet', e.message);
+    } on TimeoutException catch (e) {
+      _logger.w('Timeout during resend OTP: $e');
+      Get.snackbar('Timeout', 'Server took too long. Please try again.');
+    } on ServerException catch (e) {
+      _logger.e('Server error during resend OTP: $e');
+      Get.snackbar('Error', e.message);
+    } catch (e) {
+      _logger.e('Unknown error during resend OTP: $e');
       Get.snackbar('Error', 'Something went wrong. Please try again.');
     } finally {
       isLoading.value = false;

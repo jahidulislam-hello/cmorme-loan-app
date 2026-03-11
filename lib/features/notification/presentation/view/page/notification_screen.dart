@@ -29,44 +29,60 @@ class NotificationScreen extends GetView<NotificationController> {
         ),
       ),
       body: SafeArea(
-        child: ListView(
-          physics: const BouncingScrollPhysics(),
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          children: [
-            const SizedBox(height: 16),
-            const Text(
-              'Today',
-              style: TextStyle(
-                color: AppColors.blue300,
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
+        child: Obx(() {
+          if (controller.isLoading.value) {
+            return const Center(
+              child: CircularProgressIndicator(color: AppColors.white),
+            );
+          }
+
+          final grouped = controller.grouped;
+
+          if (grouped.isEmpty) {
+            return const Center(
+              child: Text(
+                'No notifications yet.',
+                style: TextStyle(color: AppColors.hintGrey, fontSize: 14),
               ),
-            ),
-            const SizedBox(height: 8),
-            ...controller.todayNotifications.map(
-              (item) => NotificationTile(
-                title: item.title,
-                time: item.time,
-              ),
-            ),
-            const SizedBox(height: 24),
-            const Text(
-              'Yesterday',
-              style: TextStyle(
-                color: AppColors.blue300,
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 8),
-            ...controller.yesterdayNotifications.map(
-              (item) => NotificationTile(
-                title: item.title,
-                time: item.time,
-              ),
-            ),
-          ],
-        ),
+            );
+          }
+
+          return ListView(
+            physics: const BouncingScrollPhysics(),
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            children: [
+              const SizedBox(height: 16),
+              for (final entry in grouped.entries) ...[
+                _SectionHeader(entry.key),
+                const SizedBox(height: 8),
+                for (final item in entry.value)
+                  NotificationTile(
+                    title: item.title,
+                    time: NotificationController.formatTime(item.createdAt),
+                    isRead: item.isRead,
+                  ),
+                const SizedBox(height: 16),
+              ],
+            ],
+          );
+        }),
+      ),
+    );
+  }
+}
+
+class _SectionHeader extends StatelessWidget {
+  final String label;
+  const _SectionHeader(this.label);
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      label,
+      style: const TextStyle(
+        color: AppColors.blue300,
+        fontSize: 20,
+        fontWeight: FontWeight.bold,
       ),
     );
   }

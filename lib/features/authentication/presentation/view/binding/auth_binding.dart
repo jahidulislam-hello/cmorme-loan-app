@@ -8,6 +8,7 @@ import 'package:reverse_mortage_loan_app/features/authentication/domain/usecases
 import 'package:reverse_mortage_loan_app/features/authentication/domain/usecases/login_usecase.dart';
 import 'package:reverse_mortage_loan_app/features/authentication/domain/usecases/register_usecase.dart';
 import 'package:reverse_mortage_loan_app/features/authentication/domain/usecases/reset_password_usecase.dart';
+import 'package:reverse_mortage_loan_app/features/authentication/domain/usecases/resend_otp_usecase.dart';
 import 'package:reverse_mortage_loan_app/features/authentication/domain/usecases/verify_forget_otp_usecase.dart';
 import 'package:reverse_mortage_loan_app/features/authentication/domain/usecases/verify_otp_usecase.dart';
 import 'package:reverse_mortage_loan_app/features/authentication/presentation/view/controller/auth_controller.dart';
@@ -42,6 +43,9 @@ class AuthBinding extends Bindings {
     Get.lazyPut<ResetPasswordUseCase>(
       () => ResetPasswordUseCase(Get.find<AuthRepository>()),
     );
+    Get.lazyPut<ResendOtpUseCase>(
+      () => ResendOtpUseCase(Get.find<AuthRepository>()),
+    );
     Get.lazyPut<AuthController>(
       () => AuthController(
         registerUseCase: Get.find<RegisterUseCase>(),
@@ -50,6 +54,7 @@ class AuthBinding extends Bindings {
         forgetPasswordUseCase: Get.find<ForgetPasswordUseCase>(),
         verifyForgetOtpUseCase: Get.find<VerifyForgetOtpUseCase>(),
         resetPasswordUseCase: Get.find<ResetPasswordUseCase>(),
+        resendOtpUseCase: Get.find<ResendOtpUseCase>(),
       ),
     );
   }

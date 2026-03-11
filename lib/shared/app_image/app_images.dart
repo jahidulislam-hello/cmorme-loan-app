@@ -11,6 +11,7 @@ class AppImages {
   static const String frame = 'assets/images/Frame.svg';
   static const String loanIcon = 'assets/images/loan_icon.svg';
   static const String homeIcon = 'assets/images/home.svg';
+  static const String homeValueIcon = 'assets/images/home_value.svg';
   static const String historyIcon = 'assets/images/history.svg';
   static const String avatarIcon = 'assets/images/avatar.svg';
   static const String borrowerIcon = 'assets/images/borrower_icon.svg';

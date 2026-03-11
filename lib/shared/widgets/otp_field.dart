@@ -6,12 +6,14 @@ class OtpField extends StatelessWidget {
   final int length;
   final List<TextEditingController> controllers;
   final List<FocusNode> focusNodes;
+  final VoidCallback? onCompleted;
 
   const OtpField({
     super.key,
     this.length = 4,
     required this.controllers,
     required this.focusNodes,
+    this.onCompleted,
   });
 
   @override
@@ -54,6 +56,8 @@ class OtpField extends StatelessWidget {
               onChanged: (value) {
                 if (value.isNotEmpty && index < length - 1) {
                   focusNodes[index + 1].requestFocus();
+                } else if (value.isNotEmpty && index == length - 1) {
+                  onCompleted?.call();
                 } else if (value.isEmpty && index > 0) {
                   focusNodes[index - 1].requestFocus();
                 }

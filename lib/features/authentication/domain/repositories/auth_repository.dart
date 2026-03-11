@@ -7,6 +7,7 @@ import 'package:reverse_mortage_loan_app/features/authentication/data/models/reg
 import 'package:reverse_mortage_loan_app/features/authentication/data/models/reset_password_request_model.dart';
 import 'package:reverse_mortage_loan_app/features/authentication/data/models/reset_password_response_model.dart';
 import 'package:reverse_mortage_loan_app/features/authentication/data/models/verify_forget_otp_response_model.dart';
+import 'package:reverse_mortage_loan_app/features/authentication/data/models/resend_otp_response_model.dart';
 import 'package:reverse_mortage_loan_app/features/authentication/data/models/verify_otp_request_model.dart';
 import 'package:reverse_mortage_loan_app/features/authentication/data/models/verify_otp_response_model.dart';
 
@@ -17,4 +18,5 @@ abstract class AuthRepository {
   Future<ForgetPasswordResponseModel> forgetPassword(ForgetPasswordRequestModel request);
   Future<VerifyForgetOtpResponseModel> verifyForgetOtp(VerifyOtpRequestModel request);
   Future<ResetPasswordResponseModel> resetPassword(ResetPasswordRequestModel request);
+  Future<ResendOtpResponseModel> resendOtp(String email);
 }

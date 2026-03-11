@@ -4,7 +4,7 @@ class RecentCalculationItemModel {
   final String financeType;
   final List<String> homeImg;
   final double homeValue;
-  final double mortgageAmount;
+  final double? mortgageAmount;
   final int? singleBorrowerAge;
   final int? multipleBorrowerAge1;
   final int? multipleBorrowerAge2;
@@ -29,7 +29,7 @@ class RecentCalculationItemModel {
     required this.financeType,
     required this.homeImg,
     required this.homeValue,
-    required this.mortgageAmount,
+    this.mortgageAmount,
     this.singleBorrowerAge,
     this.multipleBorrowerAge1,
     this.multipleBorrowerAge2,
@@ -88,9 +88,9 @@ class RecentCalculationItemModel {
           ? (json['user_id'] as Map<String, dynamic>)['_id'] as String
           : json['user_id'] as String,
       financeType: json['finance_type'] as String,
-      homeImg: List<String>.from(json['home_img'] as List),
+      homeImg: List<String>.from(json['home_img'] as List? ?? []),
       homeValue: (json['home_value'] as num).toDouble(),
-      mortgageAmount: (json['Mortgage_amount'] as num).toDouble(),
+      mortgageAmount: (json['Mortgage_amount'] as num?)?.toDouble(),
       singleBorrowerAge: json['single_borrwer_age'] as int?,
       multipleBorrowerAge1: json['multiple_borrwer_age1'] as int?,
       multipleBorrowerAge2: json['multiple_borrwer_age2'] as int?,

@@ -29,7 +29,7 @@ class LoanInfoSection extends StatelessWidget {
         const SizedBox(height: 12),
         _buildInfoRow(AppImages.objectiveIcon, 'Objective', objective, AppColors.white),
         const SizedBox(height: 12),
-        _buildInfoRow(AppImages.homeIcon, 'Home Value', homeValue, AppColors.green500),
+        _buildInfoRow(AppImages.homeValueIcon, 'Home Value', homeValue, AppColors.green500),
         const SizedBox(height: 12),
         if (hasTwoBorrowers) ...[
           _buildInfoRow(AppImages.borrowerIcon, '1st Borrower Age', firstBorrowerAge, AppColors.white),

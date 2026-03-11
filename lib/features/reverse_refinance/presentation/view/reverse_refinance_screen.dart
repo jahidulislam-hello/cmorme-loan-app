@@ -87,7 +87,7 @@ class ReverseRefinanceScreen extends GetView<ReverseRefinanceController> {
                               );
                             }),
                             const SizedBox(height: 20),
-                            Padding(
+                            Obx(() => Padding(
                               padding: const EdgeInsets.only(
                                   left: 20, right: 20, bottom: 20),
                               child: LabeledInputField(
@@ -96,30 +96,33 @@ class ReverseRefinanceScreen extends GetView<ReverseRefinanceController> {
                                 prefixIcon: Icons.attach_money,
                                 controller: controller.homeValueController,
                                 labelColor: AppColors.blue300,
+                                errorText: controller.homeValueError.value,
                               ),
-                            ),
+                            )),
                           ],
                         ),
                       ),
 
                       const SizedBox(height: 24),
-                      LabeledInputField(
-                        label: 'Current Loan Balance',
+                      Obx(() => LabeledInputField(
+                        label: 'Current Mortgage Balance',
                        // hintText: '1500',
                         prefixIcon: Icons.attach_money,
-                        controller: controller.loanBalanceController,
+                        controller: controller.mortgageBalanceController,
                         labelColor: AppColors.blue300,
-                      ),
+                        errorText: controller.mortgageBalanceValueError.value,
+                      )),
+                      const SizedBox(height: 24),
                       const Text(
                         'AGE SET',
                         style: TextStyle(
                           color: AppColors.blue300,
-                          fontSize: 24,
+                          fontSize: 16,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
 
-                      const SizedBox(height: 12),
+                      const SizedBox(height: 8),
 
                       Obx(() => BorrowerToggle(
                             isMultipleBorrower:

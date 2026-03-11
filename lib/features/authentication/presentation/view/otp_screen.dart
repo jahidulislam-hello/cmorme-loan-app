@@ -43,6 +43,7 @@ class OtpScreen extends GetView<AuthController> {
                         length: 6,
                         controllers: controller.otpControllers,
                         focusNodes: controller.otpFocusNodes,
+                        onCompleted: controller.verifyOtp,
                       ),
 
                       const SizedBox(height: 20),
@@ -58,9 +59,7 @@ class OtpScreen extends GetView<AuthController> {
                             ),
                           ),
                           GestureDetector(
-                            onTap: () {
-                              // TODO: Implement resend OTP
-                            },
+                            onTap: controller.resendOtp,
                             child: const Text(
                               'Resend again',
                               style: TextStyle(

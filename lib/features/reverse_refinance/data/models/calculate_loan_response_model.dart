@@ -4,7 +4,7 @@ class CalculateLoanResponseModel {
   final String financeType;
   final List<String> homeImg;
   final double homeValue;
-  final double mortgageAmount;
+  final double? mortgageAmount;
   final int? singleBorrowerAge;
   final int? multipleBorrowerAge1;
   final int? multipleBorrowerAge2;
@@ -27,7 +27,7 @@ class CalculateLoanResponseModel {
     required this.financeType,
     required this.homeImg,
     required this.homeValue,
-    required this.mortgageAmount,
+    this.mortgageAmount,
     this.singleBorrowerAge,
     this.multipleBorrowerAge1,
     this.multipleBorrowerAge2,
@@ -47,9 +47,9 @@ class CalculateLoanResponseModel {
       id: data['_id'] as String,
       userId: data['user_id'] as String,
       financeType: data['finance_type'] as String,
-      homeImg: List<String>.from(data['home_img'] as List),
+      homeImg: List<String>.from(data['home_img'] as List? ?? []),
       homeValue: (data['home_value'] as num).toDouble(),
-      mortgageAmount: (data['Mortgage_amount'] as num).toDouble(),
+      mortgageAmount: (data['Mortgage_amount'] as num?)?.toDouble(),
       singleBorrowerAge: data['single_borrwer_age'] as int?,
       multipleBorrowerAge1: data['multiple_borrwer_age1'] as int?,
       multipleBorrowerAge2: data['multiple_borrwer_age2'] as int?,
