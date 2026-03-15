@@ -12,7 +12,7 @@ class NotificationRemoteDatasource {
   Future<List<NotificationModel>> getNotifications() async {
     final response = await _apiService.get(ApiConstants.myNotifications);
     _logger.d('Notifications raw response: ${response.data}');
-    final data = response.data['data'] as List;
+    final data = response.data['data']['allNoti'] as List;
     return data
         .map((e) => NotificationModel.fromJson(e as Map<String, dynamic>))
         .toList();

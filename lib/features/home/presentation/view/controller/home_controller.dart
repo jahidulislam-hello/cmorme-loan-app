@@ -5,6 +5,7 @@ import 'package:logger/logger.dart';
 import 'package:reverse_mortage_loan_app/config/routes/route_names.dart';
 import 'package:reverse_mortage_loan_app/core/exceptions/app_exceptions.dart';
 import 'package:reverse_mortage_loan_app/core/services/cache_service.dart';
+import 'package:reverse_mortage_loan_app/features/history/presentation/view/controller/history_controller.dart';
 import 'package:reverse_mortage_loan_app/features/profile/domain/usecases/get_profile_usecase.dart';
 import 'package:reverse_mortage_loan_app/features/recent_calculation/data/models/recent_calculation_response_model.dart';
 import 'package:reverse_mortage_loan_app/features/recent_calculation/domain/usecases/delete_calculation_usecase.dart';
@@ -32,7 +33,6 @@ class HomeController extends GetxController {
 
   final userName = ''.obs;
   final isProfileLoading = true.obs;
-  final selectedNavIndex = 0.obs;
 
   final calculations = <RecentCalculationItemModel>[].obs;
   final isCalculationLoading = true.obs;
@@ -116,17 +116,7 @@ class HomeController extends GetxController {
   String tagLabel(String financeType) =>
       financeType == 'reverse_purchase' ? 'Reverse for Purchase' : 'Reverse Refinance';
 
-  void onNavTap(int index) async {
-    selectedNavIndex.value = index;
-    if (index == 1) {
-      await Get.toNamed(RouteNames.history);
-      selectedNavIndex.value = 0;
-      _fetchLatestCalculation();
-    } else if (index == 2) {
-      Get.toNamed(RouteNames.accountSetting);
-      selectedNavIndex.value = 0;
-    }
-  }
+  void onReturnToHome() => _fetchLatestCalculation();
 
   void onNotification() => Get.toNamed(RouteNames.notification);
 
@@ -180,6 +170,8 @@ class HomeController extends GetxController {
               const DeleteSuccessDialog(),
               barrierColor: Colors.white24,
             );
+          //  Get.find<HistoryController>().fetchCalculations(); // comment out to avoid unnecessary api call
+         //   Get.find<HistoryController>().removeCalculationById(item.id);
           } on NoInternetException catch (e) {
             _logger.w('No internet during delete: $e');
             Get.snackbar('No Internet', e.message);

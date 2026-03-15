@@ -18,7 +18,7 @@ class NotificationTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Opacity(
-      opacity: isRead ? 1.0 : 0.45,
+      opacity: isRead ? 0.8: 1,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 10),
         child: Row(

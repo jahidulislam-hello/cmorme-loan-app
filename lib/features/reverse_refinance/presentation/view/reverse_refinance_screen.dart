@@ -104,6 +104,7 @@ class ReverseRefinanceScreen extends GetView<ReverseRefinanceController> {
                       ),
 
                       const SizedBox(height: 24),
+                      if (!controller.isPurchase)
                       Obx(() => LabeledInputField(
                         label: 'Current Mortgage Balance',
                        // hintText: '1500',

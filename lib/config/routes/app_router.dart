@@ -7,11 +7,11 @@ import 'package:reverse_mortage_loan_app/features/authentication/presentation/vi
 import 'package:reverse_mortage_loan_app/features/authentication/presentation/view/sign_in_screen.dart';
 import 'package:reverse_mortage_loan_app/features/authentication/presentation/view/sign_up_screen.dart';
 import 'package:reverse_mortage_loan_app/features/authentication/presentation/view/verify_email_screen.dart';
-import 'package:reverse_mortage_loan_app/features/home/presentation/view/binding/home_binding.dart';
 import 'package:reverse_mortage_loan_app/features/home/presentation/view/binding/tips_calculate_binding.dart';
 import 'package:reverse_mortage_loan_app/features/home/presentation/view/calculate_options_screen.dart';
 import 'package:reverse_mortage_loan_app/features/home/presentation/view/splash_screen.dart';
-import 'package:reverse_mortage_loan_app/features/home/presentation/view/user_home_screen.dart';
+import 'package:reverse_mortage_loan_app/features/main/presentation/view/binding/main_binding.dart';
+import 'package:reverse_mortage_loan_app/features/main/presentation/view/main_screen.dart';
 import 'package:reverse_mortage_loan_app/features/home/presentation/view/tips_calculate_screen.dart';
 import 'package:reverse_mortage_loan_app/features/recent_calculation/presentation/view/binding/recent_calculation_binding.dart';
 import 'package:reverse_mortage_loan_app/features/recent_calculation/presentation/view/recent_calculation_screen.dart';
@@ -95,8 +95,8 @@ class AppRouter {
     ),
     GetPage(
       name: RouteNames.userHome,
-      page: () => const UserHomeScreen(),
-      binding: HomeBinding(),
+      page: () => const MainScreen(),
+      binding: MainBinding(),
     ),
     GetPage(
       name: RouteNames.calculateOptions,
@@ -125,7 +125,6 @@ class AppRouter {
       name: RouteNames.history,
       page: () => const HistoryScreen(),
       binding: HistoryBinding(),
-      transition: Transition.rightToLeftWithFade,
     ),
     GetPage(
       name: RouteNames.loanDetails,
@@ -176,7 +175,6 @@ class AppRouter {
       name: RouteNames.accountSetting,
       page: () => const AccountSettingScreen(),
       binding: ProfileBinding(),
-      transition: Transition.rightToLeftWithFade,
     ),
     GetPage(
       name: RouteNames.editProfile,

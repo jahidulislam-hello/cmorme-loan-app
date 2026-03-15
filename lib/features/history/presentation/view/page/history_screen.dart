@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:reverse_mortage_loan_app/features/authentication/presentation/view/controller/auth_controller.dart';
 import 'package:reverse_mortage_loan_app/features/inbox/presentation/view/widgets/inbox_item.dart';
 import 'package:reverse_mortage_loan_app/shared/theme/app_colors.dart';
-import 'package:reverse_mortage_loan_app/shared/widgets/custom_bottom_nav_bar.dart';
 import 'package:reverse_mortage_loan_app/shared/widgets/custom_calculation_item.dart';
 import 'package:reverse_mortage_loan_app/shared/widgets/custom_search_bar.dart';
 import 'package:reverse_mortage_loan_app/shared/widgets/custom_shimmer_loading_indicator.dart';
@@ -14,119 +13,126 @@ class HistoryScreen extends GetView<HistoryController> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.primary,
-      appBar: AppBar(
-        backgroundColor: AppColors.primary,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.chevron_left, color: AppColors.white, size: 30),
-          onPressed: () => Get.back(),
-        ),
-        centerTitle: true,
-        title: const Text(
-          'History',
-          style: TextStyle(
-            color: AppColors.white,
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            children: [
-              const SizedBox(height: 8),
-              CustomSearchBar(
-                controller: controller.searchController,
-                onFilterTap: controller.onFilterTap,
+    return SafeArea(
+      bottom: false,
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 12),
+            child: Center(
+              child: const Text(
+                'History',
+                style: TextStyle(
+                  color: AppColors.white,
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-              const SizedBox(height: 24),
-              Expanded(
-                child: Obx(() {
-                  if (controller.isLoading.value) {
-                    return const CustomShimmerLoadingIndicator(itemCount: 4);
-                  }
+            ),
+          ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                children: [
+                  const SizedBox(height: 8),
+                  CustomSearchBar(
+                    controller: controller.searchController,
+                    onFilterTap: controller.onFilterTap,
+                  ),
+                  const SizedBox(height: 24),
+                  Expanded(
+                    child: Obx(() {
+                      if (controller.isLoading.value) {
+                        return const CustomShimmerLoadingIndicator(itemCount: 4);
+                      }
 
-                  final items = controller.filteredCalculations;
-                  final isRealEstate =
-                      AuthController.userRole.value == 'real_estate';
+                      final items = controller.filteredCalculations;
+                      final isRealEstate =
+                          AuthController.userRole.value == 'real_estate';
 
-                  if (items.isEmpty) {
-                    return RefreshIndicator(
-                      onRefresh: controller.fetchCalculations,
-                      color: AppColors.primary,
-                      backgroundColor: AppColors.white,
-                      child: const SingleChildScrollView(
-                        physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-                        child: SizedBox(
-                          height: 400,
-                          child: Center(
-                            child: Text(
-                              'No history found.',
-                              style: TextStyle(
-                                color: AppColors.hintGrey,
-                                fontSize: 16,
+                      if (items.isEmpty) {
+                        return RefreshIndicator(
+                          onRefresh: controller.fetchCalculations,
+                          color: AppColors.primary,
+                          backgroundColor: AppColors.white,
+                          child: const SingleChildScrollView(
+                            physics: BouncingScrollPhysics(
+                                parent: AlwaysScrollableScrollPhysics()),
+                            child: SizedBox(
+                              height: 400,
+                              child: Center(
+                                child: Text(
+                                  'No history found.',
+                                  style: TextStyle(
+                                    color: AppColors.hintGrey,
+                                    fontSize: 16,
+                                  ),
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      ),
-                    );
-                  }
-
-                  return RefreshIndicator(
-                    onRefresh: controller.fetchCalculations,
-                    color: AppColors.primary,
-                    backgroundColor: AppColors.white,
-                    child: ListView.separated(
-                      physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-                      itemCount: items.length,
-                      separatorBuilder: (_, __) => const SizedBox(height: 16),
-                      itemBuilder: (context, index) {
-                        final item = items[index];
-                        final date = controller.formatDate(item.createdAt);
-                        final tag = controller.tagLabel(item.financeType);
-
-                        if (isRealEstate) {
-                          return InboxItem(
-                            userName: 'Ankon Akash',
-                            email: 'abcd1234@gmail.com',
-                            date: date,
-                            tag: tag,
-                            scenarioText: 'Calculated by 2 scenario',
-                            onViewDetails: () => controller.onViewDetails(index),
-                            onDelete: () => controller.onDeleteCalculation(index),
-                          );
-                        }
-
-                        return CustomCalculationItem(
-                          date: date,
-                          tag: tag,
-                          loanAmount: controller.formatAmount(item.govtLoanAmount),
-                          cashAvailable:
-                              controller.formatAmount(item.govtCashOrDownPayment),
-                          downPayment: item.isPurchase
-                              ? controller.formatAmount(item.govtCashOrDownPayment)
-                              : null,
-                          onViewDetails: () => controller.onViewDetails(index),
-                          onDelete: () => controller.onDeleteCalculation(index),
                         );
-                      },
-                    ),
-                  );
-                }),
+                      }
+
+                      return RefreshIndicator(
+                        onRefresh: controller.fetchCalculations,
+                        color: AppColors.primary,
+                        backgroundColor: AppColors.white,
+                        child: ListView.separated(
+                          physics: const BouncingScrollPhysics(
+                              parent: AlwaysScrollableScrollPhysics()),
+                          itemCount: items.length,
+                          separatorBuilder: (_, __) =>
+                              const SizedBox(height: 16),
+                          itemBuilder: (context, index) {
+                            final item = items[index];
+                            final date =
+                                controller.formatDate(item.createdAt);
+                            final tag =
+                                controller.tagLabel(item.financeType);
+
+                            if (isRealEstate) {
+                              return InboxItem(
+                                userName: 'Ankon Akash',
+                                email: 'abcd1234@gmail.com',
+                                date: date,
+                                tag: tag,
+                                scenarioText: 'Calculated by 2 scenario',
+                                onViewDetails: () =>
+                                    controller.onViewDetails(index),
+                                onDelete: () =>
+                                    controller.onDeleteCalculation(index),
+                              );
+                            }
+
+                            return CustomCalculationItem(
+                              date: date,
+                              tag: tag,
+                              loanAmount:
+                                  controller.formatAmount(item.govtLoanAmount),
+                              cashAvailable: controller
+                                  .formatAmount(item.govtCashOrDownPayment),
+                              downPayment: item.isPurchase
+                                  ? controller
+                                      .formatAmount(item.govtCashOrDownPayment)
+                                  : null,
+                              onViewDetails: () =>
+                                  controller.onViewDetails(index),
+                              onDelete: () =>
+                                  controller.onDeleteCalculation(index),
+                            );
+                          },
+                        ),
+                      );
+                    }),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
-        ),
+        ],
       ),
-      bottomNavigationBar: Obx(() => CustomBottomNavBar(
-            selectedIndex: controller.selectedNavIndex.value,
-            onTap: controller.onNavTap,
-          )),
     );
   }
 }

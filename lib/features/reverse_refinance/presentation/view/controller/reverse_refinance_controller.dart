@@ -123,7 +123,7 @@ class ReverseRefinanceController extends GetxController {
     } else {
       homeValueError.value = null;
     }
-    if (mortgageBalanceController.text.trim().isEmpty) {
+    if ( !isPurchase && mortgageBalanceController.text.trim().isEmpty) {
       mortgageBalanceValueError.value = 'Please enter mortgage balance.';
       hasError = true;
     } else {

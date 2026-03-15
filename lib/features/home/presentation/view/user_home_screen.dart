@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:reverse_mortage_loan_app/config/routes/app_router.dart';
 import 'package:reverse_mortage_loan_app/config/routes/route_names.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:reverse_mortage_loan_app/features/authentication/presentation/view/controller/auth_controller.dart';
 import 'package:reverse_mortage_loan_app/features/inbox/presentation/view/widgets/inbox_item.dart';
 import 'package:reverse_mortage_loan_app/shared/theme/app_colors.dart';
-import 'package:reverse_mortage_loan_app/shared/widgets/custom_bottom_nav_bar.dart';
 import 'package:reverse_mortage_loan_app/shared/widgets/custom_calculate_loan_item.dart';
 import 'package:reverse_mortage_loan_app/shared/widgets/custom_calculation_item.dart';
 import 'package:reverse_mortage_loan_app/shared/widgets/custom_shimmer_loading_indicator.dart';
@@ -18,10 +16,9 @@ class UserHomeScreen extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.primary,
-      body: SafeArea(
-        child: SingleChildScrollView(
+    return SafeArea(
+      bottom: false,
+      child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Column(
@@ -179,11 +176,6 @@ class UserHomeScreen extends GetView<HomeController> {
             ],
           ),
         ),
-      ),
-      bottomNavigationBar: Obx(() => CustomBottomNavBar(
-        selectedIndex: controller.selectedNavIndex.value,
-        onTap: controller.onNavTap,
-      )),
     );
   }
 }

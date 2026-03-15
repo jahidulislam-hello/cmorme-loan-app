@@ -81,7 +81,7 @@ class _SectionHeader extends StatelessWidget {
       label,
       style: const TextStyle(
         color: AppColors.blue300,
-        fontSize: 20,
+        fontSize: 15,
         fontWeight: FontWeight.bold,
       ),
     );

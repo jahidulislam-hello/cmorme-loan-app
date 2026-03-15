@@ -28,7 +28,6 @@ class HistoryController extends GetxController {
         _getCalculationByIdUseCase = getCalculationByIdUseCase;
 
   final searchController = TextEditingController();
-  final selectedNavIndex = 1.obs;
 
   final calculations = <RecentCalculationItemModel>[].obs;
   final isLoading = false.obs;
@@ -84,7 +83,9 @@ class HistoryController extends GetxController {
       isLoading.value = false;
     }
   }
-
+  void removeCalculationById(String id) {
+    calculations.removeWhere((c) => c.id == id);
+  }
   void _loadFromCache() {
     try {
       final cached = CacheService().get<List>(_cacheKey);
@@ -178,15 +179,6 @@ class HistoryController extends GetxController {
       ),
       barrierColor: Colors.white24,
     );
-  }
-
-  void onNavTap(int index) {
-    if (index == 1) return;
-    if (index == 0) {
-      Get.back();
-    } else if (index == 2) {
-      Get.offNamed(RouteNames.accountSetting);
-    }
   }
 
   @override
