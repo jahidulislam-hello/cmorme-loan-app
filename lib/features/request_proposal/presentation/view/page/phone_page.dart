@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:reverse_mortage_loan_app/shared/theme/app_colors.dart';
 import 'package:reverse_mortage_loan_app/shared/widgets/custom_button.dart';
 import 'package:reverse_mortage_loan_app/features/request_proposal/presentation/view/controller/request_proposal_controller.dart';
@@ -42,69 +42,115 @@ class PhonePage extends GetView<RequestProposalController> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
+                      const Text(
                         'Phone No.',
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: AppColors.blue200,
                           fontSize: 13,
                         ),
                       ),
                       const SizedBox(height: 6),
-                      IntlPhoneField(
-                        controller: controller.phoneController,
-                        initialCountryCode: 'US',
-                        keyboardType: TextInputType.phone,
-                        cursorColor: AppColors.white,
-                        style: const TextStyle(
-                          color: AppColors.white,
-                          fontSize: 14,
+                      IntrinsicHeight(
+                        child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 12),
+                            decoration: const BoxDecoration(
+                              color: AppColors.containerHighlight,
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(8),
+                                bottomLeft: Radius.circular(8),
+                              ),
+                            ),
+                            child: const Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text('🇺🇸', style: TextStyle(fontSize: 18)),
+                                SizedBox(width: 6),
+                                Text(
+                                  '+1',
+                                  style: TextStyle(
+                                    color: AppColors.white,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          // Divider
+                          Container(
+                            width: 1,
+                            color: AppColors.primary,
+                          ),
+                          // Phone number input
+                          Expanded(
+                            child: TextField(
+                              controller: controller.phoneController,
+                              keyboardType: TextInputType.phone,
+                              inputFormatters: [
+                                FilteringTextInputFormatter.digitsOnly,
+                              ],
+                              cursorColor: AppColors.white,
+                              style: const TextStyle(
+                                color: AppColors.white,
+                                fontSize: 14,
+                              ),
+                              decoration: const InputDecoration(
+                                hintText: 'Phone No.',
+                                hintStyle: TextStyle(
+                                  color: AppColors.hintGrey,
+                                  fontSize: 14,
+                                ),
+                                filled: true,
+                                fillColor: AppColors.containerHighlight,
+                                contentPadding: EdgeInsets.symmetric(
+                                  horizontal: 12,
+                                  vertical: 14,
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.only(
+                                    topRight: Radius.circular(8),
+                                    bottomRight: Radius.circular(8),
+                                  ),
+                                  borderSide: BorderSide.none,
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.only(
+                                    topRight: Radius.circular(8),
+                                    bottomRight: Radius.circular(8),
+                                  ),
+                                  borderSide: BorderSide.none,
+                                ),
+                              ),
+                              onChanged: (value) {
+                                controller.phoneCompleteNumber = '+1$value';
+                                if (value.isNotEmpty) {
+                                  controller.phoneError.value = null;
+                                }
+                              },
+                            ),
+                          ),
+                        ],
                         ),
-                        dropdownTextStyle: const TextStyle(
-                          color: AppColors.white,
-                          fontSize: 14,
-                        ),
-                        dropdownIcon: const Icon(
-                          Icons.arrow_drop_down,
-                          color: AppColors.hintGrey,
-                        ),
-                        dropdownDecoration: BoxDecoration(
-                          color: AppColors.containerHighlight,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        decoration: InputDecoration(
-                          hintText: 'Phone No.',
-                          hintStyle: const TextStyle(
-                            color: AppColors.hintGrey,
-                            fontSize: 14,
-                          ),
-                          filled: true,
-                          fillColor: AppColors.containerHighlight,
-                          contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 12,
-                            vertical: 14,
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide.none,
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide.none,
-                          ),
-                          errorBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide.none,
-                          ),
-                          focusedErrorBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide.none,
-                          ),
-                        ),
-                        onChanged: (phone) {
-                          controller.phoneCompleteNumber = phone.completeNumber;
-                        },
                       ),
-                    ],
+                      Obx(() {
+                        if (controller.phoneError.value == null) {
+                          return const SizedBox.shrink();
+                        }
+                        return Padding(
+                          padding: const EdgeInsets.only(top: 6, left: 4),
+                          child: Text(
+                            controller.phoneError.value!,
+                            style: const TextStyle(
+                              color: Colors.redAccent,
+                              fontSize: 12,
+                            ),
+                          ),
+                        );
+                      }),
+                    ]
                   ),
                 ),
               ),

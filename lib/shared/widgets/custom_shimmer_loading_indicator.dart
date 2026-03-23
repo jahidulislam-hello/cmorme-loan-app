@@ -252,6 +252,68 @@ class LegalContentShimmer extends StatelessWidget {
   }
 }
 
+/// Shimmer placeholder for the FAQ screen.
+/// Mirrors [FaqItemWidget]: rounded container with a "Q:" prefix placeholder,
+/// a question text line, and a chevron icon placeholder on the right.
+class FaqItemShimmer extends StatelessWidget {
+  final int itemCount;
+
+  const FaqItemShimmer({super.key, this.itemCount = 6});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.separated(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: itemCount,
+      separatorBuilder: (_, __) => const SizedBox(height: 14),
+      itemBuilder: (_, __) => Shimmer.fromColors(
+        baseColor: const Color(0xFF2D4278),
+        highlightColor: const Color(0xFF3D5A9A),
+        child: const _FaqItemSkeleton(),
+      ),
+    );
+  }
+}
+
+class _FaqItemSkeleton extends StatelessWidget {
+  const _FaqItemSkeleton();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      decoration: BoxDecoration(
+        color: AppColors.containerHighlight,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          // "Q:" prefix placeholder
+          _ShimmerBox(width: 20, height: 14, borderRadius: 4),
+          const SizedBox(width: 8),
+          // Question text placeholder
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _ShimmerBox(width: double.infinity, height: 14, borderRadius: 4),
+                const SizedBox(height: 6),
+                _ShimmerBox(width: 200, height: 14, borderRadius: 4),
+              ],
+            ),
+          ),
+          const SizedBox(width: 10),
+          // Chevron icon placeholder
+          _ShimmerBox(width: 22, height: 22, borderRadius: 4),
+        ],
+      ),
+    );
+  }
+}
+
 class _ShimmerBox extends StatelessWidget {
   final double width;
   final double height;

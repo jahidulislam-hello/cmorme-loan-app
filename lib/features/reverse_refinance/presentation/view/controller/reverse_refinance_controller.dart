@@ -27,6 +27,7 @@ class ReverseRefinanceController extends GetxController {
   final secondBorrowerAgeController = TextEditingController();
 
   final isMultipleBorrower = false.obs;
+  final isMarried = false.obs;
   final photos = <File>[].obs;
   final currentPhotoIndex = 0.obs;
   final uploadedImagePaths = <String>[].obs;
@@ -65,6 +66,13 @@ class ReverseRefinanceController extends GetxController {
 
   void onBorrowerToggleChanged(bool isMultiple) {
     isMultipleBorrower.value = isMultiple;
+    if (!isMultiple) isMarried.value = false;
+  }
+
+  void onMarriedToggle() {
+    _logger.d('onMarriedToggle called — before: ${isMarried.value}');
+    isMarried.value = !isMarried.value;
+    _logger.d('onMarriedToggle done — after: ${isMarried.value}');
   }
 
   void onPhotoPageChanged(int index) {
@@ -140,6 +148,7 @@ class ReverseRefinanceController extends GetxController {
       singleBorrowerAge: isMultipleBorrower.value
           ? null
           : int.tryParse(borrowerAgeController.text.trim()),
+      isMarried: isMultipleBorrower.value ? isMarried.value : null,
       multipleBorrowerAge1: isMultipleBorrower.value
           ? int.tryParse(firstBorrowerAgeController.text.trim())
           : null,

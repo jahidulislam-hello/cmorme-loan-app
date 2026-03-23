@@ -45,6 +45,7 @@ class RequestProposalController extends GetxController {
   // Step 4 - Phone
   final phoneController = TextEditingController();
   String phoneCompleteNumber = '';
+  final phoneError = RxnString();
 
   // Step 5 - Interested (finance_type)
   final selectedInterest = 0.obs;
@@ -213,7 +214,19 @@ class RequestProposalController extends GetxController {
 
   void goToCityState() => Get.toNamed(RouteNames.proposalCityState);
   void goToPhonePage() => Get.toNamed(RouteNames.phonePage);
-  void goToInterested() => Get.toNamed(RouteNames.proposalInterested);
+  void goToInterested() {
+    final digits = phoneController.text.trim();
+    if (digits.isEmpty) {
+      phoneError.value = 'Please enter your phone number.';
+      return;
+    }
+    if (digits.length != 10) {
+      phoneError.value = 'Enter a valid phone number.';
+      return;
+    }
+    phoneError.value = null;
+    Get.toNamed(RouteNames.proposalInterested);
+  }
   void goToLoanAmount() => Get.toNamed(RouteNames.proposalLoanAmount);
   void goToDob() => Get.toNamed(RouteNames.proposalDob);
   void goToInquiry() => Get.toNamed(RouteNames.proposalInquiry);

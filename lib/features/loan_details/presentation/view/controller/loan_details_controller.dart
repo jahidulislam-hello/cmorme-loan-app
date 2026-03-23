@@ -22,11 +22,15 @@ class LoanDetailsController extends GetxController {
   late final String? secondBorrowerAge;
 
   // Govt section
+  late final bool govtEligible;
+  late final String? govtNotEligibleReason;
   late final String govtLoanAmount;
   late final String govtCashAvailable;
   late final String? govtDownPayment;
 
   // Non-govt section
+  late final bool nonGovtEligible;
+  late final String? nonGovtNotEligibleReason;
   late final String nonGovtLoanAmount;
   late final String nonGovtCashAvailable;
   late final String? nonGovtDownPayment;
@@ -59,6 +63,11 @@ class LoanDetailsController extends GetxController {
       firstBorrowerAge = '${_item.singleBorrowerAge ?? '-'}';
       secondBorrowerAge = null;
     }
+
+    govtEligible = _item.govtEligible;
+    govtNotEligibleReason = _item.govtNotEligibleReason;
+    nonGovtEligible = _item.nonGovtEligible;
+    nonGovtNotEligibleReason = _item.nonGovtNotEligibleReason;
 
     if (_item.isPurchase) {
       govtLoanAmount = '\$${fmt.format(_item.reversePurchaseGovtLoanAmount ?? 0)}';

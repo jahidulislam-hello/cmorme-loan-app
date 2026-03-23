@@ -24,20 +24,20 @@ class _TipsCalculateScreenState extends State<TipsCalculateScreen>
     'Comparing multiple lenders helps you find the best deal!',
   ];
 
-  int _currentTipIndex = 0;
-  bool _tipVisible = false;
+  late List<bool> _visibleTips;
 
-  static const _fadeDuration = Duration(milliseconds: 250);
-  static const _stayDuration = Duration(milliseconds: 900);
-  static const _gapDuration = Duration(milliseconds: 50);
+  static const _slideDuration = Duration(milliseconds: 600);
+  static const _intervalDuration = Duration(milliseconds: 1800);
 
   @override
   void initState() {
     super.initState();
 
+    _visibleTips = List.filled(_tips.length, false);
+
     _progressController = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 6),
+      duration: const Duration(seconds: 10),
     )..forward();
 
     _progressController.addStatusListener((status) {
@@ -52,26 +52,8 @@ class _TipsCalculateScreenState extends State<TipsCalculateScreen>
   Future<void> _startTipsAnimation() async {
     for (int i = 0; i < _tips.length; i++) {
       if (!mounted) return;
-
-      // Fade in at this tip's position
-      setState(() {
-        _currentTipIndex = i;
-        _tipVisible = true;
-      });
-
-      if (i < _tips.length - 1) {
-        // Stay visible
-        await Future.delayed(_stayDuration);
-        if (!mounted) return;
-
-        // Fade out
-        setState(() => _tipVisible = false);
-        await Future.delayed(_fadeDuration);
-
-        // Brief gap before next tip
-        await Future.delayed(_gapDuration);
-      }
-      // Last tip: fades in and stays on screen
+      setState(() => _visibleTips[i] = true);
+      await Future.delayed(_intervalDuration);
     }
   }
 
@@ -111,14 +93,21 @@ class _TipsCalculateScreenState extends State<TipsCalculateScreen>
               Expanded(
                 child: Column(
                   children: List.generate(_tips.length, (index) {
-                    final isVisible =
-                        index == _currentTipIndex && _tipVisible;
+                    final isVisible = _visibleTips[index];
                     return Padding(
                       padding: const EdgeInsets.only(bottom: 24),
-                      child: AnimatedOpacity(
-                        opacity: isVisible ? 1.0 : 0.0,
-                        duration: _fadeDuration,
-                        child: _buildTipItem(index),
+                      child: AnimatedSlide(
+                        offset: isVisible
+                            ? Offset.zero
+                            : const Offset(0.4, 0),
+                        duration: _slideDuration,
+                        curve: Curves.easeOutCubic,
+                        child: AnimatedOpacity(
+                          opacity: isVisible ? 1.0 : 0.0,
+                          duration: _slideDuration,
+                          curve: Curves.easeOutCubic,
+                          child: _buildTipItem(index),
+                        ),
                       ),
                     );
                   }),
@@ -151,7 +140,7 @@ class _TipsCalculateScreenState extends State<TipsCalculateScreen>
                           'Please Wait...',
                           style: TextStyle(
                             color: AppColors.white,
-                            fontSize: 18,
+                            fontSize: 24,
                             fontWeight: FontWeight.bold,
                           ),
                         ),

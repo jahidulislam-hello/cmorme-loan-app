@@ -135,29 +135,63 @@ class ReverseRefinanceScreen extends GetView<ReverseRefinanceController> {
 
                       Obx(() {
                         if (controller.isMultipleBorrower.value) {
-                          return Row(
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Expanded(
-                                child: LabeledInputField(
-                                  label: '1st borrower age',
-                                  hintText: '75',
-                                  prefixImagePath: AppImages.borrowerIcon,
-                                  prefixIconColor: AppColors.buttonBlue,
-                                  controller:
-                                      controller.firstBorrowerAgeController,
-                                  labelColor: AppColors.hintGrey,
-                                ),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: LabeledInputField(
+                                      label: '1st borrower age',
+                                      hintText: '75',
+                                      prefixImagePath: AppImages.borrowerIcon,
+                                      prefixIconColor: AppColors.buttonBlue,
+                                      controller:
+                                          controller.firstBorrowerAgeController,
+                                      labelColor: AppColors.hintGrey,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 16),
+                                  Expanded(
+                                    child: LabeledInputField(
+                                      label: '2nd borrower age',
+                                      hintText: '75',
+                                      prefixImagePath: AppImages.borrowerIcon,
+                                      prefixIconColor: AppColors.buttonBlue,
+                                      controller:
+                                          controller.secondBorrowerAgeController,
+                                      labelColor: AppColors.hintGrey,
+                                    ),
+                                  ),
+                                ],
                               ),
-                              const SizedBox(width: 16),
-                              Expanded(
-                                child: LabeledInputField(
-                                  label: '2nd borrower age',
-                                  hintText: '75',
-                                  prefixImagePath: AppImages.borrowerIcon,
-                                  prefixIconColor: AppColors.buttonBlue,
-                                  controller:
-                                      controller.secondBorrowerAgeController,
-                                  labelColor: AppColors.hintGrey,
+                              const SizedBox(height: 12),
+                              GestureDetector(
+                                onTap: controller.onMarriedToggle,
+                                behavior: HitTestBehavior.opaque,
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Obx(() => Radio<bool>(
+                                          value: true,
+                                          groupValue: controller.isMarried.value
+                                              ? true
+                                              : null,
+                                          toggleable: true,
+                                          onChanged: (_) =>
+                                              controller.onMarriedToggle(),
+                                          activeColor: AppColors.buttonBlue,
+                                          materialTapTargetSize:
+                                              MaterialTapTargetSize.shrinkWrap,
+                                        )),
+                                    const Text(
+                                      'Married',
+                                      style: TextStyle(
+                                        color: AppColors.white,
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ],

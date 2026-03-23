@@ -4,6 +4,7 @@ class CalculateLoanRequestModel {
   final List<String> homeImg;
   final double? mortgageAmount;
   final int? singleBorrowerAge;
+  final bool? isMarried;
   final int? multipleBorrowerAge1;
   final int? multipleBorrowerAge2;
 
@@ -13,6 +14,7 @@ class CalculateLoanRequestModel {
     this.homeImg = const [],
     this.mortgageAmount,
     this.singleBorrowerAge,
+    this.isMarried,
     this.multipleBorrowerAge1,
     this.multipleBorrowerAge2,
   });
@@ -30,6 +32,9 @@ class CalculateLoanRequestModel {
     }
     if (singleBorrowerAge != null) {
       map['single_borrwer_age'] = singleBorrowerAge;
+    }
+    if (isMarried != null) {
+      map['is_married'] = isMarried;
     }
     if (multipleBorrowerAge1 != null) {
       map['multiple_borrwer_age1'] = multipleBorrowerAge1;

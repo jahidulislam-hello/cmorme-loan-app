@@ -24,6 +24,10 @@ class CustomCalculateLoanItem extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.containerHighlight,
         borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: AppColors.fieldBorder,
+          width: 1,
+        ),
       ),
       child: Column(
         children: [
@@ -45,7 +49,7 @@ class CustomCalculateLoanItem extends StatelessWidget {
             'What would you like to calculate?',
             textAlign: TextAlign.center,
             style: TextStyle(
-              color: AppColors.white,
+              color: AppColors.accentBlue,
               fontSize: 18,
               fontWeight: FontWeight.bold,
             ),
@@ -115,7 +119,7 @@ class _CalculateOptionButton extends StatelessWidget {
                 Text(
                   title,
                   style: const TextStyle(
-                    color: AppColors.primary,
+                    color: AppColors.green900,
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
                   ),
@@ -131,9 +135,8 @@ class _CalculateOptionButton extends StatelessWidget {
             Text(
               subtitle,
               style: const TextStyle(
-                color: AppColors.blue400,
-                fontSize: 10
-               // height: 1.3,
+                color: AppColors.green800,
+                fontSize: 10,
               ),
             ),
           ],

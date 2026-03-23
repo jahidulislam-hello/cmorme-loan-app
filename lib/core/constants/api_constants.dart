@@ -29,6 +29,9 @@ class ApiConstants {
   // Notifications
   static const String myNotifications = '/notification/my';
 
+  // FAQ
+  static const String faqAll = '/faq/all';
+
   // Calculate Loan
   static const String fileUpload = '/file-upload';
   static const String calculateLoan = '/calculate-loan/create';

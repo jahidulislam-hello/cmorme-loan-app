@@ -9,6 +9,12 @@ class RecentCalculationItemModel {
   final int? multipleBorrowerAge1;
   final int? multipleBorrowerAge2;
 
+  // Eligibility fields
+  final bool govtEligible;
+  final String? govtNotEligibleReason;
+  final bool nonGovtEligible;
+  final String? nonGovtNotEligibleReason;
+
   // Reverse Refinance fields
   final double? reverseRefinanceNonGovtLoanAmount;
   final double? reverseRefinanceNonGovtCashAvailable;
@@ -33,6 +39,10 @@ class RecentCalculationItemModel {
     this.singleBorrowerAge,
     this.multipleBorrowerAge1,
     this.multipleBorrowerAge2,
+    required this.govtEligible,
+    this.govtNotEligibleReason,
+    required this.nonGovtEligible,
+    this.nonGovtNotEligibleReason,
     this.reverseRefinanceNonGovtLoanAmount,
     this.reverseRefinanceNonGovtCashAvailable,
     this.reverseRefinanceGovtLoanAmount,
@@ -69,6 +79,10 @@ class RecentCalculationItemModel {
       'single_borrwer_age': singleBorrowerAge,
       'multiple_borrwer_age1': multipleBorrowerAge1,
       'multiple_borrwer_age2': multipleBorrowerAge2,
+      'govt_eligible': govtEligible,
+      'govt_not_eligible_reason': govtNotEligibleReason,
+      'non_govt_eligible': nonGovtEligible,
+      'non_govt_not_eligible_reason': nonGovtNotEligibleReason,
       'reverse_refinance_non_govt_loan_Amount': reverseRefinanceNonGovtLoanAmount,
       'reverse_refinance_non_govt_cash_available': reverseRefinanceNonGovtCashAvailable,
       'reverse_refinance_govt_loan_Amount': reverseRefinanceGovtLoanAmount,
@@ -94,6 +108,10 @@ class RecentCalculationItemModel {
       singleBorrowerAge: json['single_borrwer_age'] as int?,
       multipleBorrowerAge1: json['multiple_borrwer_age1'] as int?,
       multipleBorrowerAge2: json['multiple_borrwer_age2'] as int?,
+      govtEligible: json['govt_eligible'] as bool? ?? json['govt_loan_available'] as bool? ?? false,
+      govtNotEligibleReason: json['govt_not_eligible_reason'] as String?,
+      nonGovtEligible: json['non_govt_eligible'] as bool? ?? json['non_govt_loan_available'] as bool? ?? false,
+      nonGovtNotEligibleReason: json['non_govt_not_eligible_reason'] as String?,
       reverseRefinanceNonGovtLoanAmount:
           (json['reverse_refinance_non_govt_loan_Amount'] as num?)?.toDouble(),
       reverseRefinanceNonGovtCashAvailable:

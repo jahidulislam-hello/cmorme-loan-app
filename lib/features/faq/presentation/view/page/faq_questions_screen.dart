@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:reverse_mortage_loan_app/features/faq/presentation/view/controller/faq_questions_controller.dart';
 import 'package:reverse_mortage_loan_app/features/faq/presentation/view/widgets/faq_item_widget.dart';
 import 'package:reverse_mortage_loan_app/shared/theme/app_colors.dart';
+import 'package:reverse_mortage_loan_app/shared/widgets/custom_shimmer_loading_indicator.dart';
 
 class FaqQuestionsScreen extends GetView<FaqQuestionsController> {
   const FaqQuestionsScreen({super.key});
@@ -54,21 +55,34 @@ class FaqQuestionsScreen extends GetView<FaqQuestionsController> {
                 ),
               ),
               const SizedBox(height: 24),
-              ListView.separated(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: controller.faqItems.length,
-                separatorBuilder: (_, __) => const SizedBox(height: 14),
-                itemBuilder: (context, index) {
-                  final item = controller.faqItems[index];
-                  return Obx(() => FaqItemWidget(
-                        question: item.question,
-                        answer: item.answer,
-                        isExpanded: controller.expandedIndex.value == index,
-                        onTap: () => controller.toggleExpanded(index),
-                      ));
-                },
-              ),
+              Obx(() {
+                if (controller.isLoading.value) {
+                  return const FaqItemShimmer();
+                }
+                if (controller.faqItems.isEmpty) {
+                  return const Center(
+                    child: Text(
+                      'No FAQs available.',
+                      style: TextStyle(color: AppColors.hintGrey, fontSize: 14),
+                    ),
+                  );
+                }
+                return ListView.separated(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: controller.faqItems.length,
+                  separatorBuilder: (_, __) => const SizedBox(height: 14),
+                  itemBuilder: (context, index) {
+                    final item = controller.faqItems[index];
+                    return Obx(() => FaqItemWidget(
+                          question: item.question,
+                          answer: item.answer,
+                          isExpanded: controller.expandedIndex.value == index,
+                          onTap: () => controller.toggleExpanded(index),
+                        ));
+                  },
+                );
+              }),
               const SizedBox(height: 24),
             ],
           ),
