@@ -21,14 +21,20 @@ class TipsCalculateController extends GetxController {
   CalculateLoanResponseModel? _result;
   bool _progressDone = false;
   bool _apiDone = false;
+  final isApiError = false.obs;
 
   @override
   void onInit() {
     super.onInit();
-    final args = Get.arguments as Map<String, dynamic>;
-    loanType = args['type'] as String;
-    _request = args['request'] as CalculateLoanRequestModel;
-    _startApiCall();
+    try {
+      final args = Get.arguments as Map<String, dynamic>;
+      loanType = args['type'] as String;
+      _request = args['request'] as CalculateLoanRequestModel;
+      _startApiCall();
+    } catch (e) {
+      _logger.e('TipsCalculate: invalid arguments — $e');
+      isApiError.value = true;
+    }
   }
 
   Future<void> _startApiCall() async {
@@ -39,15 +45,19 @@ class TipsCalculateController extends GetxController {
       _tryNavigate();
     } on NoInternetException catch (e) {
       _logger.w('No internet during calculate loan: $e');
+      isApiError.value = true;
       Get.snackbar('No Internet', e.message);
     } on TimeoutException catch (e) {
       _logger.w('Timeout during calculate loan: $e');
+      isApiError.value = true;
       Get.snackbar('Timeout', 'Server took too long. Please try again.');
     } on ServerException catch (e) {
       _logger.e('Server error during calculate loan: $e');
+      isApiError.value = true;
       Get.snackbar('Error', e.message);
     } catch (e) {
       _logger.e('Unknown error during calculate loan: $e');
+      isApiError.value = true;
       Get.snackbar('Error', 'Something went wrong. Please try again.');
     }
   }

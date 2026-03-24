@@ -10,6 +10,8 @@ class InstantQuoteController extends GetxController {
   final phoneController = TextEditingController();
   final zipCodeController = TextEditingController();
 
+  final isLoading = false.obs;
+
   void onGetYourCode() {
     // TODO: integrate API submission
     Get.snackbar(

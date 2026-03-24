@@ -8,6 +8,7 @@ import 'package:reverse_mortage_loan_app/features/profile/data/repositories/prof
 import 'package:reverse_mortage_loan_app/features/profile/domain/repositories/profile_repository.dart';
 import 'package:reverse_mortage_loan_app/features/profile/domain/usecases/get_profile_usecase.dart';
 import 'package:reverse_mortage_loan_app/features/profile/presentation/view/controller/account_setting_controller.dart';
+import 'package:reverse_mortage_loan_app/features/recent_calculation/data/datasources/recent_calculation_local_datasource.dart';
 import 'package:reverse_mortage_loan_app/features/recent_calculation/data/datasources/recent_calculation_remote_datasource.dart';
 import 'package:reverse_mortage_loan_app/features/recent_calculation/data/repositories/recent_calculation_repository_impl.dart';
 import 'package:reverse_mortage_loan_app/features/recent_calculation/domain/repositories/recent_calculation_repository.dart';
@@ -22,9 +23,13 @@ class MainBinding extends Bindings {
     Get.lazyPut<RecentCalculationRemoteDatasource>(
       () => RecentCalculationRemoteDatasource(ApiService()),
     );
+    Get.lazyPut<RecentCalculationLocalDatasource>(
+      () => RecentCalculationLocalDatasource(),
+    );
     Get.lazyPut<RecentCalculationRepository>(
       () => RecentCalculationRepositoryImpl(
         Get.find<RecentCalculationRemoteDatasource>(),
+        Get.find<RecentCalculationLocalDatasource>(),
       ),
     );
     Get.lazyPut<GetRecentCalculationsUseCase>(

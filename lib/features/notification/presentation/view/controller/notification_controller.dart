@@ -33,8 +33,6 @@ class NotificationController extends GetxController {
     isLoading.value = true;
     try {
       final result = await _getNotificationsUseCase();
-      // Most recent first
-      result.sort((a, b) => b.createdAt.compareTo(a.createdAt));
       notifications.assignAll(result);
       _logger.i('Notifications fetched: ${result.length}');
     } on NoInternetException catch (e) {

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:reverse_mortage_loan_app/config/routes/route_names.dart';
+import 'package:reverse_mortage_loan_app/shared/app_image/app_images.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:reverse_mortage_loan_app/features/authentication/presentation/view/controller/auth_controller.dart';
 import 'package:reverse_mortage_loan_app/features/inbox/presentation/view/widgets/inbox_item.dart';
@@ -60,7 +62,7 @@ class UserHomeScreen extends GetView<HomeController> {
                         return Text(
                           controller.userName.value,
                           style: const TextStyle(
-                            color: AppColors.white,
+                            color: AppColors.blue300,
                             fontSize: 22,
                             fontWeight: FontWeight.bold,
                           ),
@@ -71,17 +73,19 @@ class UserHomeScreen extends GetView<HomeController> {
                   GestureDetector(
                     onTap: controller.onNotification,
                     child: Container(
-                      width: 40,
-                      height: 40,
+                      height: 44,
+                      width: 44,
                       decoration: BoxDecoration(
                         color: AppColors.white,
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      child: const Icon(
-                        Icons.notifications_none,
-                        color: AppColors.primary,
-                        size: 24,
+                    child: Center(
+                      child: SvgPicture.asset(
+                        AppImages.notificationHomeIcon,
+                        width: 24,
+                        height: 24,
                       ),
+                    ),
                     ),
                   ),
                 ],

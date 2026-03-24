@@ -57,14 +57,12 @@ class RecentCalculationController extends GetxController {
     }
   }
 
-  String formatDate(DateTime date) {
-    return DateFormat('dd MMM yyyy').format(date);
-  }
+  static final _dateFmt = DateFormat('dd MMM yyyy');
+  static final _numFmt = NumberFormat('#,##0.##');
 
-  String formatAmount(double amount) {
-    final formatter = NumberFormat('#,##0.##');
-    return formatter.format(amount);
-  }
+  String formatDate(DateTime date) => _dateFmt.format(date);
+
+  String formatAmount(double amount) => _numFmt.format(amount);
 
   String tagLabel(String financeType) {
     return financeType == 'reverse_purchase'

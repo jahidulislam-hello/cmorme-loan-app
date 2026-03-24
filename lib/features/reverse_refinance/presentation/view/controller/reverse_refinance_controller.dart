@@ -1,8 +1,10 @@
 import 'dart:io';
+import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:logger/logger.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:reverse_mortage_loan_app/config/routes/route_names.dart';
 import 'package:reverse_mortage_loan_app/core/exceptions/app_exceptions.dart';
 import 'package:reverse_mortage_loan_app/features/reverse_refinance/data/models/calculate_loan_request_model.dart';
@@ -32,6 +34,7 @@ class ReverseRefinanceController extends GetxController {
   final currentPhotoIndex = 0.obs;
   final uploadedImagePaths = <String>[].obs;
   final isUploadingImages = false.obs;
+  final uploadProgressText = ''.obs;
   final isLoading = false.obs;
   final homeValueError = RxnString();
   final mortgageBalanceValueError = RxnString();
@@ -95,31 +98,84 @@ class ReverseRefinanceController extends GetxController {
 
       final newFiles = pickedFiles.take(remaining).map((x) => File(x.path)).toList();
 
-      // Show loading overlay over the photo container; add photos only after upload succeeds
       isUploadingImages.value = true;
       final List<(File, String)> successfulUploads = [];
-      for (final file in newFiles) {
+      int failedCount = 0;
+      bool noInternet = false;
+
+      for (int i = 0; i < newFiles.length; i++) {
+        uploadProgressText.value = 'Uploading ${i + 1} of ${newFiles.length}...';
+        final file = await _prepareFile(newFiles[i]);
         try {
           final result = await _uploadFileUseCase(file);
           successfulUploads.add((file, result.path));
           _logger.i('Image uploaded: ${result.path}');
+        } on NoInternetException catch (e) {
+          _logger.w('No internet uploading image: $e');
+          noInternet = true;
+          break; // no point continuing — all subsequent uploads will fail too
+        } on ServerException catch (e) {
+          _logger.e('Server error uploading image: $e');
+          failedCount++;
         } catch (e) {
-          _logger.e('Failed to upload image ${file.path}: $e');
-          Get.snackbar('Upload Error', 'Failed to upload one or more images. Please try again.',
-              snackPosition: SnackPosition.BOTTOM);
+          _logger.e('Unknown error uploading image ${file.path}: $e');
+          failedCount++;
         }
       }
+
       if (successfulUploads.isNotEmpty) {
         photos.addAll(successfulUploads.map((u) => u.$1));
         uploadedImagePaths.addAll(successfulUploads.map((u) => u.$2));
         currentPhotoIndex.value = 0;
+      }
+
+      // One summary snackbar — not one per failed image
+      if (noInternet) {
+        Get.snackbar('No Internet', 'Check your connection and try again.',
+            snackPosition: SnackPosition.BOTTOM);
+      } else if (failedCount > 0) {
+        Get.snackbar(
+          'Upload Failed',
+          '$failedCount image${failedCount > 1 ? 's' : ''} failed to upload.',
+          snackPosition: SnackPosition.BOTTOM,
+        );
       }
     } catch (e) {
       _logger.e('Image picker error: $e');
       Get.snackbar('Error', 'Unable to pick images. Please try again.',
           snackPosition: SnackPosition.BOTTOM);
     } finally {
+      uploadProgressText.value = '';
       isUploadingImages.value = false;
+    }
+  }
+
+  /// image_picker skips compression for PNG files entirely.
+  /// This decodes the PNG and re-encodes it at a max 1280px width,
+  /// which significantly reduces file size before uploading.
+  Future<File> _prepareFile(File file) async {
+    final isPng = file.path.toLowerCase().endsWith('.png');
+    if (!isPng) return file;
+
+    try {
+      final bytes = await file.readAsBytes();
+      final codec = await ui.instantiateImageCodec(bytes, targetWidth: 1280);
+      final frame = await codec.getNextFrame();
+      final byteData = await frame.image.toByteData(format: ui.ImageByteFormat.png);
+      frame.image.dispose();
+
+      if (byteData == null) return file;
+
+      final tempDir = await getTemporaryDirectory();
+      final tempFile = File(
+        '${tempDir.path}/resized_${DateTime.now().millisecondsSinceEpoch}.png',
+      );
+      await tempFile.writeAsBytes(byteData.buffer.asUint8List());
+      _logger.d('PNG resized: ${file.path} → ${tempFile.path}');
+      return tempFile;
+    } catch (e) {
+      _logger.w('PNG resize failed, using original: $e');
+      return file;
     }
   }
 

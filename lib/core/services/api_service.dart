@@ -1,5 +1,7 @@
 import 'package:dio/dio.dart';
+import 'package:get/get.dart' hide Response;
 import 'package:logger/logger.dart';
+import 'package:reverse_mortage_loan_app/config/routes/route_names.dart';
 import '../constants/api_constants.dart';
 import '../exceptions/app_exceptions.dart';
 import 'token_service.dart';
@@ -45,11 +47,18 @@ class ApiService {
           );
           return handler.next(response);
         },
-        onError: (error, handler) {
+        onError: (error, handler) async {
           _logger.e(
             'ERROR[${error.response?.statusCode}] => PATH: ${error.requestOptions.path}\n'
             'Message: ${error.message}',
           );
+          if (error.response?.statusCode == 401 &&
+              _tokenService.hasToken() &&
+              Get.currentRoute != RouteNames.signIn) {
+            _logger.w('Token expired — clearing session and redirecting to sign in.');
+            await _tokenService.deleteToken();
+            Get.offAllNamed(RouteNames.signIn);
+          }
           return handler.next(error);
         },
       ),

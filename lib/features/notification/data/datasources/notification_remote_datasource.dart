@@ -1,6 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'package:logger/logger.dart';
 import 'package:reverse_mortage_loan_app/core/constants/api_constants.dart';
 import 'package:reverse_mortage_loan_app/core/services/api_service.dart';
+import 'package:reverse_mortage_loan_app/core/utils/isolate_parsers.dart';
 import '../models/notification_model.dart';
 
 class NotificationRemoteDatasource {
@@ -11,10 +13,7 @@ class NotificationRemoteDatasource {
 
   Future<List<NotificationModel>> getNotifications() async {
     final response = await _apiService.get(ApiConstants.myNotifications);
-    _logger.d('Notifications raw response: ${response.data}');
-    final data = response.data['data']['allNoti'] as List;
-    return data
-        .map((e) => NotificationModel.fromJson(e as Map<String, dynamic>))
-        .toList();
+    _logger.d('Notifications raw response received');
+    return compute(parseNotifications, response.data as Map<String, dynamic>);
   }
 }

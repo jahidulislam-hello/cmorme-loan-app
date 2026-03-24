@@ -78,7 +78,7 @@ class LoanResultScreen extends StatelessWidget {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new, color: AppColors.white),
-          onPressed: () => Get.back(),
+          onPressed: () => Get.offAllNamed(RouteNames.userHome),
         ),
         centerTitle: true,
         title: Text(

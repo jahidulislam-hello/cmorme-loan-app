@@ -6,7 +6,7 @@ class GetRecentCalculationsUseCase {
 
   GetRecentCalculationsUseCase(this._repository);
 
-  Future<RecentCalculationResponseModel> call({int limit = 10}) {
-    return _repository.getCalculations(limit: limit);
+  Future<RecentCalculationResponseModel> call({int limit = 10, int page = 1}) {
+    return _repository.getCalculations(limit: limit, page: page);
   }
 }

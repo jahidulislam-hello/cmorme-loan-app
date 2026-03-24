@@ -39,20 +39,26 @@ class LoanDetailsController extends GetxController {
   void onInit() {
     super.onInit();
     pageController = PageController();
-    _item = Get.arguments as RecentCalculationItemModel;
-    _mapFields();
+    try {
+      _item = Get.arguments as RecentCalculationItemModel;
+      _mapFields();
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to load loan details.');
+      Get.back();
+    }
   }
 
-  void _mapFields() {
-    final fmt = NumberFormat('#,##0.##');
+  static final _dateFmt = DateFormat('dd MMM yyyy');
+  static final _numFmt = NumberFormat('#,##0.##');
 
+  void _mapFields() {
     imageUrls = _item.homeImg
         .map((path) => '${ApiConstants.imageBaseUrl}$path')
         .toList();
 
-    date = DateFormat('dd MMM yyyy').format(_item.createdAt);
+    date = _dateFmt.format(_item.createdAt);
     objective = _item.isPurchase ? 'Reverse for Purchase' : 'Reverse Refinance';
-    homeValue = '\$${fmt.format(_item.homeValue)}';
+    homeValue = '\$${_numFmt.format(_item.homeValue)}';
 
     if (_item.multipleBorrowerAge1 != null) {
       firstBorrowerAge = '${_item.multipleBorrowerAge1}';
@@ -70,20 +76,20 @@ class LoanDetailsController extends GetxController {
     nonGovtNotEligibleReason = _item.nonGovtNotEligibleReason;
 
     if (_item.isPurchase) {
-      govtLoanAmount = '\$${fmt.format(_item.reversePurchaseGovtLoanAmount ?? 0)}';
-      govtCashAvailable = '\$${fmt.format(0)}';
-      govtDownPayment = '\$${fmt.format(_item.reversePurchaseGovtDownPayment ?? 0)}';
+      govtLoanAmount = '\$${_numFmt.format(_item.reversePurchaseGovtLoanAmount ?? 0)}';
+      govtCashAvailable = '\$${_numFmt.format(0)}';
+      govtDownPayment = '\$${_numFmt.format(_item.reversePurchaseGovtDownPayment ?? 0)}';
 
-      nonGovtLoanAmount = '\$${fmt.format(_item.reversePurchaseNonGovtLoanAmount ?? 0)}';
-      nonGovtCashAvailable = '\$${fmt.format(0)}';
-      nonGovtDownPayment = '\$${fmt.format(_item.reversePurchaseNonGovtDownPayment ?? 0)}';
+      nonGovtLoanAmount = '\$${_numFmt.format(_item.reversePurchaseNonGovtLoanAmount ?? 0)}';
+      nonGovtCashAvailable = '\$${_numFmt.format(0)}';
+      nonGovtDownPayment = '\$${_numFmt.format(_item.reversePurchaseNonGovtDownPayment ?? 0)}';
     } else {
-      govtLoanAmount = '\$${fmt.format(_item.reverseRefinanceGovtLoanAmount ?? 0)}';
-      govtCashAvailable = '\$${fmt.format(_item.reverseRefinanceGovtCashAvailable ?? 0)}';
+      govtLoanAmount = '\$${_numFmt.format(_item.reverseRefinanceGovtLoanAmount ?? 0)}';
+      govtCashAvailable = '\$${_numFmt.format(_item.reverseRefinanceGovtCashAvailable ?? 0)}';
       govtDownPayment = null;
 
-      nonGovtLoanAmount = '\$${fmt.format(_item.reverseRefinanceNonGovtLoanAmount ?? 0)}';
-      nonGovtCashAvailable = '\$${fmt.format(_item.reverseRefinanceNonGovtCashAvailable ?? 0)}';
+      nonGovtLoanAmount = '\$${_numFmt.format(_item.reverseRefinanceNonGovtLoanAmount ?? 0)}';
+      nonGovtCashAvailable = '\$${_numFmt.format(_item.reverseRefinanceNonGovtCashAvailable ?? 0)}';
       nonGovtDownPayment = null;
     }
   }

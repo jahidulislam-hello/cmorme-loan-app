@@ -5,7 +5,6 @@ import 'package:logger/logger.dart';
 import 'package:reverse_mortage_loan_app/config/routes/route_names.dart';
 import 'package:reverse_mortage_loan_app/core/exceptions/app_exceptions.dart';
 import 'package:reverse_mortage_loan_app/core/services/cache_service.dart';
-import 'package:reverse_mortage_loan_app/features/history/presentation/view/controller/history_controller.dart';
 import 'package:reverse_mortage_loan_app/features/profile/domain/usecases/get_profile_usecase.dart';
 import 'package:reverse_mortage_loan_app/features/recent_calculation/data/models/recent_calculation_response_model.dart';
 import 'package:reverse_mortage_loan_app/features/recent_calculation/domain/usecases/delete_calculation_usecase.dart';
@@ -13,6 +12,7 @@ import 'package:reverse_mortage_loan_app/features/recent_calculation/domain/usec
 import 'package:reverse_mortage_loan_app/features/recent_calculation/domain/usecases/get_recent_calculations_usecase.dart';
 import 'package:reverse_mortage_loan_app/shared/dialoges/delete_confirmation_dialog.dart';
 import 'package:reverse_mortage_loan_app/shared/dialoges/delete_success_dialog.dart';
+
 
 class HomeController extends GetxController {
   final GetProfileUseCase _getProfileUseCase;
@@ -69,21 +69,14 @@ class HomeController extends GetxController {
     }
   }
 
-  static const _cacheKey = 'recent_calculations';
-
   Future<void> _fetchLatestCalculation() async {
     isCalculationLoading.value = true;
     try {
       final response = await _getRecentCalculationsUseCase(limit: 10);
       calculations.assignAll(response.data);
-      await CacheService().put(
-        _cacheKey,
-        response.data.map((e) => e.toJson()).toList(),
-      );
       _logger.i('Calculations fetched: ${calculations.length}');
     } on NoInternetException catch (e) {
-      _logger.w('No internet fetching calculation — loading from cache: $e');
-      _loadCalculationsFromCache();
+      _logger.w('No internet fetching calculation: $e');
     } on ServerException catch (e) {
       _logger.e('Server error fetching calculation: $e');
     } catch (e) {
@@ -93,25 +86,12 @@ class HomeController extends GetxController {
     }
   }
 
-  void _loadCalculationsFromCache() {
-    try {
-      final cached = CacheService().get<List>(_cacheKey);
-      if (cached != null && cached.isNotEmpty) {
-        final items = cached
-            .map((e) => RecentCalculationItemModel.fromJson(
-                Map<String, dynamic>.from(e as Map)))
-            .toList();
-        calculations.assignAll(items);
-        _logger.i('Loaded ${items.length} calculations from cache');
-      }
-    } catch (e) {
-      _logger.e('Failed to load calculations from cache: $e');
-    }
-  }
+  static final _dateFmt = DateFormat('dd MMM yyyy');
+  static final _numFmt = NumberFormat('#,##0.##');
 
-  String formatDate(DateTime date) => DateFormat('dd MMM yyyy').format(date);
+  String formatDate(DateTime date) => _dateFmt.format(date);
 
-  String formatAmount(double amount) => NumberFormat('#,##0.##').format(amount);
+  String formatAmount(double amount) => _numFmt.format(amount);
 
   String tagLabel(String financeType) =>
       financeType == 'reverse_purchase' ? 'Reverse for Purchase' : 'Reverse Refinance';

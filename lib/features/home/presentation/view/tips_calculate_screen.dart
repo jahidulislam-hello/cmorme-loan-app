@@ -46,6 +46,11 @@ class _TipsCalculateScreenState extends State<TipsCalculateScreen>
       }
     });
 
+    // Stop the progress animation if the API call fails
+    ever(Get.find<TipsCalculateController>().isApiError, (bool hasError) {
+      if (hasError) _progressController.stop();
+    });
+
     _startTipsAnimation();
   }
 
@@ -114,41 +119,88 @@ class _TipsCalculateScreenState extends State<TipsCalculateScreen>
                 ),
               ),
 
-              /// Progress Bar
-              AnimatedBuilder(
-                animation: _progressController,
-                builder: (context, child) {
+              /// Progress Bar or Error State
+              Obx(() {
+                final controller = Get.find<TipsCalculateController>();
+                if (controller.isApiError.value) {
                   return Column(
                     children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(6),
-                        child: SizedBox(
-                          height: 12,
-                          width: double.infinity,
-                          child: LinearProgressIndicator(
-                            value: _progressController.value,
-                            backgroundColor: AppColors.containerHighlight,
-                            valueColor: const AlwaysStoppedAnimation<Color>(
-                              Color(0xFFE5A429),
-                            ),
+                      const Icon(
+                        Icons.error_outline,
+                        color: Color(0xFFE5A429),
+                        size: 40,
+                      ),
+                      const SizedBox(height: 12),
+                      const Center(
+                        child: Text(
+                          'Something went wrong.',
+                          style: TextStyle(
+                            color: AppColors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
                       ),
                       const SizedBox(height: 16),
-                      const Center(
-                        child: Text(
-                          'Please Wait...',
-                          style: TextStyle(
-                            color: AppColors.white,
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
+                      SizedBox(
+                        width: double.infinity,
+                        child: TextButton(
+                          onPressed: () => Get.back(),
+                          style: TextButton.styleFrom(
+                            backgroundColor: const Color(0xFFE5A429),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          child: const Text(
+                            'Go Back',
+                            style: TextStyle(
+                              color: AppColors.primary,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
                           ),
                         ),
                       ),
                     ],
                   );
-                },
-              ),
+                }
+
+                return AnimatedBuilder(
+                  animation: _progressController,
+                  builder: (context, child) {
+                    return Column(
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(6),
+                          child: SizedBox(
+                            height: 12,
+                            width: double.infinity,
+                            child: LinearProgressIndicator(
+                              value: _progressController.value,
+                              backgroundColor: AppColors.containerHighlight,
+                              valueColor: const AlwaysStoppedAnimation<Color>(
+                                Color(0xFFE5A429),
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        const Center(
+                          child: Text(
+                            'Please Wait...',
+                            style: TextStyle(
+                              color: AppColors.white,
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ],
+                    );
+                  },
+                );
+              }),
 
               const SizedBox(height: 40),
             ],

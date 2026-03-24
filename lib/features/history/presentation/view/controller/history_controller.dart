@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:reverse_mortage_loan_app/config/routes/route_names.dart';
 import 'package:reverse_mortage_loan_app/core/exceptions/app_exceptions.dart';
-import 'package:reverse_mortage_loan_app/core/services/cache_service.dart';
 import 'package:reverse_mortage_loan_app/features/recent_calculation/data/models/recent_calculation_response_model.dart';
 import 'package:reverse_mortage_loan_app/features/recent_calculation/domain/usecases/delete_calculation_usecase.dart';
 import 'package:reverse_mortage_loan_app/features/recent_calculation/domain/usecases/get_calculation_by_id_usecase.dart';
@@ -28,9 +27,15 @@ class HistoryController extends GetxController {
         _getCalculationByIdUseCase = getCalculationByIdUseCase;
 
   final searchController = TextEditingController();
+  late final ScrollController scrollController;
 
   final calculations = <RecentCalculationItemModel>[].obs;
   final isLoading = false.obs;
+  final isLoadingMore = false.obs;
+
+  int _currentPage = 1;
+  int _totalPages = 1;
+  bool get _hasMore => _currentPage < _totalPages;
 
   // null = no filter, 'reverse_refinance' or 'reverse_purchase'
   final selectedFilter = Rxn<String>();
@@ -51,25 +56,30 @@ class HistoryController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    scrollController = ScrollController();
+    scrollController.addListener(_onScroll);
     fetchCalculations();
   }
 
-  static const _cacheKey = 'recent_calculations';
+  void _onScroll() {
+    if (scrollController.position.pixels >=
+            scrollController.position.maxScrollExtent - 200 &&
+        !isLoadingMore.value &&
+        _hasMore) {
+      _loadNextPage();
+    }
+  }
 
   Future<void> fetchCalculations() async {
     isLoading.value = true;
+    _currentPage = 1;
     try {
-      final response = await _getRecentCalculationsUseCase(limit: 10);
+      final response = await _getRecentCalculationsUseCase(limit: 10, page: 1);
       calculations.assignAll(response.data);
-      await CacheService().put(
-        _cacheKey,
-        response.data.map((e) => e.toJson()).toList(),
-      );
-      _logger.i('History: fetched ${calculations.length} calculations');
+      _totalPages = response.pagination.totalPage;
+      _logger.i('History: fetched ${calculations.length} calculations (page 1 of $_totalPages)');
     } on NoInternetException catch (e) {
-      _logger.w('History: no internet — loading from cache: $e');
-      _loadFromCache();
-    //  Get.snackbar('No Internet', 'Showing cached data.');
+      _logger.w('History: no internet — showing cached data: $e');
     } on TimeoutException catch (e) {
       _logger.w('Timeout: $e');
       Get.snackbar('Timeout', 'Server took too long. Please try again.');
@@ -83,28 +93,39 @@ class HistoryController extends GetxController {
       isLoading.value = false;
     }
   }
-  void removeCalculationById(String id) {
-    calculations.removeWhere((c) => c.id == id);
-  }
-  void _loadFromCache() {
+
+  Future<void> _loadNextPage() async {
+    isLoadingMore.value = true;
+    final nextPage = _currentPage + 1;
     try {
-      final cached = CacheService().get<List>(_cacheKey);
-      if (cached != null && cached.isNotEmpty) {
-        final items = cached
-            .map((e) => RecentCalculationItemModel.fromJson(
-                Map<String, dynamic>.from(e as Map)))
-            .toList();
-        calculations.assignAll(items);
-        _logger.i('History: loaded ${items.length} calculations from cache');
-      }
+      final response = await _getRecentCalculationsUseCase(limit: 10, page: nextPage);
+      calculations.addAll(response.data);
+      _currentPage = nextPage;
+      _logger.i('History: loaded page $nextPage — total ${calculations.length} items');
+    } on NoInternetException catch (e) {
+      _logger.w('No internet loading page $nextPage: $e');
+      Get.snackbar('No Internet', 'Cannot load more.', snackPosition: SnackPosition.BOTTOM);
+    } on TimeoutException catch (e) {
+      _logger.w('Timeout loading page $nextPage: $e');
+    } on ServerException catch (e) {
+      _logger.e('Server error loading page $nextPage: $e');
     } catch (e) {
-      _logger.e('History: failed to load from cache: $e');
+      _logger.e('Unknown error loading page $nextPage: $e');
+    } finally {
+      isLoadingMore.value = false;
     }
   }
 
-  String formatDate(DateTime date) => DateFormat('dd MMM yyyy').format(date);
+  void removeCalculationById(String id) {
+    calculations.removeWhere((c) => c.id == id);
+  }
 
-  String formatAmount(double amount) => NumberFormat('#,##0.##').format(amount);
+  static final _dateFmt = DateFormat('dd MMM yyyy');
+  static final _numFmt = NumberFormat('#,##0.##');
+
+  String formatDate(DateTime date) => _dateFmt.format(date);
+
+  String formatAmount(double amount) => _numFmt.format(amount);
 
   String tagLabel(String financeType) =>
       financeType == 'reverse_purchase' ? 'Reverse for Purchase' : 'Reverse Refinance';
@@ -183,6 +204,7 @@ class HistoryController extends GetxController {
 
   @override
   void onClose() {
+    scrollController.dispose();
     searchController.dispose();
     super.onClose();
   }

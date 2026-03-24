@@ -50,7 +50,7 @@ class OtpField extends StatelessWidget {
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
                   borderSide:
-                      const BorderSide(color: AppColors.buttonBlue, width: 1.5),
+                      const BorderSide(color: AppColors.white, width: 1.5),
                 ),
               ),
               onChanged: (value) {

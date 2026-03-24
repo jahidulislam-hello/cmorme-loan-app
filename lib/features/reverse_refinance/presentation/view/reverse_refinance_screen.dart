@@ -60,7 +60,22 @@ class ReverseRefinanceScreen extends GetView<ReverseRefinanceController> {
                           children: [
                             Obx(() {
                               if (controller.isUploadingImages.value) {
-                                return const PhotoUploadShimmer();
+                                return Column(
+                                  children: [
+                                    const PhotoUploadShimmer(),
+                                    if (controller.uploadProgressText.value.isNotEmpty)
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(vertical: 8),
+                                        child: Text(
+                                          controller.uploadProgressText.value,
+                                          style: const TextStyle(
+                                            color: AppColors.hintGrey,
+                                            fontSize: 12,
+                                          ),
+                                        ),
+                                      ),
+                                  ],
+                                );
                               }
                               if (controller.photos.isEmpty) {
                                 return Padding(

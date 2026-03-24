@@ -178,6 +178,26 @@ class RecentCalculationResponseModel {
     required this.data,
   });
 
+  /// Constructs a response from locally cached items when offline.
+  factory RecentCalculationResponseModel.fromCache(
+      List<RecentCalculationItemModel> data) {
+    return RecentCalculationResponseModel(
+      success: true,
+      statusCode: 200,
+      message: 'cached',
+      pagination: RecentCalculationPaginationModel(
+        totalPage: 1,
+        currentPage: 1,
+        prevPage: 0,
+        nextPage: 0,
+        totalData: data.length,
+      ),
+      govt: 0,
+      nonGovt: 0,
+      data: data,
+    );
+  }
+
   factory RecentCalculationResponseModel.fromJson(Map<String, dynamic> json) {
     final dataObj = json['data'] as Map<String, dynamic>;
     return RecentCalculationResponseModel(

@@ -80,12 +80,24 @@ class HistoryScreen extends GetView<HistoryController> {
                         color: AppColors.primary,
                         backgroundColor: AppColors.white,
                         child: ListView.separated(
+                          controller: controller.scrollController,
                           physics: const BouncingScrollPhysics(
                               parent: AlwaysScrollableScrollPhysics()),
-                          itemCount: items.length,
+                          itemCount: items.length + 1,
                           separatorBuilder: (_, __) =>
                               const SizedBox(height: 16),
                           itemBuilder: (context, index) {
+                            if (index == items.length) {
+                              return Obx(() => controller.isLoadingMore.value
+                                  ? const Padding(
+                                      padding: EdgeInsets.symmetric(vertical: 16),
+                                      child: Center(
+                                        child: CircularProgressIndicator(),
+                                      ),
+                                    )
+                                  : const SizedBox.shrink());
+                            }
+
                             final item = items[index];
                             final date =
                                 controller.formatDate(item.createdAt);
