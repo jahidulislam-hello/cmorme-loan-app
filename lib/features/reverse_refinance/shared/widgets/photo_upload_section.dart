@@ -43,14 +43,14 @@ class PhotoUploadSection extends StatelessWidget {
             children: [
               const Icon(
                 Icons.upload_file,
-                color: AppColors.hintGrey,
+                color: AppColors.blue400,
                 size: 36,
               ),
               const SizedBox(height: 8),
               Text(
                 'Upload $maxPhotos Photos',
                 style: const TextStyle(
-                  color: AppColors.hintGrey,
+                  color: AppColors.blue400,
                   fontSize: 11,
                 ),
               ),
@@ -72,10 +72,13 @@ class PhotoUploadSection extends StatelessWidget {
               itemCount: photos.length,
               onPageChanged: onPageChanged,
               itemBuilder: (context, index) {
-                return Image.file(
-                  photos[index],
-                  fit: BoxFit.fill,
-                  width: double.infinity,
+                return ColoredBox(
+                  color: Colors.black,
+                  child: Image.file(
+                    photos[index],
+                    fit: BoxFit.contain,
+                    width: double.infinity,
+                  ),
                 );
               },
             ),

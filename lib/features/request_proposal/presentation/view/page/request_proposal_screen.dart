@@ -57,7 +57,7 @@ class RequestProposalScreen extends GetView<RequestProposalController> {
                           Text(
                             'Basic Information',
                             style: TextStyle(
-                              color: AppColors.blue600,
+                              color: AppColors.white,
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
                             ),

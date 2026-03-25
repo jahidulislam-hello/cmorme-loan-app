@@ -1,6 +1,6 @@
 import 'dart:io';
-import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:logger/logger.dart';
@@ -10,6 +10,7 @@ import 'package:reverse_mortage_loan_app/core/exceptions/app_exceptions.dart';
 import 'package:reverse_mortage_loan_app/features/reverse_refinance/data/models/calculate_loan_request_model.dart';
 import 'package:reverse_mortage_loan_app/features/reverse_refinance/domain/usecases/calculate_loan_usecase.dart';
 import 'package:reverse_mortage_loan_app/features/reverse_refinance/domain/usecases/upload_file_usecase.dart';
+
 
 class ReverseRefinanceController extends GetxController {
   final UploadFileUseCase _uploadFileUseCase;
@@ -151,30 +152,32 @@ class ReverseRefinanceController extends GetxController {
   }
 
   /// image_picker skips compression for PNG files entirely.
-  /// This decodes the PNG and re-encodes it at a max 1280px width,
-  /// which significantly reduces file size before uploading.
+  /// Uses flutter_image_compress (native codec) to convert PNG → JPEG and
+  /// resize to max 1280px wide. Runs on a native thread — no main thread blocking.
   Future<File> _prepareFile(File file) async {
     final isPng = file.path.toLowerCase().endsWith('.png');
     if (!isPng) return file;
 
     try {
-      final bytes = await file.readAsBytes();
-      final codec = await ui.instantiateImageCodec(bytes, targetWidth: 1280);
-      final frame = await codec.getNextFrame();
-      final byteData = await frame.image.toByteData(format: ui.ImageByteFormat.png);
-      frame.image.dispose();
-
-      if (byteData == null) return file;
-
       final tempDir = await getTemporaryDirectory();
-      final tempFile = File(
-        '${tempDir.path}/resized_${DateTime.now().millisecondsSinceEpoch}.png',
+      final targetPath =
+          '${tempDir.path}/resized_${DateTime.now().millisecondsSinceEpoch}.jpg';
+
+      final result = await FlutterImageCompress.compressAndGetFile(
+        file.absolute.path,
+        targetPath,
+        format: CompressFormat.jpeg,
+        quality: 85,
+        minWidth: 1280,
+        minHeight: 1,
       );
-      await tempFile.writeAsBytes(byteData.buffer.asUint8List());
-      _logger.d('PNG resized: ${file.path} → ${tempFile.path}');
-      return tempFile;
+
+      if (result == null) return file;
+
+      _logger.d('PNG compressed to JPEG: ${file.path} → ${result.path}');
+      return File(result.path);
     } catch (e) {
-      _logger.w('PNG resize failed, using original: $e');
+      _logger.w('PNG compress failed, using original: $e');
       return file;
     }
   }

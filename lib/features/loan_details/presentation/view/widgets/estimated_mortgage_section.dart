@@ -29,7 +29,7 @@ class EstimatedMortgageSection extends StatelessWidget {
         Text(
           title,
           style: const TextStyle(
-            color: AppColors.white,
+            color: AppColors.hintGrey,
             fontSize: 16,
             fontWeight: FontWeight.bold,
           ),
@@ -46,30 +46,20 @@ class EstimatedMortgageSection extends StatelessWidget {
             ),
             const SizedBox(width: 12),
             Expanded(
-              child: _MetricCard(
-                iconPath: AppImages.cashIcon,
-                label: 'Cash Available',
-                amount: cashAvailable,
-              ),
+              child: downPayment != null
+                  ? _MetricCard(
+                      iconPath: AppImages.downPay,
+                      label: 'Down-Payment',
+                      amount: downPayment!,
+                    )
+                  : _MetricCard(
+                      iconPath: AppImages.cashIcon,
+                      label: 'Cash Available',
+                      amount: cashAvailable,
+                    ),
             ),
           ],
         ),
-        if (downPayment != null) ...[
-          const SizedBox(height: 12),
-          Row(
-            children: [
-              Expanded(
-                child: _MetricCard(
-                  iconPath: AppImages.downPay,
-                  label: 'Down-Payment',
-                  amount: downPayment!,
-                ),
-              ),
-              const SizedBox(width: 12),
-              const Expanded(child: SizedBox()),
-            ],
-          ),
-        ],
       ],
     );
   }
@@ -117,7 +107,7 @@ class _MetricCard extends StatelessWidget {
           Text(
             amount,
             style: const TextStyle(
-              color: AppColors.green500,
+              color: AppColors.lightBlue,
               fontSize: 22,
               fontWeight: FontWeight.bold,
             ),

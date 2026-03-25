@@ -7,6 +7,9 @@ class CustomDropdownField extends StatelessWidget {
   final List<String> items;
   final ValueChanged<String?> onChanged;
   final Color? labelColor;
+  final Color? dropdownMenuColor;
+  final Color? dropdownItemTextColor;
+  final bool showItemDivider;
 
   const CustomDropdownField({
     super.key,
@@ -15,6 +18,9 @@ class CustomDropdownField extends StatelessWidget {
     required this.onChanged,
     this.value,
     this.labelColor,
+    this.dropdownMenuColor,
+    this.dropdownItemTextColor,
+    this.showItemDivider = false,
   });
 
   @override
@@ -30,43 +36,111 @@ class CustomDropdownField extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 6),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12),
-          decoration: BoxDecoration(
-            color: AppColors.blue400,
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: DropdownButtonHideUnderline(
-            child: DropdownButton<String>(
-              value: value,
-              isExpanded: true,
-              dropdownColor: AppColors.containerHighlight,
-              icon: const Icon(
-                Icons.keyboard_arrow_down,
-                color: AppColors.hintGrey,
+        LayoutBuilder(
+          builder: (context, constraints) {
+            return DropdownMenu<String>(
+              key: ValueKey(value),
+              initialSelection: value,
+              width: constraints.maxWidth,
+              enableSearch: false,
+              requestFocusOnTap: false,
+              menuStyle: MenuStyle(
+                alignment: Alignment.bottomRight,
+                backgroundColor: WidgetStatePropertyAll(
+                  dropdownMenuColor ?? AppColors.containerHighlight,
+                ),
+                shape: WidgetStatePropertyAll(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                elevation: const WidgetStatePropertyAll(4),
+                visualDensity: VisualDensity.compact,
               ),
-              style: const TextStyle(
-                color: AppColors.white,
-                fontSize: 14,
-              ),
-              hint: const Text(
-                'Select',
-                style: TextStyle(
+              inputDecorationTheme: InputDecorationTheme(
+                filled: true,
+                fillColor: AppColors.containerHighlight,
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 12,
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide.none,
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide.none,
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide.none,
+                ),
+                hintStyle: const TextStyle(
                   color: AppColors.hintGrey,
                   fontSize: 14,
                 ),
               ),
-              items: items.map((item) {
-                return DropdownMenuItem<String>(
-                  value: item,
-                  child: Text(item),
-                );
-              }).toList(),
-              onChanged: onChanged,
-            ),
-          ),
+              trailingIcon: const Icon(
+                Icons.keyboard_arrow_down,
+                color: AppColors.hintGrey,
+              ),
+              selectedTrailingIcon: const Icon(
+                Icons.keyboard_arrow_up,
+                color: AppColors.hintGrey,
+              ),
+              hintText: 'Select',
+              textStyle: const TextStyle(
+                color: AppColors.white,
+                fontSize: 14,
+              ),
+              dropdownMenuEntries: _buildEntries(),
+              onSelected: onChanged,
+            );
+          },
         ),
       ],
     );
+  }
+
+  List<DropdownMenuEntry<String>> _buildEntries() {
+    final entries = <DropdownMenuEntry<String>>[];
+    for (int i = 0; i < items.length; i++) {
+      entries.add(
+        DropdownMenuEntry<String>(
+          value: items[i],
+          label: items[i],
+          style: ButtonStyle(
+            foregroundColor: WidgetStatePropertyAll(
+              dropdownItemTextColor ?? AppColors.white,
+            ),
+            padding: const WidgetStatePropertyAll(
+              EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            ),
+          ),
+        ),
+      );
+      // Insert a thin divider after every item except the last
+      if (showItemDivider && i < items.length - 1) {
+        entries.add(
+          DropdownMenuEntry<String>(
+            value: '__divider_${i}__',
+            label: '',
+            enabled: false,
+            style: const ButtonStyle(
+              minimumSize: WidgetStatePropertyAll(Size(0, 1)),
+              padding: WidgetStatePropertyAll(EdgeInsets.zero),
+              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            ),
+            labelWidget: const Divider(
+              color: AppColors.hintGrey,
+              thickness: 1,
+              height: 1,
+            ),
+          ),
+        );
+      }
+    }
+    return entries;
   }
 }

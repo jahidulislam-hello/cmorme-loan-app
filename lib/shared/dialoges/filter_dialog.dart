@@ -24,7 +24,7 @@ class FilterDialog extends StatelessWidget {
           margin: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
           padding: const EdgeInsets.all(24),
           decoration: const BoxDecoration(
-            color: AppColors.containerHighlight,
+            color: AppColors.primary,
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -32,18 +32,21 @@ class FilterDialog extends StatelessWidget {
             children: [
               Obx(() => CustomDropdownField(
                 label: 'Loan Objective',
-                labelColor: AppColors.blue300,
+                labelColor: AppColors.lightBlue,
                 value: _selectedObjective.value,
                 items: const [
                   'Reverse Finance ',
                   'Reverse for Purchase',
                 ],
                 onChanged: (value) => _selectedObjective.value = value,
+                dropdownMenuColor: AppColors.white,
+                dropdownItemTextColor: AppColors.primary,
+                showItemDivider: true,
               )),
               const SizedBox(height: 20),
               CustomDatePickerField(
                 label: 'Date',
-                labelColor: AppColors.blue300,
+                labelColor: AppColors.lightBlue,
                 controller: _dateController,
               ),
               const SizedBox(height: 24),

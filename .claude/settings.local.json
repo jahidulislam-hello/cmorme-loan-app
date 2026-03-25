@@ -13,7 +13,8 @@
       "Bash(dart run:*)",
       "Bash(ls:*)",
       "Bash(find /c/Users/Siam/StudioProjects/reverse_mortage_loan_app/lib -name \"*.dart\" | xargs grep -l -i \"login\\\\|sign_in\\\\|signin\" 2>/dev/null)",
-      "Bash(find C:UsersSiamStudioProjectsreverse_mortage_loan_app/lib/features -type d -name *calculate* -o -type d -name *loan*)"
+      "Bash(find C:UsersSiamStudioProjectsreverse_mortage_loan_app/lib/features -type d -name *calculate* -o -type d -name *loan*)",
+      "Bash(find /c/Users/Siam/StudioProjects/reverse_mortage_loan_app -type f -name *request*proposal* -o -name *proposal*request*)"
     ]
   }
 }

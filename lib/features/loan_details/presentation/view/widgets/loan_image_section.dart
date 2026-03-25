@@ -17,12 +17,12 @@ class LoanImageSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SizedBox(
-          width: double.infinity,
-          height: 200,
-          child: ClipRRect(
+    return SizedBox(
+      width: double.infinity,
+      height: 200,
+      child: Stack(
+        children: [
+          ClipRRect(
             borderRadius: BorderRadius.circular(4),
             child: imageUrls.isEmpty
                 ? Container(
@@ -46,43 +46,49 @@ class LoanImageSection extends StatelessWidget {
                     itemCount: imageUrls.length,
                     onPageChanged: (index) => currentIndex.value = index,
                     itemBuilder: (context, index) {
-                      return Image.network(
-                        imageUrls[index],
-                        fit: BoxFit.cover,
-                        width: double.infinity,
-                        loadingBuilder: (context, child, loadingProgress) {
-                          if (loadingProgress == null) return child;
-                          return const LoanImageShimmer();
-                        },
-                        errorBuilder: (context, error, stackTrace) =>
-                            const Center(
-                          child: Icon(Icons.broken_image,
-                              color: Colors.white54, size: 48),
+                      return ColoredBox(
+                        color: Colors.black,
+                        child: Image.network(
+                          imageUrls[index],
+                          fit: BoxFit.contain,
+                          width: double.infinity,
+                          loadingBuilder: (context, child, loadingProgress) {
+                            if (loadingProgress == null) return child;
+                            return const LoanImageShimmer();
+                          },
+                          errorBuilder: (context, error, stackTrace) =>
+                              const Center(
+                            child: Icon(Icons.broken_image,
+                                color: Colors.white54, size: 48),
+                          ),
                         ),
                       );
                     },
                   ),
           ),
-        ),
-        if (imageUrls.length > 1) ...[
-          const SizedBox(height: 12),
-          Obx(() => Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: List.generate(imageUrls.length, (index) {
-              final isActive = index == currentIndex.value;
-              return Container(
-                width: 8,
-                height: 8,
-                margin: const EdgeInsets.symmetric(horizontal: 4),
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: isActive ? AppColors.white : AppColors.primary,
-                ),
-              );
-            }),
-          )),
+          if (imageUrls.length > 1)
+            Positioned(
+              left: 0,
+              right: 0,
+              bottom: 10,
+              child: Obx(() => Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List.generate(imageUrls.length, (index) {
+                  final isActive = index == currentIndex.value;
+                  return Container(
+                    width: 8,
+                    height: 8,
+                    margin: const EdgeInsets.symmetric(horizontal: 4),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: isActive ? AppColors.white : AppColors.primary,
+                    ),
+                  );
+                }),
+              )),
+            ),
         ],
-      ],
+      ),
     );
   }
 }

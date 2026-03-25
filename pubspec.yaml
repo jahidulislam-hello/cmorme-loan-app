@@ -51,6 +51,8 @@ dependencies:
   shared_preferences: ^2.3.3
   flutter_html: ^3.0.0-beta.2
   intl_phone_field: ^3.2.0
+  image: ^4.3.0
+  flutter_image_compress: ^2.3.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

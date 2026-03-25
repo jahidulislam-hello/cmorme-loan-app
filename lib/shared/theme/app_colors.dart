@@ -13,6 +13,7 @@ class AppColors {
   static const Color shimmerHighlight = Colors.grey;
   static const Color white = Colors.white;
   static const Color buttonBlue = Color(0xFF4A90D9);
+  static const Color lightBlue = Color(0xFF59A7FB);
   static const Color fieldBorder = Color(0xFF2D4A6F);
   static const Color accentBlue = Color(0xFF4FC3F7);
   static const Color hintGrey = Color(0xFF8899AA);

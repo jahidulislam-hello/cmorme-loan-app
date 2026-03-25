@@ -178,7 +178,7 @@ class _TipsCalculateScreenState extends State<TipsCalculateScreen>
                             width: double.infinity,
                             child: LinearProgressIndicator(
                               value: _progressController.value,
-                              backgroundColor: AppColors.containerHighlight,
+                              backgroundColor: AppColors.white,
                               valueColor: const AlwaysStoppedAnimation<Color>(
                                 Color(0xFFE5A429),
                               ),

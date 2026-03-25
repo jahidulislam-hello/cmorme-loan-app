@@ -210,11 +210,17 @@ class RequestProposalController extends GetxController {
     }
   }
 
-  // ── Navigation helpers ───────────────────────────────────────────────────
+  // ── Navigation helpers (each triggers PATCH with isCompleted: false) ─────
 
-  void goToCityState() => Get.toNamed(RouteNames.proposalCityState);
-  void goToPhonePage() => Get.toNamed(RouteNames.phonePage);
-  void goToInterested() {
+  Future<void> goToCityState() async {
+    await _submitProposal(isCompleted: false, nextRoute: RouteNames.proposalCityState);
+  }
+
+  Future<void> goToPhonePage() async {
+    await _submitProposal(isCompleted: false, nextRoute: RouteNames.phonePage);
+  }
+
+  Future<void> goToInterested() async {
     final digits = phoneController.text.trim();
     if (digits.isEmpty) {
       phoneError.value = 'Please enter your phone number.';
@@ -225,28 +231,44 @@ class RequestProposalController extends GetxController {
       return;
     }
     phoneError.value = null;
-    Get.toNamed(RouteNames.proposalInterested);
+    await _submitProposal(isCompleted: false, nextRoute: RouteNames.proposalInterested);
   }
-  void goToLoanAmount() => Get.toNamed(RouteNames.proposalLoanAmount);
-  void goToDob() => Get.toNamed(RouteNames.proposalDob);
-  void goToInquiry() => Get.toNamed(RouteNames.proposalInquiry);
-  void goToAppointment() => Get.toNamed(RouteNames.proposalAppointment);
+
+  Future<void> goToLoanAmount() async {
+    await _submitProposal(isCompleted: false, nextRoute: RouteNames.proposalLoanAmount);
+  }
+
+  Future<void> goToDob() async {
+    await _submitProposal(isCompleted: false, nextRoute: RouteNames.proposalDob);
+  }
+
+  Future<void> goToInquiry() async {
+    await _submitProposal(isCompleted: false, nextRoute: RouteNames.proposalInquiry);
+  }
+
+  Future<void> goToAppointment() async {
+    await _submitProposal(isCompleted: false, nextRoute: RouteNames.proposalAppointment);
+  }
 
   // ── Step 8: Submit from inquiry page (Email selected) ───────────────────
 
   Future<void> submitFromInquiry() async {
-    await _submitProposal(setTime: null);
+    await _submitProposal(isCompleted: true, setTime: null);
   }
 
   // ── Step 9: Submit from appointment page (Phone selected) ────────────────
 
   Future<void> submitFromAppointment() async {
-    await _submitProposal(setTime: _buildSetTime());
+    await _submitProposal(isCompleted: true, setTime: _buildSetTime());
   }
 
   // ── Internal PATCH call ──────────────────────────────────────────────────
 
-  Future<void> _submitProposal({required String? setTime}) async {
+  Future<void> _submitProposal({
+    required bool isCompleted,
+    String? nextRoute,
+    String? setTime,
+  }) async {
     isLoading.value = true;
     try {
       final request = UpdateProposalRequestModel(
@@ -267,11 +289,15 @@ class RequestProposalController extends GetxController {
         responseType:
             (selectedContactMethod.value ?? 'email').toLowerCase(),
         setTime: setTime,
-        isCompleted: true,
+        isCompleted: isCompleted,
       );
       await _updateProposalUseCase(proposalId, request);
-      _logger.i('Proposal updated successfully');
-      Get.offAllNamed(RouteNames.inquirySuccess);
+      _logger.i('Proposal updated (isCompleted: $isCompleted)');
+      if (nextRoute != null) {
+        Get.toNamed(nextRoute);
+      } else {
+        Get.offAllNamed(RouteNames.inquirySuccess);
+      }
     } on NoInternetException catch (e) {
       _logger.w('No internet: $e');
       Get.snackbar('No Internet', e.message);

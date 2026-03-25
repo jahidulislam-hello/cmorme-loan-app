@@ -100,7 +100,7 @@ class _CalculateOptionButton extends StatelessWidget {
       onTap: onTap,
       child: Container(
         width: double.infinity,
-        height: 80,
+        height: 90,
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         decoration: BoxDecoration(
           color: AppColors.green500,
@@ -136,7 +136,7 @@ class _CalculateOptionButton extends StatelessWidget {
               subtitle,
               style: const TextStyle(
                 color: AppColors.green800,
-                fontSize: 10,
+                fontSize: 12,
               ),
             ),
           ],

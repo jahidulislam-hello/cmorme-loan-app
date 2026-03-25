@@ -28,6 +28,7 @@ class AppImages {
   static const String settingsIcon = 'assets/images/setting_icon.svg';
   static const String notificationIcon = 'assets/images/notification.svg';
   static const String notificationHomeIcon = 'assets/images/notification_icon.svg';
+  static const String dollarIcon = 'assets/images/dollar_icon.svg';
   static const String inboxIcon = 'assets/images/inbox.svg';
   static const String loan = 'assets/images/loan.svg';
   static const String downPay = 'assets/images/down_pay.svg';

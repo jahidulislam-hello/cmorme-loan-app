@@ -108,7 +108,8 @@ class ReverseRefinanceScreen extends GetView<ReverseRefinanceController> {
                               child: LabeledInputField(
                                 label: 'HOME VALUE',
                               //  hintText: '1500',
-                                prefixIcon: Icons.attach_money,
+                              //  prefixIcon: Icons.attach_money,
+                                prefixImagePath: AppImages.dollarIcon,
                                 controller: controller.homeValueController,
                                 labelColor: AppColors.blue300,
                                 errorText: controller.homeValueError.value,
@@ -123,7 +124,8 @@ class ReverseRefinanceScreen extends GetView<ReverseRefinanceController> {
                       Obx(() => LabeledInputField(
                         label: 'Current Mortgage Balance',
                        // hintText: '1500',
-                        prefixIcon: Icons.attach_money,
+                      //  prefixIcon: Icons.attach_money,
+                        prefixImagePath: AppImages.dollarIcon,
                         controller: controller.mortgageBalanceController,
                         labelColor: AppColors.blue300,
                         errorText: controller.mortgageBalanceValueError.value,
