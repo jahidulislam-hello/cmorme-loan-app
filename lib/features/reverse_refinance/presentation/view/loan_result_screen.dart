@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:reverse_mortage_loan_app/config/routes/route_names.dart';
 import 'package:reverse_mortage_loan_app/features/reverse_refinance/data/models/calculate_loan_response_model.dart';
 import 'package:reverse_mortage_loan_app/features/reverse_refinance/shared/widgets/loan_estimate_card.dart';
@@ -9,8 +10,13 @@ import 'package:reverse_mortage_loan_app/shared/widgets/custom_button.dart';
 class _NotEligibleCard extends StatelessWidget {
   final String title;
   final String reason;
+  final String? secondReason;
 
-  const _NotEligibleCard({required this.title, required this.reason});
+  const _NotEligibleCard({
+    required this.title,
+    required this.reason,
+    this.secondReason,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -33,21 +39,39 @@ class _NotEligibleCard extends StatelessWidget {
             color: AppColors.containerHighlight,
             borderRadius: BorderRadius.circular(12),
           ),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          child: Column(
             children: [
-              const Icon(Icons.info_outline, color: AppColors.accentBlue, size: 18),
-              const SizedBox(width: 10),
-              Expanded(
-                child: Text(
-                  reason,
-                  style: const TextStyle(
-                    color: AppColors.hintGrey,
-                    fontSize: 13,
-                  ),
-                ),
-              ),
+              _ReasonRow(reason: reason),
+              if (secondReason != null) ...[
+                const SizedBox(height: 10),
+                _ReasonRow(reason: secondReason!),
+              ],
             ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _ReasonRow extends StatelessWidget {
+  final String reason;
+  const _ReasonRow({required this.reason});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Icon(Icons.info_outline, color: AppColors.accentBlue, size: 18),
+        const SizedBox(width: 10),
+        Expanded(
+          child: Text(
+            reason,
+            style: const TextStyle(
+              color: AppColors.hintGrey,
+              fontSize: 13,
+            ),
           ),
         ),
       ],
@@ -58,9 +82,11 @@ class _NotEligibleCard extends StatelessWidget {
 class LoanResultScreen extends StatelessWidget {
   const LoanResultScreen({super.key});
 
+  static final _numFmt = NumberFormat('#,##0.##');
+
   String _fmt(double? value) {
     if (value == null) return '\$0';
-    return '\$${value.toStringAsFixed(value.truncateToDouble() == value ? 0 : 2)}';
+    return '\$${_numFmt.format(value)}';
   }
 
   @override
@@ -106,7 +132,7 @@ class LoanResultScreen extends StatelessWidget {
                       const SizedBox(height: 16),
 
                       /// Estimated Government Insured Reverse Mortgage
-                      if (result?.govtEligible == true)
+                      if (result?.govtLoanAvailable == true)
                         LoanEstimateCard(
                           title: 'Estimated Government Insured\nReverse Mortgage',
                           loanAmount: isPurchase
@@ -119,16 +145,22 @@ class LoanResultScreen extends StatelessWidget {
                               ? _fmt(result?.reversePurchaseGovtDownPayment)
                               : null,
                         )
-                      else
+                      else if (result?.govtNotEligibleReason != null)
                         _NotEligibleCard(
                           title: 'Estimated Government Insured\nReverse Mortgage',
-                          reason: result?.govtNotEligibleReason ?? 'Not eligible for government reverse mortgage.',
+                          reason: result!.govtNotEligibleReason!,
+                          secondReason: 'Not enough home equity',
+                        )
+                      else
+                        const _NotEligibleCard(
+                          title: 'Estimated Government Insured\nReverse Mortgage',
+                          reason: 'Not enough home equity',
                         ),
 
                       const SizedBox(height: 20),
 
                       /// Estimated Non-Government Insured Reverse Mortgage
-                      if (result?.nonGovtEligible == true)
+                      if (result?.nonGovtLoanAvailable == true)
                         LoanEstimateCard(
                           title: 'Estimated Non-Government Insured\nReverse Mortgage',
                           loanAmount: isPurchase
@@ -141,10 +173,16 @@ class LoanResultScreen extends StatelessWidget {
                               ? _fmt(result?.reversePurchaseNonGovtDownPayment)
                               : null,
                         )
-                      else
+                      else if (result?.nonGovtNotEligibleReason != null)
                         _NotEligibleCard(
                           title: 'Estimated Non-Government Insured\nReverse Mortgage',
-                          reason: result?.nonGovtNotEligibleReason ?? 'Not eligible for non-government reverse mortgage.',
+                          reason: result!.nonGovtNotEligibleReason!,
+                          secondReason: 'Not enough home equity',
+                        )
+                      else
+                        const _NotEligibleCard(
+                          title: 'Estimated Non-Government Insured\nReverse Mortgage',
+                          reason: 'Not enough home equity',
                         ),
 
                       const Spacer(),
@@ -160,9 +198,12 @@ class LoanResultScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: 12),
 
-                      /// Request Full Proposal Button
+                      /// Request Full Proposal / Request More Information Button
                       CustomButton(
-                        text: 'Request Full Proposal',
+                        text: (result?.govtLoanAvailable == false &&
+                                result?.nonGovtLoanAvailable == false)
+                            ? 'Request More Information'
+                            : 'Request Full Proposal',
                         onPressed: () {
                           Get.toNamed(RouteNames.requestProposal);
                         },

@@ -11,8 +11,13 @@ import 'package:reverse_mortage_loan_app/features/loan_details/presentation/view
 class _NotEligibleCard extends StatelessWidget {
   final String title;
   final String reason;
+  final String? secondReason;
 
-  const _NotEligibleCard({required this.title, required this.reason});
+  const _NotEligibleCard({
+    required this.title,
+    required this.reason,
+    this.secondReason,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -35,21 +40,39 @@ class _NotEligibleCard extends StatelessWidget {
             color: AppColors.containerHighlight,
             borderRadius: BorderRadius.circular(12),
           ),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          child: Column(
             children: [
-              const Icon(Icons.info_outline, color: AppColors.accentBlue, size: 18),
-              const SizedBox(width: 10),
-              Expanded(
-                child: Text(
-                  reason,
-                  style: const TextStyle(
-                    color: AppColors.hintGrey,
-                    fontSize: 13,
-                  ),
-                ),
-              ),
+              _ReasonRow(reason: reason),
+              if (secondReason != null) ...[
+                const SizedBox(height: 10),
+                _ReasonRow(reason: secondReason!),
+              ],
             ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _ReasonRow extends StatelessWidget {
+  final String reason;
+  const _ReasonRow({required this.reason});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Icon(Icons.info_outline, color: AppColors.accentBlue, size: 18),
+        const SizedBox(width: 10),
+        Expanded(
+          child: Text(
+            reason,
+            style: const TextStyle(
+              color: AppColors.hintGrey,
+              fontSize: 13,
+            ),
           ),
         ),
       ],
@@ -120,7 +143,7 @@ class LoanDetailsScreen extends GetView<LoanDetailsController> {
                       ),
 
                       const SizedBox(height: 24),
-                      if (controller.govtEligible)
+                      if (controller.govtLoanAvailable)
                         EstimatedMortgageSection(
                           title: 'Estimated Government Insured Reverse Mortgage',
                           primaryLabel: 'Loan Amount',
@@ -129,14 +152,20 @@ class LoanDetailsScreen extends GetView<LoanDetailsController> {
                           cashAvailable: controller.govtCashAvailable,
                           downPayment: controller.govtDownPayment,
                         )
-                      else
+                      else if (controller.govtNotEligibleReason != null)
                         _NotEligibleCard(
                           title: 'Estimated Government Insured Reverse Mortgage',
-                          reason: controller.govtNotEligibleReason ?? 'Not eligible for government reverse mortgage.',
+                          reason: controller.govtNotEligibleReason!,
+                          secondReason: 'Not enough home equity',
+                        )
+                      else
+                        const _NotEligibleCard(
+                          title: 'Estimated Government Insured Reverse Mortgage',
+                          reason: 'Not enough home equity',
                         ),
 
                       const SizedBox(height: 24),
-                      if (controller.nonGovtEligible)
+                      if (controller.nonGovtLoanAvailable)
                         EstimatedMortgageSection(
                           title: 'Estimated Non-Govt Insured Reverse Mortgage',
                           primaryLabel: 'Loan Amount',
@@ -145,10 +174,16 @@ class LoanDetailsScreen extends GetView<LoanDetailsController> {
                           cashAvailable: controller.nonGovtCashAvailable,
                           downPayment: controller.nonGovtDownPayment,
                         )
-                      else
+                      else if (controller.nonGovtNotEligibleReason != null)
                         _NotEligibleCard(
                           title: 'Estimated Non-Govt Insured Reverse Mortgage',
-                          reason: controller.nonGovtNotEligibleReason ?? 'Not eligible for non-government reverse mortgage.',
+                          reason: controller.nonGovtNotEligibleReason!,
+                          secondReason: 'Not enough home equity',
+                        )
+                      else
+                        const _NotEligibleCard(
+                          title: 'Estimated Non-Govt Insured Reverse Mortgage',
+                          reason: 'Not enough home equity',
                         ),
 
                       const SizedBox(height: 24),

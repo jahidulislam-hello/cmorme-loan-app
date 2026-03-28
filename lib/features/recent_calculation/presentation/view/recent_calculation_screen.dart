@@ -88,10 +88,10 @@ class RecentCalculationScreen extends GetView<RecentCalculationController> {
                 return CustomCalculationItem(
                   date: date,
                   tag: tag,
-                  loanAmount: controller.formatAmount(item.govtLoanAmount),
-                  cashAvailable: controller.formatAmount(item.govtCashOrDownPayment),
+                  loanAmount: controller.formatAmount(item.displayLoanAmount),
+                  cashAvailable: controller.formatAmount(item.displayCashOrDownPayment),
                   downPayment: item.isPurchase
-                      ? controller.formatAmount(item.govtCashOrDownPayment)
+                      ? controller.formatAmount(item.displayCashOrDownPayment)
                       : null,
                   onViewDetails: () => controller.onViewDetails(index),
                   onDelete: () => controller.onDeleteCalculation(index),

@@ -32,6 +32,9 @@ class ApiConstants {
   // FAQ
   static const String faqAll = '/faq/all';
 
+  // Did You Know
+  static const String didYouKnowAll = '/did-you-know/all';
+
   // Calculate Loan
   static const String fileUpload = '/file-upload';
   static const String calculateLoan = '/calculate-loan/create';

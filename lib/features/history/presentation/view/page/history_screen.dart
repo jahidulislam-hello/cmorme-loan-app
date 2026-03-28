@@ -122,12 +122,12 @@ class HistoryScreen extends GetView<HistoryController> {
                               date: date,
                               tag: tag,
                               loanAmount:
-                                  controller.formatAmount(item.govtLoanAmount),
+                                  controller.formatAmount(item.displayLoanAmount),
                               cashAvailable: controller
-                                  .formatAmount(item.govtCashOrDownPayment),
+                                  .formatAmount(item.displayCashOrDownPayment),
                               downPayment: item.isPurchase
                                   ? controller
-                                      .formatAmount(item.govtCashOrDownPayment)
+                                      .formatAmount(item.displayCashOrDownPayment)
                                   : null,
                               onViewDetails: () =>
                                   controller.onViewDetails(index),

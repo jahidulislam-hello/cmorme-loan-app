@@ -23,6 +23,7 @@ class LoanDetailsController extends GetxController {
 
   // Govt section
   late final bool govtEligible;
+  late final bool govtLoanAvailable;
   late final String? govtNotEligibleReason;
   late final String govtLoanAmount;
   late final String govtCashAvailable;
@@ -30,6 +31,7 @@ class LoanDetailsController extends GetxController {
 
   // Non-govt section
   late final bool nonGovtEligible;
+  late final bool nonGovtLoanAvailable;
   late final String? nonGovtNotEligibleReason;
   late final String nonGovtLoanAmount;
   late final String nonGovtCashAvailable;
@@ -71,8 +73,10 @@ class LoanDetailsController extends GetxController {
     }
 
     govtEligible = _item.govtEligible;
+    govtLoanAvailable = _item.govtLoanAvailable;
     govtNotEligibleReason = _item.govtNotEligibleReason;
     nonGovtEligible = _item.nonGovtEligible;
+    nonGovtLoanAvailable = _item.nonGovtLoanAvailable;
     nonGovtNotEligibleReason = _item.nonGovtNotEligibleReason;
 
     if (_item.isPurchase) {

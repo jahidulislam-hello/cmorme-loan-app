@@ -16,14 +16,7 @@ class _TipsCalculateScreenState extends State<TipsCalculateScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _progressController;
 
-  final List<String> _tips = [
-    'Paying little extra each month can reduce total interest!',
-    'Lower monthly payments but increase total cost!',
-    'Credit score can affect the loan interest rate you get!',
-    'Refinancing later can save money if rates drop!',
-    'Comparing multiple lenders helps you find the best deal!',
-  ];
-
+  static const int _tipCount = 5;
   late List<bool> _visibleTips;
 
   static const _slideDuration = Duration(milliseconds: 600);
@@ -33,29 +26,36 @@ class _TipsCalculateScreenState extends State<TipsCalculateScreen>
   void initState() {
     super.initState();
 
-    _visibleTips = List.filled(_tips.length, false);
+    _visibleTips = List.filled(_tipCount, false);
 
     _progressController = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 10),
     )..forward();
 
+    final controller = Get.find<TipsCalculateController>();
+
     _progressController.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
-        Get.find<TipsCalculateController>().onProgressCompleted();
+        controller.onProgressCompleted();
       }
     });
 
     // Stop the progress animation if the API call fails
-    ever(Get.find<TipsCalculateController>().isApiError, (bool hasError) {
+    ever(controller.isApiError, (bool hasError) {
       if (hasError) _progressController.stop();
     });
 
-    _startTipsAnimation();
+    // Start animation only when tips are ready (API responded or 2s timeout)
+    ever(controller.tipsReady, (bool ready) {
+      if (ready && mounted) _startTipsAnimation();
+    });
+    // In case tipsReady was already true before ever was registered
+    if (controller.tipsReady.value) _startTipsAnimation();
   }
 
   Future<void> _startTipsAnimation() async {
-    for (int i = 0; i < _tips.length; i++) {
+    for (int i = 0; i < _tipCount; i++) {
       if (!mounted) return;
       setState(() => _visibleTips[i] = true);
       await Future.delayed(_intervalDuration);
@@ -96,27 +96,28 @@ class _TipsCalculateScreenState extends State<TipsCalculateScreen>
 
               /// Tips — each tip stays at its own list position, animates individually
               Expanded(
-                child: Column(
-                  children: List.generate(_tips.length, (index) {
-                    final isVisible = _visibleTips[index];
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: 24),
-                      child: AnimatedSlide(
-                        offset: isVisible
-                            ? Offset.zero
-                            : const Offset(0.4, 0),
-                        duration: _slideDuration,
-                        curve: Curves.easeOutCubic,
-                        child: AnimatedOpacity(
-                          opacity: isVisible ? 1.0 : 0.0,
+                child: Obx(() {
+                  final controller = Get.find<TipsCalculateController>();
+                  return Column(
+                    children: List.generate(_tipCount, (index) {
+                      final isVisible = _visibleTips[index];
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 24),
+                        child: AnimatedSlide(
+                          offset: isVisible ? Offset.zero : const Offset(0.4, 0),
                           duration: _slideDuration,
                           curve: Curves.easeOutCubic,
-                          child: _buildTipItem(index),
+                          child: AnimatedOpacity(
+                            opacity: isVisible ? 1.0 : 0.0,
+                            duration: _slideDuration,
+                            curve: Curves.easeOutCubic,
+                            child: _buildTipItem(index, controller.tips),
+                          ),
                         ),
-                      ),
-                    );
-                  }),
-                ),
+                      );
+                    }),
+                  );
+                }),
               ),
 
               /// Progress Bar or Error State
@@ -210,7 +211,7 @@ class _TipsCalculateScreenState extends State<TipsCalculateScreen>
     );
   }
 
-  Widget _buildTipItem(int index) {
+  Widget _buildTipItem(int index, List<String> tips) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -256,7 +257,7 @@ class _TipsCalculateScreenState extends State<TipsCalculateScreen>
         const SizedBox(width: 16),
         Expanded(
           child: Text(
-            _tips[index],
+            index < tips.length ? tips[index] : '',
             style: const TextStyle(
               color: AppColors.white,
               fontSize: 18,

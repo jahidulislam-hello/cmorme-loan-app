@@ -11,8 +11,10 @@ class RecentCalculationItemModel {
 
   // Eligibility fields
   final bool govtEligible;
+  final bool govtLoanAvailable;
   final String? govtNotEligibleReason;
   final bool nonGovtEligible;
+  final bool nonGovtLoanAvailable;
   final String? nonGovtNotEligibleReason;
 
   // Reverse Refinance fields
@@ -40,8 +42,10 @@ class RecentCalculationItemModel {
     this.multipleBorrowerAge1,
     this.multipleBorrowerAge2,
     required this.govtEligible,
+    required this.govtLoanAvailable,
     this.govtNotEligibleReason,
     required this.nonGovtEligible,
+    required this.nonGovtLoanAvailable,
     this.nonGovtNotEligibleReason,
     this.reverseRefinanceNonGovtLoanAmount,
     this.reverseRefinanceNonGovtCashAvailable,
@@ -68,6 +72,28 @@ class RecentCalculationItemModel {
           ? (reversePurchaseGovtDownPayment ?? 0)
           : (reverseRefinanceGovtCashAvailable ?? 0);
 
+  /// Best available loan amount: govt if available, else non-govt
+  double get displayLoanAmount {
+    if (govtLoanAvailable) return govtLoanAmount;
+    if (nonGovtLoanAvailable) {
+      return isPurchase
+          ? (reversePurchaseNonGovtLoanAmount ?? 0)
+          : (reverseRefinanceNonGovtLoanAmount ?? 0);
+    }
+    return 0;
+  }
+
+  /// Best available cash/down payment: govt if available, else non-govt
+  double get displayCashOrDownPayment {
+    if (govtLoanAvailable) return govtCashOrDownPayment;
+    if (nonGovtLoanAvailable) {
+      return isPurchase
+          ? (reversePurchaseNonGovtDownPayment ?? 0)
+          : (reverseRefinanceNonGovtCashAvailable ?? 0);
+    }
+    return 0;
+  }
+
   Map<String, dynamic> toJson() {
     return {
       '_id': id,
@@ -80,8 +106,10 @@ class RecentCalculationItemModel {
       'multiple_borrwer_age1': multipleBorrowerAge1,
       'multiple_borrwer_age2': multipleBorrowerAge2,
       'govt_eligible': govtEligible,
+      'govt_loan_available': govtLoanAvailable,
       'govt_not_eligible_reason': govtNotEligibleReason,
       'non_govt_eligible': nonGovtEligible,
+      'non_govt_loan_available': nonGovtLoanAvailable,
       'non_govt_not_eligible_reason': nonGovtNotEligibleReason,
       'reverse_refinance_non_govt_loan_Amount': reverseRefinanceNonGovtLoanAmount,
       'reverse_refinance_non_govt_cash_available': reverseRefinanceNonGovtCashAvailable,
@@ -109,8 +137,10 @@ class RecentCalculationItemModel {
       multipleBorrowerAge1: json['multiple_borrwer_age1'] as int?,
       multipleBorrowerAge2: json['multiple_borrwer_age2'] as int?,
       govtEligible: json['govt_eligible'] as bool? ?? json['govt_loan_available'] as bool? ?? false,
+      govtLoanAvailable: json['govt_loan_available'] as bool? ?? false,
       govtNotEligibleReason: json['govt_not_eligible_reason'] as String?,
       nonGovtEligible: json['non_govt_eligible'] as bool? ?? json['non_govt_loan_available'] as bool? ?? false,
+      nonGovtLoanAvailable: json['non_govt_loan_available'] as bool? ?? false,
       nonGovtNotEligibleReason: json['non_govt_not_eligible_reason'] as String?,
       reverseRefinanceNonGovtLoanAmount:
           (json['reverse_refinance_non_govt_loan_Amount'] as num?)?.toDouble(),
