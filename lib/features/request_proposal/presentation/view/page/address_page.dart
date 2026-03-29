@@ -42,14 +42,16 @@ class AddressPage extends GetView<RequestProposalController> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      CustomTextField(
-                        label: 'Address',
-                        hintText: 'Address',
-                        labelColor: AppColors.blue200,
-                        controller: controller.addressController,
-                        filled: true,
-                        backgroundColor: AppColors.containerHighlight,
-                      ),
+                      Obx(() => CustomTextField(
+                            label: 'Address',
+                            hintText: 'Address',
+                            labelColor: AppColors.blue200,
+                            controller: controller.addressController,
+                            filled: true,
+                            backgroundColor: AppColors.containerHighlight,
+                            errorText: controller.addressError.value,
+                            onChanged: (_) => controller.addressError.value = null,
+                          )),
                     ],
                   ),
                 ),

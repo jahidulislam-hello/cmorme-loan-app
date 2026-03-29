@@ -58,22 +58,30 @@ class ReverseRefinanceScreen extends GetView<ReverseRefinanceController> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            // Outer Obx: structural switch — only rebuilds when
+                            // isUploadingImages or photos list changes.
                             Obx(() {
                               if (controller.isUploadingImages.value) {
                                 return Column(
                                   children: [
                                     const PhotoUploadShimmer(),
-                                    if (controller.uploadProgressText.value.isNotEmpty)
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(vertical: 8),
-                                        child: Text(
-                                          controller.uploadProgressText.value,
-                                          style: const TextStyle(
-                                            color: AppColors.hintGrey,
-                                            fontSize: 12,
-                                          ),
-                                        ),
-                                      ),
+                                    // Inner Obx: only rebuilds when progress text changes.
+                                    // Isolated so shimmer is NOT rebuilt on every progress update.
+                                    Obx(() => controller
+                                            .uploadProgressText.value.isNotEmpty
+                                        ? Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 8),
+                                            child: Text(
+                                              controller
+                                                  .uploadProgressText.value,
+                                              style: const TextStyle(
+                                                color: AppColors.hintGrey,
+                                                fontSize: 12,
+                                              ),
+                                            ),
+                                          )
+                                        : const SizedBox.shrink()),
                                   ],
                                 );
                               }
@@ -82,24 +90,27 @@ class ReverseRefinanceScreen extends GetView<ReverseRefinanceController> {
                                   padding: const EdgeInsets.only(
                                       top: 20, left: 20, right: 20),
                                   child: Center(
-                                    child: PhotoUploadSection(
-                                      photos: controller.photos,
-                                      currentPhotoIndex:
-                                          controller.currentPhotoIndex.value,
-                                      onUploadTap: controller.onUploadPhotos,
-                                      onPageChanged:
-                                          controller.onPhotoPageChanged,
-                                    ),
+                                    // Inner Obx: only rebuilds when currentPhotoIndex changes.
+                                    child: Obx(() => PhotoUploadSection(
+                                          photos: controller.photos,
+                                          currentPhotoIndex: controller
+                                              .currentPhotoIndex.value,
+                                          onUploadTap:
+                                              controller.onUploadPhotos,
+                                          onPageChanged:
+                                              controller.onPhotoPageChanged,
+                                        )),
                                   ),
                                 );
                               }
-                              return PhotoUploadSection(
-                                photos: controller.photos,
-                                currentPhotoIndex:
-                                    controller.currentPhotoIndex.value,
-                                onUploadTap: controller.onUploadPhotos,
-                                onPageChanged: controller.onPhotoPageChanged,
-                              );
+                              // Inner Obx: only rebuilds when currentPhotoIndex changes.
+                              return Obx(() => PhotoUploadSection(
+                                    photos: controller.photos,
+                                    currentPhotoIndex:
+                                        controller.currentPhotoIndex.value,
+                                    onUploadTap: controller.onUploadPhotos,
+                                    onPageChanged: controller.onPhotoPageChanged,
+                                  ));
                             }),
                             const SizedBox(height: 20),
                             Obx(() => Padding(

@@ -22,6 +22,10 @@ class ChangePasswordController extends GetxController {
   final obscureNewPassword = true.obs;
   final obscureConfirmPassword = true.obs;
 
+  final oldPasswordError = Rxn<String>();
+  final newPasswordError = Rxn<String>();
+  final confirmPasswordError = Rxn<String>();
+
   void toggleOldPasswordVisibility() =>
       obscureOldPassword.value = !obscureOldPassword.value;
 
@@ -32,6 +36,14 @@ class ChangePasswordController extends GetxController {
       obscureConfirmPassword.value = !obscureConfirmPassword.value;
 
   Future<void> onUpdate() async {
+    oldPasswordError.value = oldPasswordController.text.trim().isEmpty ? 'Old password is required' : null;
+    newPasswordError.value = newPasswordController.text.trim().isEmpty ? 'New password is required' : null;
+    confirmPasswordError.value = confirmPasswordController.text.trim().isEmpty ? 'Confirm password is required' : null;
+
+    if (oldPasswordError.value != null ||
+        newPasswordError.value != null ||
+        confirmPasswordError.value != null) return;
+
     isLoading.value = true;
     try {
       final request = ChangePasswordRequestModel(

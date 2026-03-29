@@ -40,27 +40,29 @@ class SignInScreen extends GetView<AuthController> {
                       const SizedBox(height: 32),
 
                       /// Email
-                      CustomTextField(
-                        label: 'Email',
-                        hintText: 'demo@email.com',
-                       prefixImagePath: AppImages.mail,
-                        controller: controller.emailController,
-                        keyboardType: TextInputType.emailAddress,
-
-                      ),
+                      Obx(() => CustomTextField(
+                            label: 'Email',
+                            hintText: 'demo@email.com',
+                            prefixImagePath: AppImages.mail,
+                            controller: controller.emailController,
+                            keyboardType: TextInputType.emailAddress,
+                            errorText: controller.emailError.value,
+                            onChanged: (_) => controller.emailError.value = null,
+                          )),
                       const SizedBox(height: 20),
 
                       /// Password
                       Obx(() => CustomTextField(
-                        label: 'Password',
-                        hintText: 'Enter your password',
-                       prefixImagePath: AppImages.lock,
-                        isPassword: true,
-                        obscureText: controller.obscurePassword.value,
-                        onTogglePassword:
-                        controller.togglePasswordVisibility,
-                        controller: controller.passwordController,
-                      )),
+                            label: 'Password',
+                            hintText: 'Enter your password',
+                            prefixImagePath: AppImages.lock,
+                            isPassword: true,
+                            obscureText: controller.obscurePassword.value,
+                            onTogglePassword: controller.togglePasswordVisibility,
+                            controller: controller.passwordController,
+                            errorText: controller.passwordError.value,
+                            onChanged: (_) => controller.passwordError.value = null,
+                          )),
                       const SizedBox(height: 8),
                       Align(
                         alignment: Alignment.centerRight,

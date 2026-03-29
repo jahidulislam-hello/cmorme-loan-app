@@ -42,6 +42,18 @@ class RequestProposalController extends GetxController {
   final cityController = TextEditingController();
   final stateCodeController = TextEditingController();
 
+  // Step 1 - Errors
+  final fullNameError = RxnString();
+  final lastNameError = RxnString();
+  final emailError = RxnString();
+
+  // Step 2 - Error
+  final addressError = RxnString();
+
+  // Step 3 - Errors
+  final cityError = RxnString();
+  final stateCodeError = RxnString();
+
   // Step 4 - Phone
   final phoneController = TextEditingController();
   String phoneCompleteNumber = '';
@@ -57,6 +69,8 @@ class RequestProposalController extends GetxController {
   // Step 6 - Loan Amount
   final homeValueController = TextEditingController();
   final mortgageAmountController = TextEditingController();
+  final homeValueError = RxnString();
+  final mortgageAmountError = RxnString();
 
   // Step 7 - Date of Birth
   final dobController = TextEditingController();
@@ -170,10 +184,13 @@ class RequestProposalController extends GetxController {
     final lastName = lastNameController.text.trim();
     final email = emailController.text.trim();
 
-    if (firstName.isEmpty || lastName.isEmpty || email.isEmpty) {
-      Get.snackbar('Validation', 'Please fill in all fields.');
-      return;
-    }
+    fullNameError.value = firstName.isEmpty ? 'Please enter your first name.' : null;
+    lastNameError.value = lastName.isEmpty ? 'Please enter your last name.' : null;
+    emailError.value = email.isEmpty ? 'Please enter your email.' : null;
+
+    if (fullNameError.value != null ||
+        lastNameError.value != null ||
+        emailError.value != null) return;
 
     // If we already have a proposal from the GET, skip POST and just navigate
     if (proposalId.isNotEmpty) {
@@ -213,10 +230,21 @@ class RequestProposalController extends GetxController {
   // ── Navigation helpers (each triggers PATCH with isCompleted: false) ─────
 
   Future<void> goToCityState() async {
+    addressError.value = addressController.text.trim().isEmpty
+        ? 'Please enter your address.'
+        : null;
+    if (addressError.value != null) return;
     await _submitProposal(isCompleted: false, nextRoute: RouteNames.proposalCityState);
   }
 
   Future<void> goToPhonePage() async {
+    cityError.value = cityController.text.trim().isEmpty
+        ? 'Please enter your city.'
+        : null;
+    stateCodeError.value = stateCodeController.text.trim().isEmpty
+        ? 'Please enter your state code.'
+        : null;
+    if (cityError.value != null || stateCodeError.value != null) return;
     await _submitProposal(isCompleted: false, nextRoute: RouteNames.phonePage);
   }
 
@@ -239,6 +267,13 @@ class RequestProposalController extends GetxController {
   }
 
   Future<void> goToDob() async {
+    homeValueError.value = homeValueController.text.trim().isEmpty
+        ? 'Please enter your home value.'
+        : null;
+    mortgageAmountError.value = mortgageAmountController.text.trim().isEmpty
+        ? 'Please enter your mortgage balance.'
+        : null;
+    if (homeValueError.value != null || mortgageAmountError.value != null) return;
     await _submitProposal(isCompleted: false, nextRoute: RouteNames.proposalDob);
   }
 

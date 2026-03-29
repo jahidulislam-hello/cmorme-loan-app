@@ -72,6 +72,15 @@ class AuthController extends GetxController {
   final obscureNewPassword = true.obs;
   final obscureNewConfirmPassword = true.obs;
 
+  // Field errors — sign in
+  final emailError = RxnString();
+  final passwordError = RxnString();
+
+  // Field errors — sign up
+  final firstNameError = RxnString();
+  final lastNameError = RxnString();
+  final confirmPasswordError = RxnString();
+
   @override
   void onInit() {
     super.onInit();
@@ -121,6 +130,14 @@ class AuthController extends GetxController {
   // ─── Login ───────────────────────────────────────────────────────────────
 
   Future<void> login() async {
+    emailError.value = emailController.text.trim().isEmpty
+        ? 'Please enter your email.'
+        : null;
+    passwordError.value = passwordController.text.isEmpty
+        ? 'Please enter your password.'
+        : null;
+    if (emailError.value != null || passwordError.value != null) return;
+
     isLoading.value = true;
     try {
       final request = LoginRequestModel(
@@ -150,6 +167,27 @@ class AuthController extends GetxController {
   // ─── Register ─────────────────────────────────────────────────────────────
 
   Future<void> signUp() async {
+    firstNameError.value = firstNameController.text.trim().isEmpty
+        ? 'Please enter your first name.'
+        : null;
+    lastNameError.value = lastNameController.text.trim().isEmpty
+        ? 'Please enter your last name.'
+        : null;
+    emailError.value = emailController.text.trim().isEmpty
+        ? 'Please enter your email.'
+        : null;
+    passwordError.value = passwordController.text.isEmpty
+        ? 'Please enter your password.'
+        : null;
+    confirmPasswordError.value = confirmPasswordController.text.isEmpty
+        ? 'Please confirm your password.'
+        : null;
+    if (firstNameError.value != null ||
+        lastNameError.value != null ||
+        emailError.value != null ||
+        passwordError.value != null ||
+        confirmPasswordError.value != null) return;
+
     isLoading.value = true;
     try {
       final request = RegisterRequestModel(

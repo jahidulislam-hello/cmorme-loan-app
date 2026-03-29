@@ -18,6 +18,8 @@ class CustomTextField extends StatelessWidget {
   final double? textFontSize;
   final bool filled;
   final Color? backgroundColor;
+  final String? errorText;
+  final ValueChanged<String>? onChanged;
 
   const CustomTextField({
     super.key,
@@ -36,6 +38,8 @@ class CustomTextField extends StatelessWidget {
     this.textFontSize,
     this.filled = false,
     this.backgroundColor,
+    this.errorText,
+    this.onChanged,
   });
 
   Widget? _buildPrefixIcon() {
@@ -59,6 +63,8 @@ class CustomTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final hasError = errorText != null;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -75,6 +81,7 @@ class CustomTextField extends StatelessWidget {
           obscureText: obscureText,
           keyboardType: keyboardType,
           cursorColor: AppColors.white,
+          onChanged: onChanged,
           style: TextStyle(
             color: textColor ?? AppColors.white,
             fontSize: textFontSize ?? 14,
@@ -88,15 +95,14 @@ class CustomTextField extends StatelessWidget {
             prefixIcon: _buildPrefixIcon(),
             suffixIcon: isPassword
                 ? IconButton(
-              icon: Icon(
-                obscureText ? Icons.visibility_off : Icons.visibility,
-                color: AppColors.hintGrey,
-                size: 20,
-              ),
-              onPressed: onTogglePassword,
-            )
+                    icon: Icon(
+                      obscureText ? Icons.visibility_off : Icons.visibility,
+                      color: AppColors.hintGrey,
+                      size: 20,
+                    ),
+                    onPressed: onTogglePassword,
+                  )
                 : null,
-
             filled: filled,
             fillColor: backgroundColor,
             contentPadding: EdgeInsets.symmetric(
@@ -106,28 +112,41 @@ class CustomTextField extends StatelessWidget {
             enabledBorder: filled
                 ? OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
-                    borderSide: BorderSide.none,
+                    borderSide: hasError
+                        ? const BorderSide(color: Colors.redAccent, width: 1.5)
+                        : BorderSide.none,
                   )
-                : const UnderlineInputBorder(
+                : UnderlineInputBorder(
                     borderSide: BorderSide(
-                      color: AppColors.fieldBorder,
+                      color: hasError ? Colors.redAccent : AppColors.fieldBorder,
                       width: 1,
                     ),
                   ),
             focusedBorder: filled
                 ? OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
-                    borderSide: BorderSide.none,
+                    borderSide: hasError
+                        ? const BorderSide(color: Colors.redAccent, width: 1.5)
+                        : BorderSide.none,
                   )
-                : const UnderlineInputBorder(
+                : UnderlineInputBorder(
                     borderSide: BorderSide(
-                      color: AppColors.buttonBlue,
+                      color: hasError ? Colors.redAccent : AppColors.buttonBlue,
                       width: 1,
                     ),
                   ),
           ),
-
         ),
+        if (hasError) ...[
+          const SizedBox(height: 6),
+          Text(
+            errorText!,
+            style: const TextStyle(
+              color: Colors.redAccent,
+              fontSize: 12,
+            ),
+          ),
+        ],
       ],
     );
   }

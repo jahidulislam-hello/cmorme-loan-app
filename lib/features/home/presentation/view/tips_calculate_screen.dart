@@ -95,29 +95,34 @@ class _TipsCalculateScreenState extends State<TipsCalculateScreen>
               const SizedBox(height: 48),
 
               /// Tips — each tip stays at its own list position, animates individually
+              // Outer Obx removed — Column itself does not depend on any observable.
+              // Each tip item has its own Obx so only that item rebuilds when tips load,
+              // instead of all 5 AnimatedSlide+AnimatedOpacity wrappers rebuilding at once.
               Expanded(
-                child: Obx(() {
-                  final controller = Get.find<TipsCalculateController>();
-                  return Column(
-                    children: List.generate(_tipCount, (index) {
-                      final isVisible = _visibleTips[index];
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: 24),
-                        child: AnimatedSlide(
-                          offset: isVisible ? Offset.zero : const Offset(0.4, 0),
+                child: Column(
+                  children: List.generate(_tipCount, (index) {
+                    final isVisible = _visibleTips[index];
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 24),
+                      child: AnimatedSlide(
+                        offset:
+                            isVisible ? Offset.zero : const Offset(0.4, 0),
+                        duration: _slideDuration,
+                        curve: Curves.easeOutCubic,
+                        child: AnimatedOpacity(
+                          opacity: isVisible ? 1.0 : 0.0,
                           duration: _slideDuration,
                           curve: Curves.easeOutCubic,
-                          child: AnimatedOpacity(
-                            opacity: isVisible ? 1.0 : 0.0,
-                            duration: _slideDuration,
-                            curve: Curves.easeOutCubic,
-                            child: _buildTipItem(index, controller.tips),
-                          ),
+                          // Inner Obx: scoped to just this tip's text.
+                          child: Obx(() => _buildTipItem(
+                                index,
+                                Get.find<TipsCalculateController>().tips,
+                              )),
                         ),
-                      );
-                    }),
-                  );
-                }),
+                      ),
+                    );
+                  }),
+                ),
               ),
 
               /// Progress Bar or Error State
@@ -169,6 +174,17 @@ class _TipsCalculateScreenState extends State<TipsCalculateScreen>
 
                 return AnimatedBuilder(
                   animation: _progressController,
+                  // Built once and reused every frame — never rebuilt by the animation.
+                  child: const Center(
+                    child: Text(
+                      'Please Wait...',
+                      style: TextStyle(
+                        color: AppColors.white,
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
                   builder: (context, child) {
                     return Column(
                       children: [
@@ -187,16 +203,7 @@ class _TipsCalculateScreenState extends State<TipsCalculateScreen>
                           ),
                         ),
                         const SizedBox(height: 16),
-                        const Center(
-                          child: Text(
-                            'Please Wait...',
-                            style: TextStyle(
-                              color: AppColors.white,
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
+                        child!,
                       ],
                     );
                   },

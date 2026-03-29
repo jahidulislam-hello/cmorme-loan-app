@@ -8,6 +8,8 @@ class CustomPriceField extends StatelessWidget {
   final Color? labelColor;
   final Color? backgroundColor;
   final bool showBorder;
+  final String? errorText;
+  final ValueChanged<String>? onChanged;
 
   const CustomPriceField({
     super.key,
@@ -17,10 +19,14 @@ class CustomPriceField extends StatelessWidget {
     this.labelColor,
     this.backgroundColor,
     this.showBorder = false,
+    this.errorText,
+    this.onChanged,
   });
 
   @override
   Widget build(BuildContext context) {
+    final hasError = errorText != null;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -36,6 +42,7 @@ class CustomPriceField extends StatelessWidget {
           controller: controller,
           keyboardType: TextInputType.number,
           cursorColor: AppColors.white,
+          onChanged: onChanged,
           style: const TextStyle(
             color: AppColors.white,
             fontSize: 14,
@@ -58,29 +65,43 @@ class CustomPriceField extends StatelessWidget {
               vertical: 14,
             ),
             enabledBorder: showBorder
-                ? const UnderlineInputBorder(
+                ? UnderlineInputBorder(
                     borderSide: BorderSide(
-                      color: AppColors.fieldBorder,
+                      color: hasError ? Colors.redAccent : AppColors.fieldBorder,
                       width: 1,
                     ),
                   )
                 : OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
-                    borderSide: BorderSide.none,
+                    borderSide: hasError
+                        ? const BorderSide(color: Colors.redAccent, width: 1.5)
+                        : BorderSide.none,
                   ),
             focusedBorder: showBorder
-                ? const UnderlineInputBorder(
+                ? UnderlineInputBorder(
                     borderSide: BorderSide(
-                      color: AppColors.buttonBlue,
+                      color: hasError ? Colors.redAccent : AppColors.buttonBlue,
                       width: 1,
                     ),
                   )
                 : OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
-                    borderSide: BorderSide.none,
+                    borderSide: hasError
+                        ? const BorderSide(color: Colors.redAccent, width: 1.5)
+                        : BorderSide.none,
                   ),
           ),
         ),
+        if (hasError) ...[
+          const SizedBox(height: 6),
+          Text(
+            errorText!,
+            style: const TextStyle(
+              color: Colors.redAccent,
+              fontSize: 12,
+            ),
+          ),
+        ],
       ],
     );
   }

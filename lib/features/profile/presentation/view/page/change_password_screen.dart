@@ -44,6 +44,8 @@ class ChangePasswordScreen extends GetView<ChangePasswordController> {
                 isPassword: true,
                 obscureText: controller.obscureOldPassword.value,
                 onTogglePassword: controller.toggleOldPasswordVisibility,
+                errorText: controller.oldPasswordError.value,
+                onChanged: (_) => controller.oldPasswordError.value = null,
               )),
               const SizedBox(height: 24),
               Obx(() => CustomTextField(
@@ -54,6 +56,8 @@ class ChangePasswordScreen extends GetView<ChangePasswordController> {
                 isPassword: true,
                 obscureText: controller.obscureNewPassword.value,
                 onTogglePassword: controller.toggleNewPasswordVisibility,
+                errorText: controller.newPasswordError.value,
+                onChanged: (_) => controller.newPasswordError.value = null,
               )),
               const SizedBox(height: 24),
               Obx(() => CustomTextField(
@@ -64,6 +68,8 @@ class ChangePasswordScreen extends GetView<ChangePasswordController> {
                 isPassword: true,
                 obscureText: controller.obscureConfirmPassword.value,
                 onTogglePassword: controller.toggleConfirmPasswordVisibility,
+                errorText: controller.confirmPasswordError.value,
+                onChanged: (_) => controller.confirmPasswordError.value = null,
               )),
               const Spacer(),
               Obx(() => CustomButton(

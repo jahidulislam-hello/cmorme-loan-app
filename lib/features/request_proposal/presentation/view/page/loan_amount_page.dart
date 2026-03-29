@@ -58,17 +58,22 @@ class LoanAmountPage extends GetView<RequestProposalController> {
                       ],
                     ),
                     const SizedBox(height: 24),
-                    CustomPriceField(
-                      label: 'Home Value',
-                      labelColor: AppColors.white,
-                      controller: controller.homeValueController,
-                    ),
+                    Obx(() => CustomPriceField(
+                          label: 'Home Value',
+                          labelColor: AppColors.white,
+                          controller: controller.homeValueController,
+                          errorText: controller.homeValueError.value,
+                          onChanged: (_) => controller.homeValueError.value = null,
+                        )),
                     const SizedBox(height: 24),
-                    CustomPriceField(
-                      label: 'Current Mortgage Balance',
-                      labelColor: AppColors.white,
-                      controller: controller.mortgageAmountController,
-                    ),
+                    Obx(() => CustomPriceField(
+                          label: 'Current Mortgage Balance',
+                          labelColor: AppColors.white,
+                          controller: controller.mortgageAmountController,
+                          errorText: controller.mortgageAmountError.value,
+                          onChanged: (_) =>
+                              controller.mortgageAmountError.value = null,
+                        )),
                   ],
                 ),
               ),

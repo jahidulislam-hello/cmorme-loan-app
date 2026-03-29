@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:reverse_mortage_loan_app/shared/theme/app_colors.dart';
-import 'package:reverse_mortage_loan_app/shared/widgets/custom_shimmer_loading_indicator.dart';
+import 'package:reverse_mortage_loan_app/shared/widgets/custom_cached_network_image.dart';
 
 class LoanImageSection extends StatelessWidget {
   final List<String> imageUrls;
@@ -48,19 +48,10 @@ class LoanImageSection extends StatelessWidget {
                     itemBuilder: (context, index) {
                       return ColoredBox(
                         color: Colors.black,
-                        child: Image.network(
-                          imageUrls[index],
+                        child: CustomCachedNetworkImage(
+                          imageUrl: imageUrls[index],
                           fit: BoxFit.contain,
                           width: double.infinity,
-                          loadingBuilder: (context, child, loadingProgress) {
-                            if (loadingProgress == null) return child;
-                            return const LoanImageShimmer();
-                          },
-                          errorBuilder: (context, error, stackTrace) =>
-                              const Center(
-                            child: Icon(Icons.broken_image,
-                                color: Colors.white54, size: 48),
-                          ),
                         ),
                       );
                     },
