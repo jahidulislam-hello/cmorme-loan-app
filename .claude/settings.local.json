@@ -14,7 +14,12 @@
       "Bash(ls:*)",
       "Bash(find /c/Users/Siam/StudioProjects/reverse_mortage_loan_app/lib -name \"*.dart\" | xargs grep -l -i \"login\\\\|sign_in\\\\|signin\" 2>/dev/null)",
       "Bash(find C:UsersSiamStudioProjectsreverse_mortage_loan_app/lib/features -type d -name *calculate* -o -type d -name *loan*)",
-      "Bash(find /c/Users/Siam/StudioProjects/reverse_mortage_loan_app -type f -name *request*proposal* -o -name *proposal*request*)"
+      "Bash(find /c/Users/Siam/StudioProjects/reverse_mortage_loan_app -type f -name *request*proposal* -o -name *proposal*request*)",
+      "Bash(wc -l /c/Users/Siam/StudioProjects/reverse_mortage_loan_app/lib/features/*/presentation/view/controller/*.dart)",
+      "Bash(xargs wc:*)",
+      "Bash(grep -r \"TextEditingController\\(\\)\" /c/Users/Siam/StudioProjects/reverse_mortage_loan_app/lib/features/*/presentation/view/controller --include=\"*.dart\")",
+      "Bash(grep -r \"\\\\.clear\\(\\)\\\\|\\\\.dispose\\(\\)\" /c/Users/Siam/StudioProjects/reverse_mortage_loan_app/lib/features/*/presentation/view/controller --include=\"*.dart\" -A1)",
+      "Bash(wc -l /c/Users/Siam/StudioProjects/reverse_mortage_loan_app/lib/features/*/presentation/view/binding/*.dart)"
     ]
   }
 }
