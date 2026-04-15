@@ -36,6 +36,7 @@ class LoanDetailsController extends GetxController {
   late final String nonGovtLoanAmount;
   late final String nonGovtCashAvailable;
   late final String? nonGovtDownPayment;
+  late final bool showNonGovtAgeDisclaimer;
 
   @override
   void onInit() {
@@ -78,6 +79,11 @@ class LoanDetailsController extends GetxController {
     nonGovtEligible = _item.nonGovtEligible;
     nonGovtLoanAvailable = _item.nonGovtLoanAvailable;
     nonGovtNotEligibleReason = _item.nonGovtNotEligibleReason;
+
+    final age1 = _item.multipleBorrowerAge1;
+    final age2 = _item.multipleBorrowerAge2;
+    showNonGovtAgeDisclaimer = nonGovtLoanAvailable &&
+        ((age1 != null && age1 < 55) || (age2 != null && age2 < 55));
 
     if (_item.isPurchase) {
       govtLoanAmount = '\$${_numFmt.format(_item.reversePurchaseGovtLoanAmount ?? 0)}';

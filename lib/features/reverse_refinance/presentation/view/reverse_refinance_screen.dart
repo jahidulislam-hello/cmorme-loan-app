@@ -118,12 +118,11 @@ class ReverseRefinanceScreen extends GetView<ReverseRefinanceController> {
                                   left: 20, right: 20, bottom: 20),
                               child: LabeledInputField(
                                 label: 'HOME VALUE',
-                              //  hintText: '1500',
-                              //  prefixIcon: Icons.attach_money,
                                 prefixImagePath: AppImages.dollarIcon,
                                 controller: controller.homeValueController,
                                 labelColor: AppColors.blue300,
                                 errorText: controller.homeValueError.value,
+                                infoText: 'Estimated approximate value of your current home.',
                               ),
                             )),
                           ],
@@ -134,21 +133,69 @@ class ReverseRefinanceScreen extends GetView<ReverseRefinanceController> {
                       if (!controller.isPurchase)
                       Obx(() => LabeledInputField(
                         label: 'Current Mortgage Balance',
-                       // hintText: '1500',
-                      //  prefixIcon: Icons.attach_money,
                         prefixImagePath: AppImages.dollarIcon,
                         controller: controller.mortgageBalanceController,
                         labelColor: AppColors.blue300,
                         errorText: controller.mortgageBalanceValueError.value,
+                        infoText: 'This is the total mortgage balance on your current home. If you do not have a current mortgage, please enter 0.',
                       )),
                       const SizedBox(height: 24),
-                      const Text(
-                        'AGE SET',
-                        style: TextStyle(
-                          color: AppColors.blue300,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
+                      Row(
+                        children: [
+                          const Text(
+                            'AGE SET',
+                            style: TextStyle(
+                              color: AppColors.blue300,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(width: 4),
+                          GestureDetector(
+                            onTap: () {
+                              showDialog(
+                                context: context,
+                                builder: (_) => AlertDialog(
+                                  backgroundColor: AppColors.blue400,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12)),
+                                  title: const Text(
+                                    'Age Set',
+                                    style: TextStyle(
+                                      color: AppColors.white,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  content: const Text(
+                                    'You AND the 2nd borrower\'s age - if you are married, you must include your spouse on the loan.',
+                                    style: TextStyle(
+                                      color: AppColors.hintGrey,
+                                      fontSize: 14,
+                                      height: 1.5,
+                                    ),
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () =>
+                                          Navigator.of(context).pop(),
+                                      child: const Text(
+                                        'Got it',
+                                        style: TextStyle(
+                                            color: AppColors.green500),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                            child: const Icon(
+                              Icons.info_outline,
+                              size: 18,
+                              color: AppColors.hintGrey,
+                            ),
+                          ),
+                        ],
                       ),
 
                       const SizedBox(height: 8),

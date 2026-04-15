@@ -176,6 +176,16 @@ class UserHomeScreen extends GetView<HomeController> {
                 );
               }),
 
+              const SizedBox(height: 16),
+              const Text(
+                'Real Estate Broker - CA Department of Real Estate - LIC #01932729 - NMLS #1064287  |  This material is not from HUD or FHA and has not been approved by HUD or a government agency.',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: AppColors.hintGrey,
+                  fontSize: 10,
+                  height: 1.6,
+                ),
+              ),
               const SizedBox(height: 20),
             ],
           ),

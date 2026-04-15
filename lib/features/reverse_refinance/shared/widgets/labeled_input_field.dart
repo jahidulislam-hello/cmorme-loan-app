@@ -13,6 +13,7 @@ class LabeledInputField extends StatelessWidget {
   final TextInputType keyboardType;
   final Color? labelColor;
   final String? errorText;
+  final String? infoText;
 
   const LabeledInputField({
     super.key,
@@ -25,21 +26,72 @@ class LabeledInputField extends StatelessWidget {
     this.keyboardType = TextInputType.number,
     this.labelColor,
     this.errorText,
+    this.infoText,
   });
+
+  void _showInfoDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        backgroundColor: AppColors.blue400,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        title: Text(
+          label,
+          style: const TextStyle(
+            color: AppColors.white,
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        content: Text(
+          infoText!,
+          style: const TextStyle(
+            color: AppColors.hintGrey,
+            fontSize: 14,
+            height: 1.5,
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text(
+              'Got it',
+              style: TextStyle(color: AppColors.green500),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          label,
-          style: TextStyle(
-            color: labelColor ?? AppColors.green500,
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-            letterSpacing: 0.5,
-          ),
+        Row(
+          children: [
+            Text(
+              label,
+              style: TextStyle(
+                color: labelColor ?? AppColors.green500,
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                letterSpacing: 0.5,
+              ),
+            ),
+            if (infoText != null) ...[
+              const SizedBox(width: 4),
+              GestureDetector(
+                onTap: () => _showInfoDialog(context),
+                child: const Icon(
+                  Icons.info_outline,
+                  size: 18,
+                  color: AppColors.hintGrey,
+                ),
+              ),
+            ],
+          ],
         ),
         const SizedBox(height: 8),
         Container(

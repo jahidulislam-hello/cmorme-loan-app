@@ -5,6 +5,7 @@ import 'package:reverse_mortage_loan_app/shared/widgets/custom_button.dart';
 // import 'package:reverse_mortage_loan_app/shared/widgets/custom_step_progress.dart';
 import 'package:reverse_mortage_loan_app/shared/widgets/custom_text_field.dart';
 import 'package:reverse_mortage_loan_app/features/request_proposal/presentation/view/controller/request_proposal_controller.dart';
+import 'package:reverse_mortage_loan_app/shared/widgets/consent_disclaimer.dart';
 
 class RequestProposalScreen extends GetView<RequestProposalController> {
   const RequestProposalScreen({super.key});
@@ -102,6 +103,7 @@ class RequestProposalScreen extends GetView<RequestProposalController> {
                   ),
                 ),
               ),
+              const ConsentDisclaimer(),
               Padding(
                 padding: const EdgeInsets.only(bottom: 20),
                 child: Obx(() => CustomButton(

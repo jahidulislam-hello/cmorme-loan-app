@@ -10,6 +10,7 @@ import 'package:reverse_mortage_loan_app/core/exceptions/app_exceptions.dart';
 import 'package:reverse_mortage_loan_app/features/reverse_refinance/data/models/calculate_loan_request_model.dart';
 import 'package:reverse_mortage_loan_app/features/reverse_refinance/domain/usecases/calculate_loan_usecase.dart';
 import 'package:reverse_mortage_loan_app/features/reverse_refinance/domain/usecases/upload_file_usecase.dart';
+import 'package:reverse_mortage_loan_app/shared/theme/app_colors.dart';
 
 
 class ReverseRefinanceController extends GetxController {
@@ -183,6 +184,7 @@ class ReverseRefinanceController extends GetxController {
   }
 
   Future<void> onNext() async {
+    // Step 1: Required field validation
     bool hasError = false;
     if (homeValueController.text.trim().isEmpty) {
       homeValueError.value = 'Please enter home value.';
@@ -190,7 +192,7 @@ class ReverseRefinanceController extends GetxController {
     } else {
       homeValueError.value = null;
     }
-    if ( !isPurchase && mortgageBalanceController.text.trim().isEmpty) {
+    if (!isPurchase && mortgageBalanceController.text.trim().isEmpty) {
       mortgageBalanceValueError.value = 'Please enter mortgage balance.';
       hasError = true;
     } else {
@@ -198,7 +200,71 @@ class ReverseRefinanceController extends GetxController {
     }
     if (hasError) return;
 
+    // Step 2: Two-borrower validations
+    if (isMultipleBorrower.value) {
+      final age1 = int.tryParse(firstBorrowerAgeController.text.trim());
+      final age2 = int.tryParse(secondBorrowerAgeController.text.trim());
 
+      // Block if BOTH borrowers are under 55
+      if (age1 != null && age2 != null && age1 < 55 && age2 < 55) {
+        await Get.dialog(
+          AlertDialog(
+            backgroundColor: AppColors.blue400,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12)),
+            title: const Text(
+              'Age Requirement',
+              style: TextStyle(
+                  color: AppColors.white, fontWeight: FontWeight.bold),
+            ),
+            content: const Text(
+              'For a Non-Government Reverse Mortgage, at least one borrower must be 55 years or older.',
+              style: TextStyle(
+                  color: AppColors.hintGrey, fontSize: 14, height: 1.5),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Get.back(),
+                child: const Text('OK',
+                    style: TextStyle(color: AppColors.green500)),
+              ),
+            ],
+          ),
+        );
+        return;
+      }
+
+      // Married confirmation popup if married box not checked
+      if (!isMarried.value) {
+        final confirmed = await Get.dialog<bool>(
+          AlertDialog(
+            backgroundColor: AppColors.blue400,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12)),
+            content: const Text(
+              'You did not check if both borrowers are married. If this is not true, please go back and check "Married". Otherwise, please confirm to resume calculation.',
+              style: TextStyle(
+                  color: AppColors.hintGrey, fontSize: 14, height: 1.5),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Get.back(result: false),
+                child: const Text('Go Back',
+                    style: TextStyle(color: AppColors.hintGrey)),
+              ),
+              TextButton(
+                onPressed: () => Get.back(result: true),
+                child: const Text('Confirm',
+                    style: TextStyle(color: AppColors.green500)),
+              ),
+            ],
+          ),
+        );
+        if (confirmed != true) return;
+      }
+    }
+
+    // Step 3: Build request and proceed
     final request = CalculateLoanRequestModel(
       financeType: financeType,
       homeValue: double.parse(homeValueController.text.trim()),

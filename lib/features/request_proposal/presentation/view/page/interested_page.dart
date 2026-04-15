@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:reverse_mortage_loan_app/shared/theme/app_colors.dart';
 import 'package:reverse_mortage_loan_app/shared/widgets/custom_button.dart';
 import 'package:reverse_mortage_loan_app/features/request_proposal/presentation/view/controller/request_proposal_controller.dart';
+import 'package:reverse_mortage_loan_app/shared/widgets/consent_disclaimer.dart';
 
 class InterestedPage extends GetView<RequestProposalController> {
   const InterestedPage({super.key});
@@ -120,6 +121,7 @@ class InterestedPage extends GetView<RequestProposalController> {
                   ],
                 ),
               ),
+              const ConsentDisclaimer(),
               Padding(
                 padding: const EdgeInsets.only(bottom: 20),
                 child: CustomButton(
