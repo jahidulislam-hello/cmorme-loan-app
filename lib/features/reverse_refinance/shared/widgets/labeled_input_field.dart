@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:reverse_mortage_loan_app/shared/theme/app_colors.dart';
+import 'package:reverse_mortage_loan_app/shared/widgets/smooth_dialog.dart';
 
 class LabeledInputField extends StatelessWidget {
   final String label;
@@ -30,38 +31,7 @@ class LabeledInputField extends StatelessWidget {
   });
 
   void _showInfoDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (_) => AlertDialog(
-        backgroundColor: AppColors.blue400,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        title: Text(
-          label,
-          style: const TextStyle(
-            color: AppColors.white,
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        content: Text(
-          infoText!,
-          style: const TextStyle(
-            color: AppColors.hintGrey,
-            fontSize: 14,
-            height: 1.5,
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text(
-              'Got it',
-              style: TextStyle(color: AppColors.green500),
-            ),
-          ),
-        ],
-      ),
-    );
+    showSmoothInfoDialog(context: context, title: label, content: infoText!);
   }
 
   @override

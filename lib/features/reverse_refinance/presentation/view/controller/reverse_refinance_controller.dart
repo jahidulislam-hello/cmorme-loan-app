@@ -209,7 +209,7 @@ class ReverseRefinanceController extends GetxController {
       if (age1 != null && age2 != null && age1 < 55 && age2 < 55) {
         await Get.dialog(
           AlertDialog(
-            backgroundColor: AppColors.blue400,
+            backgroundColor: AppColors.primary,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12)),
             title: const Text(
@@ -238,7 +238,7 @@ class ReverseRefinanceController extends GetxController {
       if (!isMarried.value) {
         final confirmed = await Get.dialog<bool>(
           AlertDialog(
-            backgroundColor: AppColors.blue400,
+            backgroundColor: AppColors.primary,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12)),
             content: const Text(

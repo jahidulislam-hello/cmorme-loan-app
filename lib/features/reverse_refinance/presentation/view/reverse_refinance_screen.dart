@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:reverse_mortage_loan_app/features/reverse_refinance/shared/widgets/borrower_toggle.dart';
 import 'package:reverse_mortage_loan_app/shared/widgets/custom_shimmer_loading_indicator.dart';
 import 'package:reverse_mortage_loan_app/features/reverse_refinance/shared/widgets/labeled_input_field.dart';
+import 'package:reverse_mortage_loan_app/shared/widgets/smooth_dialog.dart';
 import 'package:reverse_mortage_loan_app/features/reverse_refinance/shared/widgets/photo_upload_section.dart';
 import 'package:reverse_mortage_loan_app/shared/app_image/app_images.dart';
 import 'package:reverse_mortage_loan_app/shared/theme/app_colors.dart';
@@ -152,43 +153,12 @@ class ReverseRefinanceScreen extends GetView<ReverseRefinanceController> {
                           ),
                           const SizedBox(width: 4),
                           GestureDetector(
-                            onTap: () {
-                              showDialog(
-                                context: context,
-                                builder: (_) => AlertDialog(
-                                  backgroundColor: AppColors.blue400,
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(12)),
-                                  title: const Text(
-                                    'Age Set',
-                                    style: TextStyle(
-                                      color: AppColors.white,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  content: const Text(
-                                    'You AND the 2nd borrower\'s age - if you are married, you must include your spouse on the loan.',
-                                    style: TextStyle(
-                                      color: AppColors.hintGrey,
-                                      fontSize: 14,
-                                      height: 1.5,
-                                    ),
-                                  ),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () =>
-                                          Navigator.of(context).pop(),
-                                      child: const Text(
-                                        'Got it',
-                                        style: TextStyle(
-                                            color: AppColors.green500),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            },
+                            onTap: () => showSmoothInfoDialog(
+                              context: context,
+                              title: 'Age Set',
+                              content:
+                                  'You AND the 2nd borrower\'s age - if you are married, you must include your spouse on the loan.',
+                            ),
                             child: const Icon(
                               Icons.info_outline,
                               size: 18,

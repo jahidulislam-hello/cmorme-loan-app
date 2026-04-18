@@ -101,15 +101,6 @@ class UserHomeScreen extends GetView<HomeController> {
               ),
 
               const SizedBox(height: 28),
-              CustomButton(
-                text: 'Reverse Mortgage FAQ',
-                onPressed:(){
-                  Get.toNamed(RouteNames.faqQuestions);
-                },
-                backgroundColor: AppColors.blue600,
-                textColor: AppColors.primary,
-              ),
-              const SizedBox(height: 28),
               /// Recent Calculation Header
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -176,6 +167,17 @@ class UserHomeScreen extends GetView<HomeController> {
                 );
               }),
 
+
+              const SizedBox(height: 28),
+              CustomButton(
+                text: 'Reverse Mortgage FAQ',
+                onPressed:(){
+                  Get.toNamed(RouteNames.faqQuestions);
+                },
+                backgroundColor: AppColors.blue600,
+                textColor: AppColors.primary,
+              ),
+              const SizedBox(height: 28),
               const SizedBox(height: 16),
               const Text(
                 'Real Estate Broker - CA Department of Real Estate - LIC #01932729 - NMLS #1064287  |  This material is not from HUD or FHA and has not been approved by HUD or a government agency.',

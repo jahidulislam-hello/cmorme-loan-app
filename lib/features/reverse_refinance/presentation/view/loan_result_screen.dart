@@ -231,6 +231,7 @@ class LoanResultScreen extends StatelessWidget {
                         ),
                       ],
 
+                      const SizedBox(height: 24),
                       const Spacer(),
 
                       /// Start New Calculation Button

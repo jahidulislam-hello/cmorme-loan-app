@@ -16,7 +16,7 @@ class _TipsCalculateScreenState extends State<TipsCalculateScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _progressController;
 
-  static const int _tipCount = 5;
+  static const int _tipCount = 4;
   late List<bool> _visibleTips;
 
   static const _slideDuration = Duration(milliseconds: 600);
@@ -30,7 +30,7 @@ class _TipsCalculateScreenState extends State<TipsCalculateScreen>
 
     _progressController = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 10),
+      duration: const Duration(seconds: 15),
     )..forward();
 
     final controller = Get.find<TipsCalculateController>();
@@ -78,7 +78,7 @@ class _TipsCalculateScreenState extends State<TipsCalculateScreen>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 48),
+              const SizedBox(height: 32),
 
               /// Title
               const Center(
@@ -92,7 +92,7 @@ class _TipsCalculateScreenState extends State<TipsCalculateScreen>
                 ),
               ),
 
-              const SizedBox(height: 48),
+              const SizedBox(height: 32),
 
               /// Tips — each tip stays at its own list position, animates individually
               // Outer Obx removed — Column itself does not depend on any observable.
@@ -103,7 +103,7 @@ class _TipsCalculateScreenState extends State<TipsCalculateScreen>
                   children: List.generate(_tipCount, (index) {
                     final isVisible = _visibleTips[index];
                     return Padding(
-                      padding: const EdgeInsets.only(bottom: 24),
+                      padding: const EdgeInsets.only(bottom: 16),
                       child: AnimatedSlide(
                         offset:
                             isVisible ? Offset.zero : const Offset(0.4, 0),
@@ -267,7 +267,7 @@ class _TipsCalculateScreenState extends State<TipsCalculateScreen>
             index < tips.length ? tips[index] : '',
             style: const TextStyle(
               color: AppColors.white,
-              fontSize: 18,
+              fontSize: 20,
               height: 1.5,
               fontWeight: FontWeight.w500,
             ),
