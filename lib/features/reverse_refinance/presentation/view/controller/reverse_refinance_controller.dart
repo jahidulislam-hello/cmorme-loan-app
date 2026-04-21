@@ -242,7 +242,8 @@ class ReverseRefinanceController extends GetxController {
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12)),
             content: const Text(
-              'You did not check if both borrowers are married. If this is not true, please go back and check "Married". Otherwise, please confirm to resume calculation.',
+             // 'You did not check if both borrowers are married. If this is not true, please go back and check "Married". Otherwise, please confirm to resume calculation.',
+              'If borrowers are married to each other, then please press "Go Back" and check "Married". Otherwise please press Confirm.',
               style: TextStyle(
                   color: AppColors.hintGrey, fontSize: 14, height: 1.5),
             ),
