@@ -115,7 +115,7 @@ class ReverseRefinanceController extends GetxController {
         } on NoInternetException catch (e) {
           _logger.w('No internet uploading image: $e');
           noInternet = true;
-          break; // no point continuing — all subsequent uploads will fail too
+          break;
         } on ServerException catch (e) {
           _logger.e('Server error uploading image: $e');
           failedCount++;
@@ -152,9 +152,7 @@ class ReverseRefinanceController extends GetxController {
     }
   }
 
-  /// image_picker skips compression for PNG files entirely.
-  /// Uses flutter_image_compress (native codec) to convert PNG → JPEG and
-  /// resize to max 1280px wide. Runs on a native thread — no main thread blocking.
+
   Future<File> _prepareFile(File file) async {
     final isPng = file.path.toLowerCase().endsWith('.png');
     if (!isPng) return file;
@@ -184,7 +182,7 @@ class ReverseRefinanceController extends GetxController {
   }
 
   Future<void> onNext() async {
-    // Step 1: Required field validation
+
     bool hasError = false;
     if (homeValueController.text.trim().isEmpty) {
       homeValueError.value = 'Please enter home value.';
@@ -200,12 +198,12 @@ class ReverseRefinanceController extends GetxController {
     }
     if (hasError) return;
 
-    // Step 2: Two-borrower validations
+
     if (isMultipleBorrower.value) {
       final age1 = int.tryParse(firstBorrowerAgeController.text.trim());
       final age2 = int.tryParse(secondBorrowerAgeController.text.trim());
 
-      // Block if BOTH borrowers are under 55
+
       if (age1 != null && age2 != null && age1 < 55 && age2 < 55) {
         await Get.dialog(
           AlertDialog(
@@ -265,7 +263,7 @@ class ReverseRefinanceController extends GetxController {
       }
     }
 
-    // Step 3: Build request and proceed
+
     final request = CalculateLoanRequestModel(
       financeType: financeType,
       homeValue: double.parse(homeValueController.text.trim()),

@@ -6,12 +6,14 @@ class ProfileOptionContainer extends StatelessWidget {
   final String? iconPath;
   final String title;
   final VoidCallback? onTap;
+  final Color? backgroundColor;
 
   const ProfileOptionContainer({
     super.key,
     this.iconPath,
     required this.title,
     this.onTap,
+    this.backgroundColor,
   });
 
   @override
@@ -21,7 +23,7 @@ class ProfileOptionContainer extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         decoration: BoxDecoration(
-          color: AppColors.containerHighlight,
+          color: backgroundColor ?? AppColors.containerHighlight,
           borderRadius: BorderRadius.circular(12),
         ),
         child: Row(

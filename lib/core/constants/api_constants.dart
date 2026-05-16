@@ -1,6 +1,8 @@
 class ApiConstants {
-  static const String baseUrl = 'https://sayedsabbir2000.sobhoy.com/api/v1';
-  static const String imageBaseUrl = 'http://sayedsabbir2000.sobhoy.com';
+ // static const String baseUrl = 'https://sayedsabbir2000.sobhoy.com/api/v1';
+  static const String baseUrl = 'https://api.rmeducators.com/api/v1';
+ // static const String imageBaseUrl = 'http://sayedsabbir2000.sobhoy.com';
+  static const String imageBaseUrl = 'https://api.rmeducators.com';
 
   // Auth
   static const String register = '/user/register';
@@ -15,6 +17,7 @@ class ApiConstants {
   static const String myProfile = '/user/my-profile';
   static const String updateProfile = '/user/update';
   static const String changePassword = '/user/change-password';
+  static const String deleteAccount = '/user/delete';
 
   // Management
   static const String legalPrivacy = '/management/privacy';
