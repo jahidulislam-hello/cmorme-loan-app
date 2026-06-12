@@ -32,141 +32,152 @@ class PhonePage extends GetView<RequestProposalController> {
         ),
       ),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            children: [
-              const SizedBox(height: 40),
-              Expanded(
-                child: SingleChildScrollView(
-                  physics: const BouncingScrollPhysics(),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            return SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              physics: const BouncingScrollPhysics(),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                child: IntrinsicHeight(
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        'Phone No.',
-                        style: TextStyle(
-                          color: AppColors.blue200,
-                          fontSize: 13,
+                      const SizedBox(height: 40),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'Phone No.',
+                              style: TextStyle(
+                                color: AppColors.blue200,
+                                fontSize: 13,
+                              ),
+                            ),
+                            const SizedBox(height: 6),
+                            IntrinsicHeight(
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 12),
+                                    decoration: const BoxDecoration(
+                                      color: AppColors.containerHighlight,
+                                      borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(8),
+                                        bottomLeft: Radius.circular(8),
+                                      ),
+                                    ),
+                                    child: const Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Text('🇺🇸',
+                                            style: TextStyle(fontSize: 18)),
+                                        SizedBox(width: 6),
+                                        Text(
+                                          '+1',
+                                          style: TextStyle(
+                                            color: AppColors.white,
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  // Divider
+                                  Container(
+                                    width: 1,
+                                    color: AppColors.primary,
+                                  ),
+                                  // Phone number input
+                                  Expanded(
+                                    child: TextField(
+                                      controller: controller.phoneController,
+                                      keyboardType: TextInputType.phone,
+                                      inputFormatters: [
+                                        FilteringTextInputFormatter.digitsOnly,
+                                      ],
+                                      cursorColor: AppColors.white,
+                                      style: const TextStyle(
+                                        color: AppColors.white,
+                                        fontSize: 14,
+                                      ),
+                                      decoration: const InputDecoration(
+                                        hintText: 'Phone No.',
+                                        hintStyle: TextStyle(
+                                          color: AppColors.hintGrey,
+                                          fontSize: 14,
+                                        ),
+                                        filled: true,
+                                        fillColor: AppColors.containerHighlight,
+                                        contentPadding: EdgeInsets.symmetric(
+                                          horizontal: 12,
+                                          vertical: 14,
+                                        ),
+                                        enabledBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.only(
+                                            topRight: Radius.circular(8),
+                                            bottomRight: Radius.circular(8),
+                                          ),
+                                          borderSide: BorderSide.none,
+                                        ),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.only(
+                                            topRight: Radius.circular(8),
+                                            bottomRight: Radius.circular(8),
+                                          ),
+                                          borderSide: BorderSide.none,
+                                        ),
+                                      ),
+                                      onChanged: (value) {
+                                        controller.phoneCompleteNumber =
+                                            '+1$value';
+                                        if (value.isNotEmpty) {
+                                          controller.phoneError.value = null;
+                                        }
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Obx(() {
+                              if (controller.phoneError.value == null) {
+                                return const SizedBox.shrink();
+                              }
+                              return Padding(
+                                padding: const EdgeInsets.only(top: 6, left: 4),
+                                child: Text(
+                                  controller.phoneError.value!,
+                                  style: const TextStyle(
+                                    color: Colors.redAccent,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              );
+                            }),
+                            const SizedBox(height: 30),
+                          ],
                         ),
                       ),
-                      const SizedBox(height: 6),
-                      IntrinsicHeight(
-                        child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 12),
-                            decoration: const BoxDecoration(
-                              color: AppColors.containerHighlight,
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(8),
-                                bottomLeft: Radius.circular(8),
-                              ),
-                            ),
-                            child: const Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text('🇺🇸', style: TextStyle(fontSize: 18)),
-                                SizedBox(width: 6),
-                                Text(
-                                  '+1',
-                                  style: TextStyle(
-                                    color: AppColors.white,
-                                    fontSize: 14,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          // Divider
-                          Container(
-                            width: 1,
-                            color: AppColors.primary,
-                          ),
-                          // Phone number input
-                          Expanded(
-                            child: TextField(
-                              controller: controller.phoneController,
-                              keyboardType: TextInputType.phone,
-                              inputFormatters: [
-                                FilteringTextInputFormatter.digitsOnly,
-                              ],
-                              cursorColor: AppColors.white,
-                              style: const TextStyle(
-                                color: AppColors.white,
-                                fontSize: 14,
-                              ),
-                              decoration: const InputDecoration(
-                                hintText: 'Phone No.',
-                                hintStyle: TextStyle(
-                                  color: AppColors.hintGrey,
-                                  fontSize: 14,
-                                ),
-                                filled: true,
-                                fillColor: AppColors.containerHighlight,
-                                contentPadding: EdgeInsets.symmetric(
-                                  horizontal: 12,
-                                  vertical: 14,
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.only(
-                                    topRight: Radius.circular(8),
-                                    bottomRight: Radius.circular(8),
-                                  ),
-                                  borderSide: BorderSide.none,
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.only(
-                                    topRight: Radius.circular(8),
-                                    bottomRight: Radius.circular(8),
-                                  ),
-                                  borderSide: BorderSide.none,
-                                ),
-                              ),
-                              onChanged: (value) {
-                                controller.phoneCompleteNumber = '+1$value';
-                                if (value.isNotEmpty) {
-                                  controller.phoneError.value = null;
-                                }
-                              },
-                            ),
-                          ),
-                        ],
+                      const ConsentDisclaimer(),
+                      const SizedBox(height: 12),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 20),
+                        child: CustomButton(
+                          text: 'Next',
+                          onPressed: controller.goToInterested,
+                          backgroundColor: AppColors.buttonBlue,
+                          textColor: AppColors.white,
                         ),
                       ),
-                      Obx(() {
-                        if (controller.phoneError.value == null) {
-                          return const SizedBox.shrink();
-                        }
-                        return Padding(
-                          padding: const EdgeInsets.only(top: 6, left: 4),
-                          child: Text(
-                            controller.phoneError.value!,
-                            style: const TextStyle(
-                              color: Colors.redAccent,
-                              fontSize: 12,
-                            ),
-                          ),
-                        );
-                      }),
-                    ]
+                    ],
                   ),
                 ),
               ),
-              const ConsentDisclaimer(),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 20),
-                child: CustomButton(
-                  text: 'Next',
-                  onPressed: controller.goToInterested,
-                  backgroundColor: AppColors.buttonBlue,
-                  textColor: AppColors.white,
-                ),
-              ),
-            ],
-          ),
+            );
+          },
         ),
       ),
     );

@@ -32,54 +32,65 @@ class CityStatePage extends GetView<RequestProposalController> {
         ),
       ),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            children: [
-              const SizedBox(height: 40),
-              Expanded(
-                child: SingleChildScrollView(
-                  physics: const BouncingScrollPhysics(),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            return SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              physics: const BouncingScrollPhysics(),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                child: IntrinsicHeight(
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Obx(() => CustomTextField(
-                            label: 'City',
-                            hintText: 'City Name',
-                            labelColor: AppColors.blue200,
-                            controller: controller.cityController,
-                            filled: true,
-                            backgroundColor: AppColors.containerHighlight,
-                            errorText: controller.cityError.value,
-                            onChanged: (_) => controller.cityError.value = null,
-                          )),
-                      const SizedBox(height: 20),
-                      Obx(() => CustomTextField(
-                            label: 'State Code',
-                            hintText: 'Code',
-                            labelColor: AppColors.blue200,
-                            controller: controller.stateCodeController,
-                            filled: true,
-                            backgroundColor: AppColors.containerHighlight,
-                            errorText: controller.stateCodeError.value,
-                            onChanged: (_) => controller.stateCodeError.value = null,
-                          )),
+                      const SizedBox(height: 40),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Obx(() => CustomTextField(
+                                  label: 'City',
+                                  hintText: 'City Name',
+                                  labelColor: AppColors.blue200,
+                                  controller: controller.cityController,
+                                  filled: true,
+                                  backgroundColor: AppColors.containerHighlight,
+                                  errorText: controller.cityError.value,
+                                  onChanged: (_) =>
+                                      controller.cityError.value = null,
+                                )),
+                            const SizedBox(height: 20),
+                            Obx(() => CustomTextField(
+                                  label: 'State Code',
+                                  hintText: 'Code',
+                                  labelColor: AppColors.blue200,
+                                  controller: controller.stateCodeController,
+                                  filled: true,
+                                  backgroundColor: AppColors.containerHighlight,
+                                  errorText: controller.stateCodeError.value,
+                                  onChanged: (_) =>
+                                      controller.stateCodeError.value = null,
+                                )),
+                            const SizedBox(height: 30),
+                          ],
+                        ),
+                      ),
+                      const ConsentDisclaimer(),
+                      const SizedBox(height: 12),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 20),
+                        child: CustomButton(
+                          text: 'Next',
+                          onPressed: controller.goToPhonePage,
+                          backgroundColor: AppColors.buttonBlue,
+                          textColor: AppColors.white,
+                        ),
+                      ),
                     ],
                   ),
                 ),
               ),
-              const ConsentDisclaimer(),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 20),
-                child: CustomButton(
-                  text: 'Next',
-                  onPressed: controller.goToPhonePage,
-                  backgroundColor: AppColors.buttonBlue,
-                  textColor: AppColors.white,
-                ),
-              ),
-            ],
-          ),
+            );
+          },
         ),
       ),
     );

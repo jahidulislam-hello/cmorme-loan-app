@@ -145,13 +145,14 @@ class LoanDetailsScreen extends GetView<LoanDetailsController> {
                       ),
 
                       const SizedBox(height: 24),
-                      if (controller.govtLoanAvailable)
+                      if (controller.govtLoanAvailable || controller.rawGovtCashAvailable < 0)
                         EstimatedMortgageSection(
                           title: 'Estimated Government Insured Reverse Mortgage',
                           primaryLabel: 'Loan Amount',
                           primaryIconPath: AppImages.loanAmountIcon,
                           primaryAmount: controller.govtLoanAmount,
                           cashAvailable: controller.govtCashAvailable,
+                          cashAvailableLabel: controller.govtCashAvailableLabel,
                           downPayment: controller.govtDownPayment,
                         )
                       else if (controller.govtNotEligibleReason != null)
@@ -167,13 +168,14 @@ class LoanDetailsScreen extends GetView<LoanDetailsController> {
                         ),
 
                       const SizedBox(height: 24),
-                      if (controller.nonGovtLoanAvailable)
+                      if (controller.nonGovtLoanAvailable || controller.rawNonGovtCashAvailable < 0)
                         EstimatedMortgageSection(
                           title: 'Estimated Non-Govt Insured Reverse Mortgage',
                           primaryLabel: 'Loan Amount',
                           primaryIconPath: AppImages.loanAmountIcon,
                           primaryAmount: controller.nonGovtLoanAmount,
                           cashAvailable: controller.nonGovtCashAvailable,
+                          cashAvailableLabel: controller.nonGovtCashAvailableLabel,
                           downPayment: controller.nonGovtDownPayment,
                         )
                       else if (controller.nonGovtNotEligibleReason != null)

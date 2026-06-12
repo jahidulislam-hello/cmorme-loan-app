@@ -146,7 +146,7 @@ class LoanResultScreen extends StatelessWidget {
                       const SizedBox(height: 16),
 
                       /// Estimated Government Insured Reverse Mortgage
-                      if (result?.govtLoanAvailable == true)
+                      if (result?.govtLoanAvailable == true || (result?.reverseRefinanceGovtCashAvailable ?? 0) < 0)
                         LoanEstimateCard(
                           title: 'Estimated Government Insured\nReverse Mortgage',
                           loanAmount: isPurchase
@@ -154,7 +154,10 @@ class LoanResultScreen extends StatelessWidget {
                               : _fmt(result?.reverseRefinanceGovtLoanAmount),
                           cashAvailable: isPurchase
                               ? null
-                              : _fmt(result?.reverseRefinanceGovtCashAvailable),
+                              : _fmt(result?.reverseRefinanceGovtCashAvailable?.abs()),
+                          cashAvailableLabel: (result?.reverseRefinanceGovtCashAvailable ?? 0) < 0
+                              ? 'Short to close by:'
+                              : 'Cash Available',
                           downPayment: isPurchase
                               ? _fmt(result?.reversePurchaseGovtDownPayment)
                               : null,
@@ -174,7 +177,7 @@ class LoanResultScreen extends StatelessWidget {
                       const SizedBox(height: 20),
 
                       /// Estimated Non-Government Insured Reverse Mortgage
-                      if (result?.nonGovtLoanAvailable == true)
+                      if (result?.nonGovtLoanAvailable == true || (result?.reverseRefinanceNonGovtCashAvailable ?? 0) < 0)
                         LoanEstimateCard(
                           title: 'Estimated Non-Government Insured\nReverse Mortgage',
                           loanAmount: isPurchase
@@ -182,7 +185,10 @@ class LoanResultScreen extends StatelessWidget {
                               : _fmt(result?.reverseRefinanceNonGovtLoanAmount),
                           cashAvailable: isPurchase
                               ? null
-                              : _fmt(result?.reverseRefinanceNonGovtCashAvailable),
+                              : _fmt(result?.reverseRefinanceNonGovtCashAvailable?.abs()),
+                          cashAvailableLabel: (result?.reverseRefinanceNonGovtCashAvailable ?? 0) < 0
+                              ? 'Short to close by:'
+                              : 'Cash Available',
                           downPayment: isPurchase
                               ? _fmt(result?.reversePurchaseNonGovtDownPayment)
                               : null,

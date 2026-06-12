@@ -33,89 +33,95 @@ class RequestProposalScreen extends GetView<RequestProposalController> {
         ),
       ),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            children: [
-              const SizedBox(height: 8),
-              // Obx(() => CustomStepProgress(
-              //   totalSteps: 8,
-              //   currentStep: controller.currentStep.value,
-              //   onStepTap: controller.goToStep,
-              // )),
-              const SizedBox(height: 32),
-              Expanded(
-                child: SingleChildScrollView(
-                  physics: const BouncingScrollPhysics(),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            return SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              physics: const BouncingScrollPhysics(),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                child: IntrinsicHeight(
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Row(
-                        children: [
-                          Icon(Icons.info_outline,
-                              color: AppColors.blue600, size: 24),
-                          SizedBox(width: 8),
-                          Text(
-                            'Basic Information',
-                            style: TextStyle(
-                              color: AppColors.white,
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
+                      const SizedBox(height: 32),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Row(
+                              children: [
+                                Icon(Icons.info_outline,
+                                    color: AppColors.blue600, size: 24),
+                                SizedBox(width: 8),
+                                Text(
+                                  'Basic Information',
+                                  style: TextStyle(
+                                    color: AppColors.white,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-                        ],
+                            const SizedBox(height: 24),
+                            Obx(() => CustomTextField(
+                                  label: 'Full Name',
+                                  hintText: 'Full Name',
+                                  labelColor: AppColors.blue200,
+                                  controller: controller.fullNameController,
+                                  filled: true,
+                                  backgroundColor: AppColors.containerHighlight,
+                                  errorText: controller.fullNameError.value,
+                                  onChanged: (_) =>
+                                      controller.fullNameError.value = null,
+                                )),
+                            const SizedBox(height: 20),
+                            Obx(() => CustomTextField(
+                                  label: 'Last Name',
+                                  hintText: 'Last Name',
+                                  labelColor: AppColors.blue200,
+                                  controller: controller.lastNameController,
+                                  filled: true,
+                                  backgroundColor: AppColors.containerHighlight,
+                                  errorText: controller.lastNameError.value,
+                                  onChanged: (_) =>
+                                      controller.lastNameError.value = null,
+                                )),
+                            const SizedBox(height: 20),
+                            Obx(() => CustomTextField(
+                                  label: 'Email',
+                                  hintText: 'Email',
+                                  labelColor: AppColors.blue200,
+                                  controller: controller.emailController,
+                                  keyboardType: TextInputType.emailAddress,
+                                  filled: true,
+                                  backgroundColor: AppColors.containerHighlight,
+                                  errorText: controller.emailError.value,
+                                  onChanged: (_) =>
+                                      controller.emailError.value = null,
+                                )),
+                            const SizedBox(height: 30),
+                          ],
+                        ),
                       ),
-                      const SizedBox(height: 24),
-                      Obx(() => CustomTextField(
-                            label: 'Full Name',
-                            hintText: 'Full Name',
-                            labelColor: AppColors.blue200,
-                            controller: controller.fullNameController,
-                            filled: true,
-                            backgroundColor: AppColors.containerHighlight,
-                            errorText: controller.fullNameError.value,
-                            onChanged: (_) => controller.fullNameError.value = null,
-                          )),
-                      const SizedBox(height: 20),
-                      Obx(() => CustomTextField(
-                            label: 'Last Name',
-                            hintText: 'Last Name',
-                            labelColor: AppColors.blue200,
-                            controller: controller.lastNameController,
-                            filled: true,
-                            backgroundColor: AppColors.containerHighlight,
-                            errorText: controller.lastNameError.value,
-                            onChanged: (_) => controller.lastNameError.value = null,
-                          )),
-                      const SizedBox(height: 20),
-                      Obx(() => CustomTextField(
-                            label: 'Email',
-                            hintText: 'Email',
-                            labelColor: AppColors.blue200,
-                            controller: controller.emailController,
-                            keyboardType: TextInputType.emailAddress,
-                            filled: true,
-                            backgroundColor: AppColors.containerHighlight,
-                            errorText: controller.emailError.value,
-                            onChanged: (_) => controller.emailError.value = null,
-                          )),
+                      const ConsentDisclaimer(),
+                      const SizedBox(height: 12),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 20),
+                        child: Obx(() => CustomButton(
+                              text: 'Next',
+                              onPressed: controller.goToAddress,
+                              backgroundColor: AppColors.buttonBlue,
+                              textColor: AppColors.white,
+                              isLoading: controller.isLoading.value,
+                            )),
+                      ),
                     ],
                   ),
                 ),
               ),
-              const ConsentDisclaimer(),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 20),
-                child: Obx(() => CustomButton(
-                      text: 'Next',
-                      onPressed: controller.goToAddress,
-                      backgroundColor: AppColors.buttonBlue,
-                      textColor: AppColors.white,
-                      isLoading: controller.isLoading.value,
-                    )),
-              ),
-            ],
-          ),
+            );
+          },
         ),
       ),
     );

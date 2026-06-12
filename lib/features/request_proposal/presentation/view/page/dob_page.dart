@@ -32,35 +32,47 @@ class DobPage extends GetView<RequestProposalController> {
         ),
       ),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            children: [
-              const SizedBox(height: 40),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    CustomDatePickerField(
-                      label: 'Spouse Date of Birth',
-                      labelColor: AppColors.white,
-                      controller: controller.dobController,
-                    ),
-                  ],
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            return SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              physics: const BouncingScrollPhysics(),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                child: IntrinsicHeight(
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 40),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            CustomDatePickerField(
+                              label: 'Spouse Date of Birth',
+                              labelColor: AppColors.white,
+                              controller: controller.dobController,
+                            ),
+                            const SizedBox(height: 30),
+                          ],
+                        ),
+                      ),
+                      const ConsentDisclaimer(),
+                      const SizedBox(height: 12),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 20),
+                        child: CustomButton(
+                          text: 'Next',
+                          onPressed: controller.goToInquiry,
+                          backgroundColor: AppColors.buttonBlue,
+                          textColor: AppColors.white,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-              const ConsentDisclaimer(),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 20),
-                child: CustomButton(
-                  text: 'Next',
-                  onPressed: controller.goToInquiry,
-                  backgroundColor: AppColors.buttonBlue,
-                  textColor: AppColors.white,
-                ),
-              ),
-            ],
-          ),
+            );
+          },
         ),
       ),
     );

@@ -8,6 +8,7 @@ class LoanEstimateCard extends StatelessWidget {
   final String title;
   final String loanAmount;
   final String? cashAvailable;
+  final String? cashAvailableLabel;
   final String? downPayment;
 
   const LoanEstimateCard({
@@ -15,6 +16,7 @@ class LoanEstimateCard extends StatelessWidget {
     required this.title,
     required this.loanAmount,
     this.cashAvailable,
+    this.cashAvailableLabel,
     this.downPayment,
   });
 
@@ -75,9 +77,9 @@ class LoanEstimateCard extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        'Cash Available',
-                        style: TextStyle(
+                      Text(
+                        cashAvailableLabel ?? 'Cash Available',
+                        style: const TextStyle(
                           color: AppColors.white,
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
