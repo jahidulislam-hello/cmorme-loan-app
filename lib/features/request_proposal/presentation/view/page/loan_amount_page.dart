@@ -6,6 +6,7 @@ import 'package:reverse_mortage_loan_app/shared/theme/app_colors.dart';
 import 'package:reverse_mortage_loan_app/shared/widgets/custom_button.dart';
 import 'package:reverse_mortage_loan_app/shared/widgets/custom_price_field.dart';
 import 'package:reverse_mortage_loan_app/features/request_proposal/presentation/view/controller/request_proposal_controller.dart';
+import 'package:reverse_mortage_loan_app/shared/widgets/consent_disclaimer.dart';
 
 class LoanAmountPage extends GetView<RequestProposalController> {
   const LoanAmountPage({super.key});
@@ -33,61 +34,75 @@ class LoanAmountPage extends GetView<RequestProposalController> {
         ),
       ),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            children: [
-              const SizedBox(height: 40),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        SvgPicture.asset(AppImages.detailsIcon,
-                            width: 22, height: 22),
-                        const SizedBox(width: 8),
-                        const Text(
-                          'Details for Loan Amount',
-                          style: TextStyle(
-                            color: AppColors.white,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            return SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              physics: const BouncingScrollPhysics(),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                child: IntrinsicHeight(
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 40),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                SvgPicture.asset(AppImages.detailsIcon,
+                                    width: 22, height: 22),
+                                const SizedBox(width: 8),
+                                const Text(
+                                  'Details for Loan Amount',
+                                  style: TextStyle(
+                                    color: AppColors.white,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 24),
+                            Obx(() => CustomPriceField(
+                                  label: 'Home Value',
+                                  labelColor: AppColors.white,
+                                  controller: controller.homeValueController,
+                                  errorText: controller.homeValueError.value,
+                                  onChanged: (_) =>
+                                      controller.homeValueError.value = null,
+                                )),
+                            const SizedBox(height: 24),
+                            Obx(() => CustomPriceField(
+                                  label: 'Current Mortgage Balance',
+                                  labelColor: AppColors.white,
+                                  controller: controller.mortgageAmountController,
+                                  errorText: controller.mortgageAmountError.value,
+                                  onChanged: (_) => controller
+                                      .mortgageAmountError.value = null,
+                                )),
+                            const SizedBox(height: 30),
+                          ],
                         ),
-                      ],
-                    ),
-                    const SizedBox(height: 24),
-                    Obx(() => CustomPriceField(
-                          label: 'Home Value',
-                          labelColor: AppColors.white,
-                          controller: controller.homeValueController,
-                          errorText: controller.homeValueError.value,
-                          onChanged: (_) => controller.homeValueError.value = null,
-                        )),
-                    const SizedBox(height: 24),
-                    Obx(() => CustomPriceField(
-                          label: 'Current Mortgage Balance',
-                          labelColor: AppColors.white,
-                          controller: controller.mortgageAmountController,
-                          errorText: controller.mortgageAmountError.value,
-                          onChanged: (_) =>
-                              controller.mortgageAmountError.value = null,
-                        )),
-                  ],
+                      ),
+                      const ConsentDisclaimer(),
+                      const SizedBox(height: 12),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 20),
+                        child: CustomButton(
+                          text: 'Next',
+                          onPressed: controller.goToDob,
+                          backgroundColor: AppColors.buttonBlue,
+                          textColor: AppColors.white,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 20),
-                child: CustomButton(
-                  text: 'Next',
-                  onPressed: controller.goToDob,
-                  backgroundColor: AppColors.buttonBlue,
-                  textColor: AppColors.white,
-                ),
-              ),
-            ],
-          ),
+            );
+          },
         ),
       ),
     );

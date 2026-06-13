@@ -8,4 +8,5 @@ abstract class ProfileRepository {
   Future<ProfileModel> getProfile();
   Future<UpdateProfileResponseModel> updateProfile(UpdateProfileRequestModel request);
   Future<ChangePasswordResponseModel> changePassword(ChangePasswordRequestModel request);
+  Future<void> deleteAccount(String id);
 }

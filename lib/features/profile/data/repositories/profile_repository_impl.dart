@@ -25,4 +25,9 @@ class ProfileRepositoryImpl implements ProfileRepository {
   Future<ChangePasswordResponseModel> changePassword(ChangePasswordRequestModel request) async {
     return await _datasource.changePassword(request);
   }
+
+  @override
+  Future<void> deleteAccount(String id) async {
+    return await _datasource.deleteAccount(id);
+  }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:reverse_mortage_loan_app/shared/theme/app_colors.dart';
+import 'package:reverse_mortage_loan_app/shared/widgets/smooth_dialog.dart';
 
 class LabeledInputField extends StatelessWidget {
   final String label;
@@ -13,6 +14,7 @@ class LabeledInputField extends StatelessWidget {
   final TextInputType keyboardType;
   final Color? labelColor;
   final String? errorText;
+  final String? infoText;
 
   const LabeledInputField({
     super.key,
@@ -25,21 +27,41 @@ class LabeledInputField extends StatelessWidget {
     this.keyboardType = TextInputType.number,
     this.labelColor,
     this.errorText,
+    this.infoText,
   });
+
+  void _showInfoDialog(BuildContext context) {
+    showSmoothInfoDialog(context: context, title: label, content: infoText!);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          label,
-          style: TextStyle(
-            color: labelColor ?? AppColors.green500,
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-            letterSpacing: 0.5,
-          ),
+        Row(
+          children: [
+            Text(
+              label,
+              style: TextStyle(
+                color: labelColor ?? AppColors.green500,
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                letterSpacing: 0.5,
+              ),
+            ),
+            if (infoText != null) ...[
+              const SizedBox(width: 4),
+              GestureDetector(
+                onTap: () => _showInfoDialog(context),
+                child: const Icon(
+                  Icons.info_outline,
+                  size: 18,
+                  color: AppColors.hintGrey,
+                ),
+              ),
+            ],
+          ],
         ),
         const SizedBox(height: 8),
         Container(

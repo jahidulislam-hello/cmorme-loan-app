@@ -9,6 +9,7 @@ class EstimatedMortgageSection extends StatelessWidget {
   final String primaryIconPath;
   final String primaryAmount;
   final String cashAvailable;
+  final String? cashAvailableLabel;
   final String? downPayment;
 
   const EstimatedMortgageSection({
@@ -18,6 +19,7 @@ class EstimatedMortgageSection extends StatelessWidget {
     required this.primaryIconPath,
     required this.primaryAmount,
     required this.cashAvailable,
+    this.cashAvailableLabel,
     this.downPayment,
   });
 
@@ -54,7 +56,7 @@ class EstimatedMortgageSection extends StatelessWidget {
                     )
                   : _MetricCard(
                       iconPath: AppImages.cashIcon,
-                      label: 'Cash Available',
+                      label: cashAvailableLabel ?? 'Cash Available',
                       amount: cashAvailable,
                     ),
             ),

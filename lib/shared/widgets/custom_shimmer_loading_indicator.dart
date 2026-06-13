@@ -54,81 +54,105 @@ class _CalculationItemSkeleton extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                children: [
-                  _ShimmerBox(width: 16, height: 16, borderRadius: 4),
-                  const SizedBox(width: 6),
-                  _ShimmerBox(width: 100, height: 14, borderRadius: 4),
-                ],
+              Flexible(
+                child: Row(
+                  children: [
+                    const _ShimmerBox(width: 16, height: 16, borderRadius: 4),
+                    const SizedBox(width: 6),
+                    const _ShimmerBox(width: 100, height: 14, borderRadius: 4),
+                  ],
+                ),
               ),
-              _ShimmerBox(width: 80, height: 22, borderRadius: 4),
+              const _ShimmerBox(width: 80, height: 22, borderRadius: 4),
             ],
           ),
           const SizedBox(height: 16),
 
           // ── Row 2: Loan Amount | Cash Available ────────────────────────────
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               // Loan Amount column
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      _ShimmerBox(width: 14, height: 14, borderRadius: 4),
-                      const SizedBox(width: 4),
-                      _ShimmerBox(width: 80, height: 13, borderRadius: 4),
-                    ],
-                  ),
-                  const SizedBox(height: 4),
-                  _ShimmerBox(width: 80, height: 20, borderRadius: 4),
-                ],
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        const _ShimmerBox(width: 14, height: 14, borderRadius: 4),
+                        const SizedBox(width: 4),
+                        const Expanded(
+                          child: _ShimmerBox(
+                              width: double.infinity,
+                              height: 13,
+                              borderRadius: 4),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 4),
+                    const _ShimmerBox(width: 80, height: 20, borderRadius: 4),
+                  ],
+                ),
               ),
+              const SizedBox(width: 8),
               // Cash Available column
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      _ShimmerBox(width: 14, height: 14, borderRadius: 4),
-                      const SizedBox(width: 4),
-                      _ShimmerBox(width: 90, height: 13, borderRadius: 4),
-                    ],
-                  ),
-                  const SizedBox(height: 4),
-                  _ShimmerBox(width: 80, height: 20, borderRadius: 4),
-                ],
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        const _ShimmerBox(width: 14, height: 14, borderRadius: 4),
+                        const SizedBox(width: 4),
+                        const Expanded(
+                          child: _ShimmerBox(
+                              width: double.infinity,
+                              height: 13,
+                              borderRadius: 4),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 4),
+                    const _ShimmerBox(width: 80, height: 20, borderRadius: 4),
+                  ],
+                ),
               ),
+              const SizedBox(width: 8),
               // Down Payment column placeholder (keeps layout balanced)
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      _ShimmerBox(width: 14, height: 14, borderRadius: 4),
-                      const SizedBox(width: 4),
-                      _ShimmerBox(width: 60, height: 13, borderRadius: 4),
-                    ],
-                  ),
-                  const SizedBox(height: 4),
-                  _ShimmerBox(width: 60, height: 20, borderRadius: 4),
-                ],
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        const _ShimmerBox(width: 14, height: 14, borderRadius: 4),
+                        const SizedBox(width: 4),
+                        const Expanded(
+                          child: _ShimmerBox(
+                              width: double.infinity,
+                              height: 13,
+                              borderRadius: 4),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 4),
+                    const _ShimmerBox(width: 60, height: 20, borderRadius: 4),
+                  ],
+                ),
               ),
             ],
           ),
           const SizedBox(height: 16),
 
           // ── Divider ────────────────────────────────────────────────────────
-          _ShimmerBox(width: double.infinity, height: 2, borderRadius: 2),
+          const _ShimmerBox(width: double.infinity, height: 2, borderRadius: 2),
           const SizedBox(height: 16),
 
           // ── Row 3: View Details | Delete button ────────────────────────────
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              _ShimmerBox(width: 80, height: 13, borderRadius: 4),
-              _ShimmerBox(width: 20, height: 20, borderRadius: 5),
+              const _ShimmerBox(width: 80, height: 13, borderRadius: 4),
+              const _ShimmerBox(width: 20, height: 20, borderRadius: 5),
             ],
           ),
         ],
@@ -190,59 +214,63 @@ class LegalContentShimmer extends StatelessWidget {
       highlightColor: const Color(0xFF3D5A9A),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Heading
-            _ShimmerBox(width: 200, height: 22, borderRadius: 4),
-            const SizedBox(height: 16),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final w = constraints.maxWidth;
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Heading
+                _ShimmerBox(width: w * 0.6, height: 22, borderRadius: 4),
+                const SizedBox(height: 16),
 
-            // Paragraph block 1
-            ..._paragraphLines([0.9, 1.0, 0.85, 0.7]),
-            const SizedBox(height: 20),
+                // Paragraph block 1
+                ..._paragraphLines(w, [0.9, 1.0, 0.85, 0.7]),
+                const SizedBox(height: 20),
 
-            // Sub-heading
-            _ShimmerBox(width: 160, height: 18, borderRadius: 4),
-            const SizedBox(height: 12),
+                // Sub-heading
+                _ShimmerBox(width: w * 0.45, height: 18, borderRadius: 4),
+                const SizedBox(height: 12),
 
-            // Paragraph block 2
-            ..._paragraphLines([1.0, 0.95, 0.8, 0.6]),
-            const SizedBox(height: 20),
+                // Paragraph block 2
+                ..._paragraphLines(w, [1.0, 0.95, 0.8, 0.6]),
+                const SizedBox(height: 20),
 
-            // Sub-heading
-            _ShimmerBox(width: 140, height: 18, borderRadius: 4),
-            const SizedBox(height: 12),
+                // Sub-heading
+                _ShimmerBox(width: w * 0.4, height: 18, borderRadius: 4),
+                const SizedBox(height: 12),
 
-            // Paragraph block 3
-            ..._paragraphLines([0.95, 1.0, 0.75]),
-            const SizedBox(height: 20),
+                // Paragraph block 3
+                ..._paragraphLines(w, [0.95, 1.0, 0.75]),
+                const SizedBox(height: 20),
 
-            // Sub-heading
-            _ShimmerBox(width: 170, height: 18, borderRadius: 4),
-            const SizedBox(height: 12),
+                // Sub-heading
+                _ShimmerBox(width: w * 0.48, height: 18, borderRadius: 4),
+                const SizedBox(height: 12),
 
-            // Paragraph block 4
-            ..._paragraphLines([1.0, 0.9, 0.85, 0.5]),
-            const SizedBox(height: 20),
+                // Paragraph block 4
+                ..._paragraphLines(w, [1.0, 0.9, 0.85, 0.5]),
+                const SizedBox(height: 20),
 
-            // Sub-heading
-            _ShimmerBox(width: 150, height: 18, borderRadius: 4),
-            const SizedBox(height: 12),
+                // Sub-heading
+                _ShimmerBox(width: w * 0.42, height: 18, borderRadius: 4),
+                const SizedBox(height: 12),
 
-            // Paragraph block 5
-            ..._paragraphLines([0.9, 0.8, 0.65]),
-          ],
+                // Paragraph block 5
+                ..._paragraphLines(w, [0.9, 0.8, 0.65]),
+              ],
+            );
+          },
         ),
       ),
     );
   }
 
-  List<Widget> _paragraphLines(List<double> fractions) {
-    final screenWidth = 360.0; // approximate inner width
+  List<Widget> _paragraphLines(double totalWidth, List<double> fractions) {
     final widgets = <Widget>[];
     for (final f in fractions) {
       widgets.add(_ShimmerBox(
-        width: screenWidth * f,
+        width: totalWidth * f,
         height: 14,
         borderRadius: 4,
       ));

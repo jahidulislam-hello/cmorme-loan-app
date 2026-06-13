@@ -5,6 +5,8 @@ import 'package:reverse_mortage_loan_app/features/inbox/presentation/view/widget
 import 'package:reverse_mortage_loan_app/shared/theme/app_colors.dart';
 import 'package:reverse_mortage_loan_app/shared/widgets/custom_calculation_item.dart';
 import 'package:reverse_mortage_loan_app/shared/widgets/custom_shimmer_loading_indicator.dart';
+import 'package:reverse_mortage_loan_app/shared/widgets/legal_disclaimer.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'controller/recent_calculation_controller.dart';
 
 class RecentCalculationScreen extends GetView<RecentCalculationController> {
@@ -32,7 +34,9 @@ class RecentCalculationScreen extends GetView<RecentCalculationController> {
         ),
       ),
       body: SafeArea(
-        child: Obx(() {
+        child: Column(
+          children: [
+            Expanded(child: Obx(() {
           if (controller.isLoading.value) {
             return const CustomShimmerLoadingIndicator(itemCount: 3);
           }
@@ -99,7 +103,39 @@ class RecentCalculationScreen extends GetView<RecentCalculationController> {
               },
             ),
           );
-        }),
+        })),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+              child: SizedBox(
+                width: double.infinity,
+                child: OutlinedButton.icon(
+                  onPressed: () async {
+                    final uri = Uri.parse('tel:+18008002190');
+                    if (await canLaunchUrl(uri)) await launchUrl(uri);
+                  },
+                  icon: const Icon(Icons.phone, size: 18),
+                  label: const Text('Speak to an Educator'),
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: AppColors.white,
+                    side: const BorderSide(color: AppColors.white, width: 1.5),
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    textStyle: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: LegalDisclaimer(),
+            ),
+          ],
+        ),
       ),
     );
   }

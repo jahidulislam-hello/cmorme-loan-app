@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:reverse_mortage_loan_app/features/reverse_refinance/shared/widgets/borrower_toggle.dart';
 import 'package:reverse_mortage_loan_app/shared/widgets/custom_shimmer_loading_indicator.dart';
 import 'package:reverse_mortage_loan_app/features/reverse_refinance/shared/widgets/labeled_input_field.dart';
+import 'package:reverse_mortage_loan_app/shared/widgets/smooth_dialog.dart';
 import 'package:reverse_mortage_loan_app/features/reverse_refinance/shared/widgets/photo_upload_section.dart';
 import 'package:reverse_mortage_loan_app/shared/app_image/app_images.dart';
 import 'package:reverse_mortage_loan_app/shared/theme/app_colors.dart';
@@ -118,12 +119,11 @@ class ReverseRefinanceScreen extends GetView<ReverseRefinanceController> {
                                   left: 20, right: 20, bottom: 20),
                               child: LabeledInputField(
                                 label: 'HOME VALUE',
-                              //  hintText: '1500',
-                              //  prefixIcon: Icons.attach_money,
                                 prefixImagePath: AppImages.dollarIcon,
                                 controller: controller.homeValueController,
                                 labelColor: AppColors.blue300,
                                 errorText: controller.homeValueError.value,
+                                infoText: 'Estimated approximate value of your current home.',
                               ),
                             )),
                           ],
@@ -134,21 +134,38 @@ class ReverseRefinanceScreen extends GetView<ReverseRefinanceController> {
                       if (!controller.isPurchase)
                       Obx(() => LabeledInputField(
                         label: 'Current Mortgage Balance',
-                       // hintText: '1500',
-                      //  prefixIcon: Icons.attach_money,
                         prefixImagePath: AppImages.dollarIcon,
                         controller: controller.mortgageBalanceController,
                         labelColor: AppColors.blue300,
                         errorText: controller.mortgageBalanceValueError.value,
+                        infoText: 'This is the total mortgage balance on your current home. If you do not have a current mortgage, please enter 0.',
                       )),
                       const SizedBox(height: 24),
-                      const Text(
-                        'AGE SET',
-                        style: TextStyle(
-                          color: AppColors.blue300,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
+                      Row(
+                        children: [
+                          const Text(
+                            'AGE SET',
+                            style: TextStyle(
+                              color: AppColors.blue300,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(width: 4),
+                          GestureDetector(
+                            onTap: () => showSmoothInfoDialog(
+                              context: context,
+                              title: 'Age Set',
+                              content:
+                                  'You AND the 2nd borrower\'s age - if you are married, you must include your spouse on the loan.',
+                            ),
+                            child: const Icon(
+                              Icons.info_outline,
+                              size: 18,
+                              color: AppColors.hintGrey,
+                            ),
+                          ),
+                        ],
                       ),
 
                       const SizedBox(height: 8),

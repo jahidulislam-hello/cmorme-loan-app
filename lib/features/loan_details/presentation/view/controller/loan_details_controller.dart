@@ -27,6 +27,7 @@ class LoanDetailsController extends GetxController {
   late final String? govtNotEligibleReason;
   late final String govtLoanAmount;
   late final String govtCashAvailable;
+  late final String govtCashAvailableLabel;
   late final String? govtDownPayment;
 
   // Non-govt section
@@ -35,7 +36,13 @@ class LoanDetailsController extends GetxController {
   late final String? nonGovtNotEligibleReason;
   late final String nonGovtLoanAmount;
   late final String nonGovtCashAvailable;
+  late final String nonGovtCashAvailableLabel;
   late final String? nonGovtDownPayment;
+  late final bool showNonGovtAgeDisclaimer;
+
+  // Raw values for conditional display in UI
+  late final double rawGovtCashAvailable;
+  late final double rawNonGovtCashAvailable;
 
   @override
   void onInit() {
@@ -79,21 +86,33 @@ class LoanDetailsController extends GetxController {
     nonGovtLoanAvailable = _item.nonGovtLoanAvailable;
     nonGovtNotEligibleReason = _item.nonGovtNotEligibleReason;
 
+    final age1 = _item.multipleBorrowerAge1;
+    final age2 = _item.multipleBorrowerAge2;
+    showNonGovtAgeDisclaimer = nonGovtLoanAvailable &&
+        ((age1 != null && age1 < 55) || (age2 != null && age2 < 55));
+
+    rawGovtCashAvailable = _item.reverseRefinanceGovtCashAvailable ?? 0;
+    rawNonGovtCashAvailable = _item.reverseRefinanceNonGovtCashAvailable ?? 0;
+
     if (_item.isPurchase) {
       govtLoanAmount = '\$${_numFmt.format(_item.reversePurchaseGovtLoanAmount ?? 0)}';
       govtCashAvailable = '\$${_numFmt.format(0)}';
+      govtCashAvailableLabel = 'Cash Available';
       govtDownPayment = '\$${_numFmt.format(_item.reversePurchaseGovtDownPayment ?? 0)}';
 
       nonGovtLoanAmount = '\$${_numFmt.format(_item.reversePurchaseNonGovtLoanAmount ?? 0)}';
       nonGovtCashAvailable = '\$${_numFmt.format(0)}';
+      nonGovtCashAvailableLabel = 'Cash Available';
       nonGovtDownPayment = '\$${_numFmt.format(_item.reversePurchaseNonGovtDownPayment ?? 0)}';
     } else {
       govtLoanAmount = '\$${_numFmt.format(_item.reverseRefinanceGovtLoanAmount ?? 0)}';
-      govtCashAvailable = '\$${_numFmt.format(_item.reverseRefinanceGovtCashAvailable ?? 0)}';
+      govtCashAvailable = '\$${_numFmt.format(rawGovtCashAvailable.abs())}';
+      govtCashAvailableLabel = rawGovtCashAvailable < 0 ? 'Short to close by:' : 'Cash Available';
       govtDownPayment = null;
 
       nonGovtLoanAmount = '\$${_numFmt.format(_item.reverseRefinanceNonGovtLoanAmount ?? 0)}';
-      nonGovtCashAvailable = '\$${_numFmt.format(_item.reverseRefinanceNonGovtCashAvailable ?? 0)}';
+      nonGovtCashAvailable = '\$${_numFmt.format(rawNonGovtCashAvailable.abs())}';
+      nonGovtCashAvailableLabel = rawNonGovtCashAvailable < 0 ? 'Short to close by:' : 'Cash Available';
       nonGovtDownPayment = null;
     }
   }

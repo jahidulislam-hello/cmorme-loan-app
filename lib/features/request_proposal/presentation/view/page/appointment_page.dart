@@ -5,6 +5,7 @@ import 'package:reverse_mortage_loan_app/shared/app_image/app_images.dart';
 import 'package:reverse_mortage_loan_app/shared/theme/app_colors.dart';
 import 'package:reverse_mortage_loan_app/shared/widgets/custom_button.dart';
 import 'package:reverse_mortage_loan_app/features/request_proposal/presentation/view/controller/request_proposal_controller.dart';
+import 'package:reverse_mortage_loan_app/shared/widgets/consent_disclaimer.dart';
 
 class AppointmentPage extends GetView<RequestProposalController> {
   const AppointmentPage({super.key});
@@ -32,106 +33,116 @@ class AppointmentPage extends GetView<RequestProposalController> {
         ),
       ),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            children: [
-              const SizedBox(height: 40),
-              Expanded(
-                child: SingleChildScrollView(
-                  physics: const BouncingScrollPhysics(),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            return SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              physics: const BouncingScrollPhysics(),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                child: IntrinsicHeight(
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
-                        children: [
-                          SvgPicture.asset(AppImages.calenderIcon,
-                              width: 22, height: 22),
-                          const SizedBox(width: 8),
-                          const Text(
-                            'Appointment',
-                            style: TextStyle(
-                              color: AppColors.white,
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
+                      const SizedBox(height: 40),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                SvgPicture.asset(AppImages.calenderIcon,
+                                    width: 22, height: 22),
+                                const SizedBox(width: 8),
+                                const Text(
+                                  'Appointment',
+                                  style: TextStyle(
+                                    color: AppColors.white,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 24),
+                            const SizedBox(height: 24),
 
-                      /// Calendar
-                      Obx(() => _MonthCalendar(
-                            selectedDate: controller.selectedDate.value,
-                            onDateSelected: (date) {
-                              controller.selectedDate.value = date;
-                            },
-                          )),
+                            /// Calendar
+                            Obx(() => _MonthCalendar(
+                                  selectedDate: controller.selectedDate.value,
+                                  onDateSelected: (date) {
+                                    controller.selectedDate.value = date;
+                                  },
+                                )),
 
-                      const SizedBox(height: 100),
+                            const SizedBox(height: 100),
 
-                      /// Set Time
-                      const Text(
-                        'Set Time',
-                        style: TextStyle(
-                          color: AppColors.white,
-                          fontSize: 14,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      GestureDetector(
-                        onTap: () => _selectTime(context),
-                        child: AbsorbPointer(
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: AppColors.containerHighlight,
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: TextField(
-                              controller: controller.timeController,
-                              style: const TextStyle(
+                            /// Set Time
+                            const Text(
+                              'Set Time',
+                              style: TextStyle(
                                 color: AppColors.white,
                                 fontSize: 14,
                               ),
-                              decoration: const InputDecoration(
-                                hintText: 'Time',
-                                hintStyle: TextStyle(
-                                  color: AppColors.hintGrey,
-                                  fontSize: 14,
+                            ),
+                            const SizedBox(height: 8),
+                            GestureDetector(
+                              onTap: () => _selectTime(context),
+                              child: AbsorbPointer(
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: AppColors.containerHighlight,
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: TextField(
+                                    controller: controller.timeController,
+                                    style: const TextStyle(
+                                      color: AppColors.white,
+                                      fontSize: 14,
+                                    ),
+                                    decoration: const InputDecoration(
+                                      hintText: 'Time',
+                                      hintStyle: TextStyle(
+                                        color: AppColors.hintGrey,
+                                        fontSize: 14,
+                                      ),
+                                      suffixIcon: Icon(
+                                        Icons.access_time,
+                                        color: AppColors.hintGrey,
+                                        size: 20,
+                                      ),
+                                      contentPadding: EdgeInsets.symmetric(
+                                        horizontal: 12,
+                                        vertical: 14,
+                                      ),
+                                      border: InputBorder.none,
+                                      enabledBorder: InputBorder.none,
+                                      focusedBorder: InputBorder.none,
+                                    ),
+                                  ),
                                 ),
-                                suffixIcon: Icon(
-                                  Icons.access_time,
-                                  color: AppColors.hintGrey,
-                                  size: 20,
-                                ),
-                                contentPadding: EdgeInsets.symmetric(
-                                  horizontal: 12,
-                                  vertical: 14,
-                                ),
-                                border: InputBorder.none,
-                                enabledBorder: InputBorder.none,
-                                focusedBorder: InputBorder.none,
                               ),
                             ),
-                          ),
+                            const SizedBox(height: 30),
+                          ],
                         ),
+                      ),
+                      const ConsentDisclaimer(),
+                      const SizedBox(height: 12),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 20),
+                        child: Obx(() => CustomButton(
+                              text: 'Send',
+                              onPressed: controller.submitFromAppointment,
+                              backgroundColor: AppColors.buttonBlue,
+                              textColor: AppColors.white,
+                              isLoading: controller.isLoading.value,
+                            )),
                       ),
                     ],
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 20),
-                child: Obx(() => CustomButton(
-                      text: 'Send',
-                      onPressed: controller.submitFromAppointment,
-                      backgroundColor: AppColors.buttonBlue,
-                      textColor: AppColors.white,
-                      isLoading: controller.isLoading.value,
-                    )),
-              ),
-            ],
-          ),
+            );
+          },
         ),
       ),
     );

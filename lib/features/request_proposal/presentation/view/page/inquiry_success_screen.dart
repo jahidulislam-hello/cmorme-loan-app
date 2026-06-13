@@ -58,7 +58,7 @@ class InquirySuccessScreen extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             const Text(
-              'Send your inquiry successfully',
+              'Your inquiry has been sent Successfully',
               style: TextStyle(
                 color: AppColors.hintGrey,
                 fontSize: 14,
