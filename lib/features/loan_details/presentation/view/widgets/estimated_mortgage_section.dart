@@ -96,8 +96,10 @@ class _MetricCard extends StatelessWidget {
               Flexible(
                 child: Text(
                   label,
-                  style: const TextStyle(
-                    color: AppColors.hintGrey,
+                  style: TextStyle(
+                    color: label.contains('Short to close by')
+                        ? Colors.red
+                        : AppColors.hintGrey,
                     fontSize: 12,
                   ),
                   overflow: TextOverflow.ellipsis,

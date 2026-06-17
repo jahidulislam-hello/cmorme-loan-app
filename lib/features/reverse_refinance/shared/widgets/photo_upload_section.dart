@@ -90,116 +90,119 @@ class _PhotoUploadSectionState extends State<PhotoUploadSection> {
   }
 
   Widget _buildStockCarousel() {
-    return Container(
-      width: double.infinity,
-      height: 180,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.2),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(16),
-        child: Stack(
-          children: [
-            PageView.builder(
-              controller: _stockPageController,
-              itemCount: _stockImages.length,
-              onPageChanged: (index) => setState(() => _currentStockIndex = index),
-              itemBuilder: (context, index) {
-                return CachedNetworkImage(
-                  imageUrl: _stockImages[index],
-                  fit: BoxFit.cover,
-                  placeholder: (context, url) => Container(
-                    color: AppColors.containerHighlight,
-                    child: const Center(child: CircularProgressIndicator()),
-                  ),
-                  errorWidget: (context, url, error) => Container(
-                    color: AppColors.containerHighlight,
-                    child: const Icon(Icons.home, size: 50, color: AppColors.hintGrey),
-                  ),
-                );
-              },
-            ),
-            // Gradient Overlay
-            Positioned.fill(
-              child: Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      Colors.transparent,
-                      Colors.black.withOpacity(0.6),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            // Upload Button Overlay
-            Center(
-              child: GestureDetector(
-                onTap: widget.onUploadTap,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                  decoration: BoxDecoration(
-                    color: AppColors.buttonBlue.withOpacity(0.9),
-                    borderRadius: BorderRadius.circular(30),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.3),
-                        blurRadius: 8,
-                        offset: const Offset(0, 2),
-                      ),
-                    ],
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Icon(Icons.add_a_photo, color: AppColors.white, size: 20),
-                      const SizedBox(width: 8),
-                      Text(
-                        'Upload ${widget.maxPhotos} Photos',
-                        style: const TextStyle(
-                          color: AppColors.white,
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            // Page Indicators
-            Positioned(
-              bottom: 15,
-              left: 0,
-              right: 0,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: List.generate(_stockImages.length, (index) {
-                  return AnimatedContainer(
-                    duration: const Duration(milliseconds: 300),
-                    width: _currentStockIndex == index ? 20 : 8,
-                    height: 8,
-                    margin: const EdgeInsets.symmetric(horizontal: 4),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(4),
-                      color: _currentStockIndex == index
-                          ? AppColors.white
-                          : AppColors.white.withOpacity(0.5),
-                    ),
-                  );
-                }),
-              ),
+    return GestureDetector(
+      onTap: widget.onUploadTap,
+      child: Container(
+        width: double.infinity,
+        height: 180,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.2),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
             ),
           ],
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(16),
+          child: Stack(
+            children: [
+              PageView.builder(
+                controller: _stockPageController,
+                itemCount: _stockImages.length,
+                onPageChanged: (index) => setState(() => _currentStockIndex = index),
+                itemBuilder: (context, index) {
+                  return CachedNetworkImage(
+                    imageUrl: _stockImages[index],
+                    fit: BoxFit.cover,
+                    placeholder: (context, url) => Container(
+                      color: AppColors.containerHighlight,
+                      child: const Center(child: CircularProgressIndicator()),
+                    ),
+                    errorWidget: (context, url, error) => Container(
+                      color: AppColors.containerHighlight,
+                      child: const Icon(Icons.home, size: 50, color: AppColors.hintGrey),
+                    ),
+                  );
+                },
+              ),
+              // Gradient Overlay
+              Positioned.fill(
+                child: Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Colors.transparent,
+                        Colors.black.withOpacity(0.6),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              // Upload Button Overlay
+              // Center(
+              //   child: GestureDetector(
+              //     onTap: widget.onUploadTap,
+              //     child: Container(
+              //       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+              //       decoration: BoxDecoration(
+              //         color: AppColors.buttonBlue.withOpacity(0.9),
+              //         borderRadius: BorderRadius.circular(30),
+              //         boxShadow: [
+              //           BoxShadow(
+              //             color: Colors.black.withOpacity(0.3),
+              //             blurRadius: 8,
+              //             offset: const Offset(0, 2),
+              //           ),
+              //         ],
+              //       ),
+              //       child: Row(
+              //         mainAxisSize: MainAxisSize.min,
+              //         children: [
+              //           const Icon(Icons.add_a_photo, color: AppColors.white, size: 20),
+              //           const SizedBox(width: 8),
+              //           Text(
+              //             'Upload ${widget.maxPhotos} Photos',
+              //             style: const TextStyle(
+              //               color: AppColors.white,
+              //               fontSize: 14,
+              //               fontWeight: FontWeight.bold,
+              //             ),
+              //           ),
+              //         ],
+              //       ),
+              //     ),
+              //   ),
+              // ),
+              // Page Indicators
+              Positioned(
+                bottom: 15,
+                left: 0,
+                right: 0,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: List.generate(_stockImages.length, (index) {
+                    return AnimatedContainer(
+                      duration: const Duration(milliseconds: 300),
+                      width: _currentStockIndex == index ? 20 : 8,
+                      height: 8,
+                      margin: const EdgeInsets.symmetric(horizontal: 4),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(4),
+                        color: _currentStockIndex == index
+                            ? AppColors.white
+                            : AppColors.white.withOpacity(0.5),
+                      ),
+                    );
+                  }),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -79,8 +79,10 @@ class LoanEstimateCard extends StatelessWidget {
                     children: [
                       Text(
                         cashAvailableLabel ?? 'Cash Available',
-                        style: const TextStyle(
-                          color: AppColors.white,
+                        style: TextStyle(
+                          color: (cashAvailableLabel?.contains('Short to close by') ?? false)
+                              ? Colors.red
+                              : AppColors.white,
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
                         ),
