@@ -40,6 +40,7 @@ class AppImages {
   static const String educate = 'assets/images/educate.png';
   static const String instantQuote = 'assets/images/instant_quote.png';
   static const String launcherIcons = 'assets/images/image0_76_1104.png';
+  static const String logo1 = 'assets/images/logo.png';
   static const String launcherIconsText = 'assets/images/launcher_icon_text.svg';
 
   static const String logout = 'assets/images/logout.svg';

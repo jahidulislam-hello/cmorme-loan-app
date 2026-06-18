@@ -36,15 +36,15 @@ class _SplashScreenState extends State<SplashScreen> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Image.asset(
-              AppImages.launcherIcons,
-              width: screenWidth * 0.6,
+              AppImages.logo1,
+              width: screenWidth * 0.5,
               fit: BoxFit.contain,
             ),
-            const SizedBox(height: 16),
-            SvgPicture.asset(
-              AppImages.launcherIconsText,
-              width: screenWidth * 0.7,
-            ),
+            // const SizedBox(height: 16),
+            // SvgPicture.asset(
+            //   AppImages.launcherIconsText,
+            //   width: screenWidth * 0.7,
+            // ),
           ],
         ),
       ),
