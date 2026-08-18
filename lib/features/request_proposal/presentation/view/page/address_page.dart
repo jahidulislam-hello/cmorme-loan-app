@@ -48,8 +48,8 @@ class AddressPage extends GetView<RequestProposalController> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Obx(() => CustomTextField(
-                                  label: 'Address',
-                                  hintText: 'Address',
+                                  label: 'Street Number & Name',
+                                  hintText: 'Street Number & Name',
                                   labelColor: AppColors.blue200,
                                   controller: controller.addressController,
                                   filled: true,
