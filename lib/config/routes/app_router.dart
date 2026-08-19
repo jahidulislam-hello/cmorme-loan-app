@@ -143,10 +143,11 @@ class AppRouter {
       name: RouteNames.phonePage,
       page: () => const PhonePage(),
     ),
-    GetPage(
-      name: RouteNames.proposalCityState,
-      page: () => const CityStatePage(),
-    ),
+
+    // GetPage(
+    //   name: RouteNames.proposalCityState,
+    //   page: () => const CityStatePage(),
+    // ),
     GetPage(
       name: RouteNames.proposalInterested,
       page: () => const InterestedPage(),
