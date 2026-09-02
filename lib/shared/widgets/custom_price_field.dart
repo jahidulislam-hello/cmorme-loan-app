@@ -14,7 +14,7 @@ class CustomPriceField extends StatelessWidget {
   const CustomPriceField({
     super.key,
     required this.label,
-    this.hintText = 'Price',
+    this.hintText = '',
     this.controller,
     this.labelColor,
     this.backgroundColor,

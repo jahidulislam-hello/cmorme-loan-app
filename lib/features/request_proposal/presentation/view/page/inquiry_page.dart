@@ -64,7 +64,7 @@ class InquiryPage extends GetView<RequestProposalController> {
 
                             // ── How to receive proposal ───────────────────────
                             const Text(
-                              'How would you like to receive your proposal?',
+                              'Would you like to receive your proposal by email or receive a phone call from an educator?',
                               style: TextStyle(
                                 color: AppColors.white,
                                 fontSize: 14,
