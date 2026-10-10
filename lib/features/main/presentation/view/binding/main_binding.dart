@@ -6,6 +6,7 @@ import 'package:reverse_mortage_loan_app/features/main/presentation/view/control
 import 'package:reverse_mortage_loan_app/features/profile/data/datasources/profile_remote_datasource.dart';
 import 'package:reverse_mortage_loan_app/features/profile/data/repositories/profile_repository_impl.dart';
 import 'package:reverse_mortage_loan_app/features/profile/domain/repositories/profile_repository.dart';
+import 'package:reverse_mortage_loan_app/features/profile/domain/usecases/delete_account_usecase.dart';
 import 'package:reverse_mortage_loan_app/features/profile/domain/usecases/get_profile_usecase.dart';
 import 'package:reverse_mortage_loan_app/features/profile/presentation/view/controller/account_setting_controller.dart';
 import 'package:reverse_mortage_loan_app/features/recent_calculation/data/datasources/recent_calculation_local_datasource.dart';
@@ -52,6 +53,9 @@ class MainBinding extends Bindings {
     Get.lazyPut<GetProfileUseCase>(
       () => GetProfileUseCase(Get.find<ProfileRepository>()),
     );
+    Get.lazyPut<DeleteAccountUseCase>(
+      () => DeleteAccountUseCase(Get.find<ProfileRepository>()),
+    );
 
     // Tab controllers
     Get.lazyPut<HomeController>(
@@ -69,7 +73,12 @@ class MainBinding extends Bindings {
         getCalculationByIdUseCase: Get.find<GetCalculationByIdUseCase>(),
       ),
     );
-    Get.lazyPut<AccountSettingController>(() => AccountSettingController());
+    Get.lazyPut<AccountSettingController>(
+      () => AccountSettingController(
+        getProfileUseCase: Get.find<GetProfileUseCase>(),
+        deleteAccountUseCase: Get.find<DeleteAccountUseCase>(),
+      ),
+    );
 
     // Shell controller
     Get.lazyPut<MainController>(() => MainController());

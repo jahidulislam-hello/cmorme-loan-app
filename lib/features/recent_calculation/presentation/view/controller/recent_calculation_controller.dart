@@ -95,27 +95,47 @@ class RecentCalculationController extends GetxController {
     Get.dialog(
       DeleteConfirmationDialog(
         onDelete: () async {
+          // Close confirmation dialog
           Get.back();
+
+          // Show full-screen loading overlay while API call runs
+          Get.dialog(
+            const Center(
+              child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+              ),
+            ),
+            barrierColor: Colors.black54,
+            barrierDismissible: false,
+          );
+
           final id = calculations[index].id;
           try {
             await _deleteCalculationUseCase(id);
             calculations.removeAt(index);
             _logger.i('Deleted calculation: $id');
+
+            // Close loading overlay, then show success popup
+            Get.back();
             Get.dialog(
               const DeleteSuccessDialog(),
               barrierColor: Colors.white24,
             );
           } on NoInternetException catch (e) {
             _logger.w('No internet during delete: $e');
+            Get.back(); // close loading overlay
             Get.snackbar('No Internet', e.message);
           } on TimeoutException catch (e) {
             _logger.w('Timeout during delete: $e');
+            Get.back(); // close loading overlay
             Get.snackbar('Timeout', 'Server took too long. Please try again.');
           } on ServerException catch (e) {
             _logger.e('Server error during delete: $e');
+            Get.back(); // close loading overlay
             Get.snackbar('Error', e.message);
           } catch (e) {
             _logger.e('Unknown error during delete: $e');
+            Get.back(); // close loading overlay
             Get.snackbar('Error', 'Something went wrong. Please try again.');
           }
         },

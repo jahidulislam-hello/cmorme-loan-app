@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 import 'package:reverse_mortage_loan_app/shared/app_image/app_images.dart';
 import 'package:reverse_mortage_loan_app/shared/theme/app_colors.dart';
 import 'package:reverse_mortage_loan_app/shared/widgets/custom_button.dart';
+import 'package:reverse_mortage_loan_app/shared/widgets/legal_disclaimer.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:reverse_mortage_loan_app/features/loan_details/presentation/view/controller/loan_details_controller.dart';
 import 'package:reverse_mortage_loan_app/features/loan_details/presentation/view/widgets/loan_image_section.dart';
 import 'package:reverse_mortage_loan_app/features/loan_details/presentation/view/widgets/loan_info_section.dart';
@@ -143,13 +145,14 @@ class LoanDetailsScreen extends GetView<LoanDetailsController> {
                       ),
 
                       const SizedBox(height: 24),
-                      if (controller.govtLoanAvailable)
+                      if (controller.govtLoanAvailable || controller.rawGovtCashAvailable < 0)
                         EstimatedMortgageSection(
                           title: 'Estimated Government Insured Reverse Mortgage',
                           primaryLabel: 'Loan Amount',
                           primaryIconPath: AppImages.loanAmountIcon,
                           primaryAmount: controller.govtLoanAmount,
                           cashAvailable: controller.govtCashAvailable,
+                          cashAvailableLabel: controller.govtCashAvailableLabel,
                           downPayment: controller.govtDownPayment,
                         )
                       else if (controller.govtNotEligibleReason != null)
@@ -165,13 +168,14 @@ class LoanDetailsScreen extends GetView<LoanDetailsController> {
                         ),
 
                       const SizedBox(height: 24),
-                      if (controller.nonGovtLoanAvailable)
+                      if (controller.nonGovtLoanAvailable || controller.rawNonGovtCashAvailable < 0)
                         EstimatedMortgageSection(
                           title: 'Estimated Non-Govt Insured Reverse Mortgage',
                           primaryLabel: 'Loan Amount',
                           primaryIconPath: AppImages.loanAmountIcon,
                           primaryAmount: controller.nonGovtLoanAmount,
                           cashAvailable: controller.nonGovtCashAvailable,
+                          cashAvailableLabel: controller.nonGovtCashAvailableLabel,
                           downPayment: controller.nonGovtDownPayment,
                         )
                       else if (controller.nonGovtNotEligibleReason != null)
@@ -186,6 +190,40 @@ class LoanDetailsScreen extends GetView<LoanDetailsController> {
                           reason: 'Not enough home equity',
                         ),
 
+                      if (controller.showNonGovtAgeDisclaimer) ...[
+                        const SizedBox(height: 12),
+                        Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: AppColors.containerHighlight,
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(
+                                color: AppColors.accentBlue.withOpacity(0.4)),
+                          ),
+                          child: const Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Icon(Icons.info_outline,
+                                  color: AppColors.accentBlue, size: 16),
+                              SizedBox(width: 8),
+                              Expanded(
+                                child: Text(
+                                  'For the Non-Government Reverse Mortgage, the youngest borrower is not included in the loan.',
+                                  style: TextStyle(
+                                    color: AppColors.hintGrey,
+                                    fontSize: 12,
+                                    height: 1.5,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+
+                      const SizedBox(height: 16),
+                      const LegalDisclaimer(),
                       const SizedBox(height: 24),
                     ],
                   ),
@@ -199,6 +237,30 @@ class LoanDetailsScreen extends GetView<LoanDetailsController> {
                       text: 'Request Full Proposal',
                       onPressed: controller.onRequestMoreInfo,
                       textColor: AppColors.primary,
+                    ),
+                    const SizedBox(height: 12),
+                    SizedBox(
+                      width: double.infinity,
+                      child: OutlinedButton.icon(
+                        onPressed: () async {
+                          final uri = Uri.parse('tel:+18008002190');
+                          if (await canLaunchUrl(uri)) await launchUrl(uri);
+                        },
+                        icon: const Icon(Icons.phone, size: 18),
+                        label: const Text('Speak to an Educator'),
+                        style: OutlinedButton.styleFrom(
+                          foregroundColor: AppColors.white,
+                          side: const BorderSide(color: AppColors.white, width: 1.5),
+                          padding: const EdgeInsets.symmetric(vertical: 14),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          textStyle: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
                     ),
                     const SizedBox(height: 8),
                     const Text(

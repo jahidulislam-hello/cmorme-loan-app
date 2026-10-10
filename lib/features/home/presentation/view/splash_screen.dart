@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:reverse_mortage_loan_app/config/routes/route_names.dart';
 import 'package:reverse_mortage_loan_app/core/services/token_service.dart';
@@ -27,11 +28,24 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
-      body: Align(
-        alignment: const Alignment(0.3, 0.3),
-        child: Image.asset(
-          AppImages.launcherIcons,
+      backgroundColor: Color(0xFF17295B),
+      body: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Image.asset(
+              AppImages.logo2,
+              width: screenWidth * 0.5,
+              fit: BoxFit.contain,
+            ),
+            // const SizedBox(height: 16),
+            // SvgPicture.asset(
+            //   AppImages.launcherIconsText,
+            //   width: screenWidth * 0.7,
+            // ),
+          ],
         ),
       ),
     );

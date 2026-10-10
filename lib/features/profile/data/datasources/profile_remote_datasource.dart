@@ -39,4 +39,10 @@ class ProfileRemoteDatasource {
     _logger.d('ChangePassword raw response: ${response.data}');
     return ChangePasswordResponseModel.fromJson(response.data);
   }
+
+  Future<void> deleteAccount(String id) async {
+    _logger.d('DeleteAccount request — userId: $id');
+    final response = await _apiService.delete('${ApiConstants.deleteAccount}/$id');
+    _logger.d('DeleteAccount raw response: ${response.data}');
+  }
 }

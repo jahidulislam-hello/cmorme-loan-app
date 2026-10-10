@@ -49,6 +49,13 @@ class AccountSettingScreen extends GetView<AccountSettingController> {
                   title: 'Log Out',
                   onTap: controller.onLogout,
                 ),
+                const SizedBox(height: 16),
+                ProfileOptionContainer(
+                  iconPath: AppImages.deleteIcon,
+                  title: 'Delete Account',
+                  onTap: controller.onDeleteAccount,
+                  backgroundColor: Colors.red.shade700,
+                ),
               ],
             ),
           ),

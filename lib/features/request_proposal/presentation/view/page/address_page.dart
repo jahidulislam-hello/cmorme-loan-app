@@ -4,6 +4,7 @@ import 'package:reverse_mortage_loan_app/shared/theme/app_colors.dart';
 import 'package:reverse_mortage_loan_app/shared/widgets/custom_button.dart';
 import 'package:reverse_mortage_loan_app/shared/widgets/custom_text_field.dart';
 import 'package:reverse_mortage_loan_app/features/request_proposal/presentation/view/controller/request_proposal_controller.dart';
+import 'package:reverse_mortage_loan_app/shared/widgets/consent_disclaimer.dart';
 
 class AddressPage extends GetView<RequestProposalController> {
   const AddressPage({super.key});
@@ -31,42 +32,77 @@ class AddressPage extends GetView<RequestProposalController> {
         ),
       ),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            children: [
-              const SizedBox(height: 40),
-              Expanded(
-                child: SingleChildScrollView(
-                  physics: const BouncingScrollPhysics(),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            return SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              physics: const BouncingScrollPhysics(),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                child: IntrinsicHeight(
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Obx(() => CustomTextField(
-                            label: 'Address',
-                            hintText: 'Address',
-                            labelColor: AppColors.blue200,
-                            controller: controller.addressController,
-                            filled: true,
-                            backgroundColor: AppColors.containerHighlight,
-                            errorText: controller.addressError.value,
-                            onChanged: (_) => controller.addressError.value = null,
-                          )),
+                      const SizedBox(height: 40),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Obx(() => CustomTextField(
+                                  label: 'Street Number & Name',
+                                  hintText: 'Street Number & Name',
+                                  labelColor: AppColors.blue200,
+                                  controller: controller.addressController,
+                                  filled: true,
+                                  backgroundColor: AppColors.containerHighlight,
+                                  errorText: controller.addressError.value,
+                                  onChanged: (_) =>
+                                      controller.addressError.value = null,
+                                )),
+                            const SizedBox(height: 30),
+                            Obx(() => CustomTextField(
+                              label: 'City',
+                              hintText: 'City Name',
+                              labelColor: AppColors.blue200,
+                              controller: controller.cityController,
+                              filled: true,
+                              backgroundColor: AppColors.containerHighlight,
+                              errorText: controller.cityError.value,
+                              onChanged: (_) =>
+                              controller.cityError.value = null,
+                            )),
+                            const SizedBox(height: 20),
+                            Obx(() => CustomTextField(
+                              label: 'State Code',
+                              hintText: 'Code',
+                              labelColor: AppColors.blue200,
+                              controller: controller.stateCodeController,
+                              filled: true,
+                              backgroundColor: AppColors.containerHighlight,
+                              errorText: controller.stateCodeError.value,
+                              onChanged: (_) =>
+                              controller.stateCodeError.value = null,
+                            )),
+                            const SizedBox(height: 30),
+                          ],
+                        ),
+                      ),
+                      const ConsentDisclaimer(),
+                      const SizedBox(height: 12),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 20),
+                        child: CustomButton(
+                          text: 'Next',
+                          onPressed: controller.goToPhonePage,
+                          backgroundColor: AppColors.buttonBlue,
+                          textColor: AppColors.white,
+                        ),
+                      ),
                     ],
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 20),
-                child: CustomButton(
-                  text: 'Next',
-                  onPressed: controller.goToCityState,
-                  backgroundColor: AppColors.buttonBlue,
-                  textColor: AppColors.white,
-                ),
-              ),
-            ],
-          ),
+            );
+          },
         ),
       ),
     );

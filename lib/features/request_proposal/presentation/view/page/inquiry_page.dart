@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:reverse_mortage_loan_app/shared/theme/app_colors.dart';
 import 'package:reverse_mortage_loan_app/shared/widgets/custom_button.dart';
 import 'package:reverse_mortage_loan_app/features/request_proposal/presentation/view/controller/request_proposal_controller.dart';
+import 'package:reverse_mortage_loan_app/shared/widgets/consent_disclaimer.dart';
 
 class InquiryPage extends GetView<RequestProposalController> {
   const InquiryPage({super.key});
@@ -29,94 +30,104 @@ class InquiryPage extends GetView<RequestProposalController> {
         ),
       ),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            children: [
-              const SizedBox(height: 40),
-              Expanded(
-                child: SingleChildScrollView(
-                  physics: const BouncingScrollPhysics(),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            return SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              physics: const BouncingScrollPhysics(),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                child: IntrinsicHeight(
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // ── Best time to contact ──────────────────────────
-                      const Text(
-                        'What is the best time to contact you?',
-                        style: TextStyle(
-                          color: AppColors.white,
-                          fontSize: 14,
-                        ),
-                      ),
-                      const SizedBox(height: 12),
-                      Obx(() => _TimeDropdown(
-                            selected: controller.selectedContactTime.value,
-                            onSelect: (val) =>
-                                controller.selectedContactTime.value = val,
-                          )),
+                      const SizedBox(height: 40),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // ── Best time to contact ──────────────────────────
+                            const Text(
+                              'What is the best time to contact you?',
+                              style: TextStyle(
+                                color: AppColors.white,
+                                fontSize: 14,
+                              ),
+                            ),
+                            const SizedBox(height: 12),
+                            Obx(() => _TimeDropdown(
+                                  selected: controller.selectedContactTime.value,
+                                  onSelect: (val) =>
+                                      controller.selectedContactTime.value = val,
+                                )),
 
-                      const SizedBox(height: 36),
+                            const SizedBox(height: 36),
 
-                      // ── How to receive proposal ───────────────────────
-                      const Text(
-                        'How would you like to receive your proposal?',
-                        style: TextStyle(
-                          color: AppColors.white,
-                          fontSize: 14,
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      Obx(() => Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: ['Email', 'Phone'].map((method) {
-                              final isSelected =
-                                  controller.selectedContactMethod.value ==
-                                      method;
-                              return Padding(
-                                padding: const EdgeInsets.only(bottom: 20),
-                                child: GestureDetector(
-                                  onTap: () => controller
-                                      .selectedContactMethod.value = method,
-                                  child: Row(
-                                    children: [
-                                      _RadioDot(isSelected: isSelected),
-                                      const SizedBox(width: 12),
-                                      Text(
-                                        method,
-                                        style: const TextStyle(
-                                          color: AppColors.blue500,
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w500,
+                            // ── How to receive proposal ───────────────────────
+                            const Text(
+                              'Would you like to receive your proposal by email or receive a phone call from an educator?',
+                              style: TextStyle(
+                                color: AppColors.white,
+                                fontSize: 14,
+                              ),
+                            ),
+                            const SizedBox(height: 20),
+                            Obx(() => Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: ['Email', 'Phone'].map((method) {
+                                    final isSelected =
+                                        controller.selectedContactMethod.value ==
+                                            method;
+                                    return Padding(
+                                      padding: const EdgeInsets.only(bottom: 20),
+                                      child: GestureDetector(
+                                        onTap: () => controller
+                                            .selectedContactMethod.value = method,
+                                        child: Row(
+                                          children: [
+                                            _RadioDot(isSelected: isSelected),
+                                            const SizedBox(width: 12),
+                                            Text(
+                                              method,
+                                              style: const TextStyle(
+                                                color: AppColors.blue500,
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ),
-                                    ],
-                                  ),
-                                ),
-                              );
-                            }).toList(),
-                          )),
+                                    );
+                                  }).toList(),
+                                )),
+                            const SizedBox(height: 30),
+                          ],
+                        ),
+                      ),
+                      const ConsentDisclaimer(),
+                      const SizedBox(height: 12),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 20),
+                        child: Obx(() {
+                          final isEmail =
+                              controller.selectedContactMethod.value == 'Email';
+                          return CustomButton(
+                            text: isEmail ? 'Send' : 'Next',
+                            onPressed: isEmail
+                                ? controller.submitFromInquiry
+                                : controller.goToAppointment,
+                            backgroundColor: AppColors.buttonBlue,
+                            textColor: AppColors.white,
+                            isLoading: controller.isLoading.value,
+                          );
+                        }),
+                      ),
                     ],
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 20),
-                child: Obx(() {
-                  final isEmail =
-                      controller.selectedContactMethod.value == 'Email';
-                  return CustomButton(
-                    text: isEmail ? 'Send' : 'Next',
-                    onPressed: isEmail
-                        ? controller.submitFromInquiry
-                        : controller.goToAppointment,
-                    backgroundColor: AppColors.buttonBlue,
-                    textColor: AppColors.white,
-                    isLoading: controller.isLoading.value,
-                  );
-                }),
-              ),
-            ],
-          ),
+            );
+          },
         ),
       ),
     );

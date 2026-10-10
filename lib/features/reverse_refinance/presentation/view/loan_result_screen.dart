@@ -6,6 +6,8 @@ import 'package:reverse_mortage_loan_app/features/reverse_refinance/data/models/
 import 'package:reverse_mortage_loan_app/features/reverse_refinance/shared/widgets/loan_estimate_card.dart';
 import 'package:reverse_mortage_loan_app/shared/theme/app_colors.dart';
 import 'package:reverse_mortage_loan_app/shared/widgets/custom_button.dart';
+import 'package:reverse_mortage_loan_app/shared/widgets/legal_disclaimer.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class _NotEligibleCard extends StatelessWidget {
   final String title;
@@ -84,6 +86,18 @@ class LoanResultScreen extends StatelessWidget {
 
   static final _numFmt = NumberFormat('#,##0.##');
 
+  static Future<void> _callEducator() async {
+    final uri = Uri.parse('tel:+18008002190');
+    if (await canLaunchUrl(uri)) await launchUrl(uri);
+  }
+
+  static bool _showNonGovtDisclaimer(CalculateLoanResponseModel? result) {
+    if (result?.nonGovtLoanAvailable != true) return false;
+    final age1 = result?.multipleBorrowerAge1;
+    final age2 = result?.multipleBorrowerAge2;
+    return (age1 != null && age1 < 55) || (age2 != null && age2 < 55);
+  }
+
   String _fmt(double? value) {
     if (value == null) return '\$0';
     return '\$${_numFmt.format(value)}';
@@ -132,7 +146,7 @@ class LoanResultScreen extends StatelessWidget {
                       const SizedBox(height: 16),
 
                       /// Estimated Government Insured Reverse Mortgage
-                      if (result?.govtLoanAvailable == true)
+                      if (result?.govtLoanAvailable == true || (result?.reverseRefinanceGovtCashAvailable ?? 0) < 0)
                         LoanEstimateCard(
                           title: 'Estimated Government Insured\nReverse Mortgage',
                           loanAmount: isPurchase
@@ -140,7 +154,10 @@ class LoanResultScreen extends StatelessWidget {
                               : _fmt(result?.reverseRefinanceGovtLoanAmount),
                           cashAvailable: isPurchase
                               ? null
-                              : _fmt(result?.reverseRefinanceGovtCashAvailable),
+                              : _fmt(result?.reverseRefinanceGovtCashAvailable?.abs()),
+                          cashAvailableLabel: (result?.reverseRefinanceGovtCashAvailable ?? 0) < 0
+                              ? 'Short to close by:'
+                              : 'Cash Available',
                           downPayment: isPurchase
                               ? _fmt(result?.reversePurchaseGovtDownPayment)
                               : null,
@@ -160,7 +177,7 @@ class LoanResultScreen extends StatelessWidget {
                       const SizedBox(height: 20),
 
                       /// Estimated Non-Government Insured Reverse Mortgage
-                      if (result?.nonGovtLoanAvailable == true)
+                      if (result?.nonGovtLoanAvailable == true || (result?.reverseRefinanceNonGovtCashAvailable ?? 0) < 0)
                         LoanEstimateCard(
                           title: 'Estimated Non-Government Insured\nReverse Mortgage',
                           loanAmount: isPurchase
@@ -168,7 +185,10 @@ class LoanResultScreen extends StatelessWidget {
                               : _fmt(result?.reverseRefinanceNonGovtLoanAmount),
                           cashAvailable: isPurchase
                               ? null
-                              : _fmt(result?.reverseRefinanceNonGovtCashAvailable),
+                              : _fmt(result?.reverseRefinanceNonGovtCashAvailable?.abs()),
+                          cashAvailableLabel: (result?.reverseRefinanceNonGovtCashAvailable ?? 0) < 0
+                              ? 'Short to close by:'
+                              : 'Cash Available',
                           downPayment: isPurchase
                               ? _fmt(result?.reversePurchaseNonGovtDownPayment)
                               : null,
@@ -185,6 +205,39 @@ class LoanResultScreen extends StatelessWidget {
                           reason: 'Not enough home equity',
                         ),
 
+                      if (_showNonGovtDisclaimer(result)) ...[
+                        const SizedBox(height: 12),
+                        Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: AppColors.containerHighlight,
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(
+                                color: AppColors.accentBlue.withOpacity(0.4)),
+                          ),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Icon(Icons.info_outline,
+                                  color: AppColors.accentBlue, size: 16),
+                              const SizedBox(width: 8),
+                              const Expanded(
+                                child: Text(
+                                  'For the Non-Government Reverse Mortgage, the youngest borrower is not included in the loan.',
+                                  style: TextStyle(
+                                    color: AppColors.hintGrey,
+                                    fontSize: 12,
+                                    height: 1.5,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+
+                      const SizedBox(height: 24),
                       const Spacer(),
 
                       /// Start New Calculation Button
@@ -211,12 +264,35 @@ class LoanResultScreen extends StatelessWidget {
                         backgroundColor: AppColors.blue100,
                       ),
 
+                      const SizedBox(height: 12),
+
+                      /// Speak to an Educator Button
+                      SizedBox(
+                        width: double.infinity,
+                        child: OutlinedButton.icon(
+                          onPressed: _callEducator,
+                          icon: const Icon(Icons.phone, size: 18),
+                          label: const Text('Speak to an Educator'),
+                          style: OutlinedButton.styleFrom(
+                            foregroundColor: AppColors.white,
+                            side: const BorderSide(color: AppColors.white, width: 1.5),
+                            padding: const EdgeInsets.symmetric(vertical: 14),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            textStyle: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ),
+
                       const SizedBox(height: 8),
 
                       const Center(
                         child: Text(
                           'Get more information on available line of credit, interest rates, eligibility, and more.',
-
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             color: AppColors.hintGrey,
@@ -225,6 +301,8 @@ class LoanResultScreen extends StatelessWidget {
                         ),
                       ),
 
+                      const SizedBox(height: 16),
+                      const LegalDisclaimer(),
                       const SizedBox(height: 20),
                     ],
                   ),

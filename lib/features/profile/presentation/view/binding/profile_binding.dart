@@ -4,6 +4,7 @@ import 'package:reverse_mortage_loan_app/features/profile/data/datasources/profi
 import 'package:reverse_mortage_loan_app/features/profile/data/repositories/profile_repository_impl.dart';
 import 'package:reverse_mortage_loan_app/features/profile/domain/repositories/profile_repository.dart';
 import 'package:reverse_mortage_loan_app/features/profile/domain/usecases/change_password_usecase.dart';
+import 'package:reverse_mortage_loan_app/features/profile/domain/usecases/delete_account_usecase.dart';
 import 'package:reverse_mortage_loan_app/features/profile/domain/usecases/get_profile_usecase.dart';
 import 'package:reverse_mortage_loan_app/features/profile/domain/usecases/update_profile_usecase.dart';
 import 'package:reverse_mortage_loan_app/features/profile/presentation/view/controller/account_setting_controller.dart';
@@ -26,7 +27,15 @@ class ProfileBinding extends Bindings {
     Get.lazyPut<UpdateProfileUseCase>(
       () => UpdateProfileUseCase(Get.find<ProfileRepository>()),
     );
-    Get.lazyPut<AccountSettingController>(() => AccountSettingController());
+    Get.lazyPut<DeleteAccountUseCase>(
+      () => DeleteAccountUseCase(Get.find<ProfileRepository>()),
+    );
+    Get.lazyPut<AccountSettingController>(
+      () => AccountSettingController(
+        getProfileUseCase: Get.find<GetProfileUseCase>(),
+        deleteAccountUseCase: Get.find<DeleteAccountUseCase>(),
+      ),
+    );
     Get.lazyPut<EditProfileController>(
       () => EditProfileController(
         getProfileUseCase: Get.find<GetProfileUseCase>(),

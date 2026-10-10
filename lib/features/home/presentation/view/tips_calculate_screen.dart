@@ -16,7 +16,7 @@ class _TipsCalculateScreenState extends State<TipsCalculateScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _progressController;
 
-  static const int _tipCount = 5;
+  static const int _tipCount = 4;
   late List<bool> _visibleTips;
 
   static const _slideDuration = Duration(milliseconds: 600);
@@ -30,7 +30,7 @@ class _TipsCalculateScreenState extends State<TipsCalculateScreen>
 
     _progressController = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 10),
+      duration: const Duration(seconds: 15),
     )..forward();
 
     final controller = Get.find<TipsCalculateController>();
@@ -70,6 +70,15 @@ class _TipsCalculateScreenState extends State<TipsCalculateScreen>
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    // Use smaller font & spacing on short screens (< 680px logical height)
+    final isSmallScreen = screenHeight < 680;
+    final tipFontSize = isSmallScreen ? 14.0 : 16.0;
+    final titleFontSize = isSmallScreen ? 20.0 : 24.0;
+    final topSpacing = isSmallScreen ? 16.0 : 32.0;
+    final tipSpacing = isSmallScreen ? 10.0 : 16.0;
+    final bottomSpacing = isSmallScreen ? 16.0 : 40.0;
+
     return Scaffold(
       backgroundColor: AppColors.primary,
       body: SafeArea(
@@ -78,50 +87,51 @@ class _TipsCalculateScreenState extends State<TipsCalculateScreen>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 48),
+              SizedBox(height: topSpacing),
 
               /// Title
-              const Center(
+              Center(
                 child: Text(
                   'DID YOU KNOW!',
                   style: TextStyle(
                     color: AppColors.white,
-                    fontSize: 24,
+                    fontSize: titleFontSize,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
 
-              const SizedBox(height: 48),
+              SizedBox(height: topSpacing),
 
-              /// Tips — each tip stays at its own list position, animates individually
-              // Outer Obx removed — Column itself does not depend on any observable.
-              // Each tip item has its own Obx so only that item rebuilds when tips load,
-              // instead of all 5 AnimatedSlide+AnimatedOpacity wrappers rebuilding at once.
+              /// Tips — scrollable so content never overflows on small devices
               Expanded(
-                child: Column(
-                  children: List.generate(_tipCount, (index) {
-                    final isVisible = _visibleTips[index];
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: 24),
-                      child: AnimatedSlide(
-                        offset:
-                            isVisible ? Offset.zero : const Offset(0.4, 0),
-                        duration: _slideDuration,
-                        curve: Curves.easeOutCubic,
-                        child: AnimatedOpacity(
-                          opacity: isVisible ? 1.0 : 0.0,
+                child: SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  child: Column(
+                    children: List.generate(_tipCount, (index) {
+                      final isVisible = _visibleTips[index];
+                      return Padding(
+                        padding: EdgeInsets.only(bottom: tipSpacing),
+                        child: AnimatedSlide(
+                          offset:
+                              isVisible ? Offset.zero : const Offset(0.4, 0),
                           duration: _slideDuration,
                           curve: Curves.easeOutCubic,
-                          // Inner Obx: scoped to just this tip's text.
-                          child: Obx(() => _buildTipItem(
-                                index,
-                                Get.find<TipsCalculateController>().tips,
-                              )),
+                          child: AnimatedOpacity(
+                            opacity: isVisible ? 1.0 : 0.0,
+                            duration: _slideDuration,
+                            curve: Curves.easeOutCubic,
+                            // Inner Obx: scoped to just this tip's text.
+                            child: Obx(() => _buildTipItem(
+                                  index,
+                                  Get.find<TipsCalculateController>().tips,
+                                  tipFontSize,
+                                )),
+                          ),
                         ),
-                      ),
-                    );
-                  }),
+                      );
+                    }),
+                  ),
                 ),
               ),
 
@@ -175,12 +185,12 @@ class _TipsCalculateScreenState extends State<TipsCalculateScreen>
                 return AnimatedBuilder(
                   animation: _progressController,
                   // Built once and reused every frame — never rebuilt by the animation.
-                  child: const Center(
+                  child: Center(
                     child: Text(
                       'Please Wait...',
                       style: TextStyle(
                         color: AppColors.white,
-                        fontSize: 24,
+                        fontSize: isSmallScreen ? 18.0 : 24.0,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -210,7 +220,7 @@ class _TipsCalculateScreenState extends State<TipsCalculateScreen>
                 );
               }),
 
-              const SizedBox(height: 40),
+              SizedBox(height: bottomSpacing),
             ],
           ),
         ),
@@ -218,9 +228,9 @@ class _TipsCalculateScreenState extends State<TipsCalculateScreen>
     );
   }
 
-  Widget _buildTipItem(int index, List<String> tips) {
+  Widget _buildTipItem(int index, List<String> tips, double fontSize) {
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(
           width: 56,
@@ -265,9 +275,9 @@ class _TipsCalculateScreenState extends State<TipsCalculateScreen>
         Expanded(
           child: Text(
             index < tips.length ? tips[index] : '',
-            style: const TextStyle(
+            style: TextStyle(
               color: AppColors.white,
-              fontSize: 18,
+              fontSize: fontSize,
               height: 1.5,
               fontWeight: FontWeight.w500,
             ),

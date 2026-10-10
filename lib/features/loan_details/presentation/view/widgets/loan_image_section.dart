@@ -26,18 +26,22 @@ class LoanImageSection extends StatelessWidget {
             borderRadius: BorderRadius.circular(4),
             child: imageUrls.isEmpty
                 ? Container(
+                    width: double.infinity,
+                    height: 200,
                     color: AppColors.blue400,
-                    child: const Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.image_not_supported_outlined,
-                            color: Colors.white54, size: 52),
-                        SizedBox(height: 8),
-                        Text(
-                          'No images available',
-                          style: TextStyle(color: Colors.white54, fontSize: 13),
-                        ),
-                      ],
+                    child: const Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.image_not_supported_outlined,
+                              color: Colors.white54, size: 52),
+                          SizedBox(height: 8),
+                          Text(
+                            'No images available',
+                            style: TextStyle(color: Colors.white54, fontSize: 13),
+                          ),
+                        ],
+                      ),
                     ),
                   )
                 : PageView.builder(
@@ -50,7 +54,7 @@ class LoanImageSection extends StatelessWidget {
                         color: Colors.black,
                         child: CustomCachedNetworkImage(
                           imageUrl: imageUrls[index],
-                          fit: BoxFit.contain,
+                          fit: BoxFit.cover,
                           width: double.infinity,
                         ),
                       );
